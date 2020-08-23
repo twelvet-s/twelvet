@@ -1,0 +1,28 @@
+twelvet:
+  name: twelvet-gateway
+  version: 1.0.0
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: ${twelvet.name}
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: http://nacos.twelvet.cn
+        namespace: eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e
+      config:
+        # 配置中心地址
+        server-addr: http://nacos.twelvet.cn
+        # 配置文件格式
+        file-extension: yml
+        # 命名空间
+        namespace: eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e
+        # 配置组
+        group: DEFAULT_GROUP
+        # 共享配置
+        shared-configs: twelvet-app-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}

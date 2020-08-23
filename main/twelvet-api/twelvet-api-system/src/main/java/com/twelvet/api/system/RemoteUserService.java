@@ -1,0 +1,33 @@
+package com.twelvet.api.system;
+
+import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
+import com.twelvet.api.system.model.UserInfo;
+import com.twelvet.framework.core.constants.ServiceNameConstant;
+import com.twelvet.framework.core.pojo.R;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+/**
+ * @author twelvet
+ * @WebSite www.twelvet.cn
+ * @Description: 用户信息服务
+ */
+@FeignClient(
+        contextId = "remoteUserService",
+        value = ServiceNameConstant.SYSTEM_SERVICE,
+        fallbackFactory = RemoteUserFallbackFactory.class
+)
+public interface RemoteUserService {
+
+    /**
+     * 通过用户名查询用户信息
+     *
+     * @param username
+     * @return R<UserInfo>
+     */
+    @GetMapping(value = "/user/info/{username}")
+    R<UserInfo> getUserInfo(@PathVariable("username") String username);
+}

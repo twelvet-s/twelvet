@@ -1,0 +1,36 @@
+
+.container{
+    .opa-box{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    :global {
+        .ant-form-item-children{
+            a{
+                width: 60px;
+            }
+            input{
+                width: auto;
+            }
+        }
+        .ant-legacy-form-item,.ant-pro-table-search{
+            margin-bottom: 0;
+        }
+        .ant-legacy-form-item-children {
+            a{
+                display: block;
+                width: 63px;
+                text-align: center;
+            }
+        }
+        .ant-pro-table-search-option{
+            margin-left: initial;
+            .ant-form-item-children,.ant-legacy-form-item-children{
+                // 查询按钮左对齐
+                justify-content: flex-start;
+            }   
+        }
+    }
+}
+
