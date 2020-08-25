@@ -1,11 +1,10 @@
 package com.twelvet.framework.security.service;
 
 import com.twelvet.api.system.RemoteUserService;
-import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.api.system.domain.SysUser;
-import com.twelvet.framework.core.pojo.R;
+import com.twelvet.api.system.model.UserInfo;
+import com.twelvet.framework.core.domain.R;
 import com.twelvet.framework.security.pojo.LoginUser;
-import com.twelvet.framework.utils.StringUtil;
 import com.twelvet.framework.utils.TWTUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

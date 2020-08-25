@@ -1,8 +1,8 @@
-  ______              __         ______
- /_  __/      _____  / /   _____/_  __/
-  / / | | /| / / _ \/ / | / / _ \/ /
- / /  | |/ |/ /  __/ /| |/ /  __/ /
-/_/   |__/|__/\___/_/ |___/\___/_/
+  ______              __         ______   ___         __  __
+ /_  __/      _____  / /   _____/_  __/  /   | __  __/ /_/ /_
+  / / | | /| / / _ \/ / | / / _ \/ /    / /| |/ / / / __/ __ \
+ / /  | |/ |/ /  __/ /| |/ /  __/ /    / ___ / /_/ / /_/ / / /
+/_/   |__/|__/\___/_/ |___/\___/_/    /_/  |_\__,_/\__/_/ /_/
 
-:: ${twelvet.name} :: ${twelvet.version}
-:: Spring Boot :: ${spring-boot.version}
+${AnsiColor.GREEN} :: ${twelvet.name} :: ${AnsiColor.BRIGHT_WHITE} ${twelvet.version}
+${AnsiColor.GREEN} :: Spring Boot :: ${AnsiColor.BRIGHT_WHITE} ${spring-boot.version}

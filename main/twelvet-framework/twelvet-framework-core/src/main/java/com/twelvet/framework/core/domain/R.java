@@ -1,4 +1,4 @@
-package com.twelvet.framework.core.pojo;
+package com.twelvet.framework.core.domain;
 
 import org.springframework.http.HttpStatus;
 

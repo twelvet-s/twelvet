@@ -26,6 +26,12 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
 
+        <!-- SpringBoot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!--Myabtis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>

@@ -1,0 +1,8 @@
+  ______              __         ______   ______     __                 __
+ /_  __/      _____  / /   _____/_  __/  / ____/__  / /__      ______ _/ /_
+  / / | | /| / / _ \/ / | / / _ \/ /    / / __/ _ \/ __/ | /| / / __ `/ __/
+ / /  | |/ |/ /  __/ /| |/ /  __/ /    / /_/ /  __/ /_ | |/ |/ / /_/ / /_
+/_/   |__/|__/\___/_/ |___/\___/_/     \____/\___/\__/ |__/|__/\__,_/\__/
+
+${AnsiColor.GREEN} :: ${twelvet.name} :: ${AnsiColor.BRIGHT_WHITE} ${twelvet.version}
+${AnsiColor.GREEN} :: Spring Boot :: ${AnsiColor.BRIGHT_WHITE} ${spring-boot.version}

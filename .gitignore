@@ -30,6 +30,7 @@ nbproject/private/
 build/*
 nbbuild/
 dist/
+mock/
 nbdist/
 .nb-gradle/
 

@@ -3,10 +3,8 @@ package com.twelvet.api.system;
 import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.constants.ServiceNameConstant;
-import com.twelvet.framework.core.pojo.R;
+import com.twelvet.framework.core.domain.R;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,7 +23,7 @@ public interface RemoteUserService {
     /**
      * 通过用户名查询用户信息
      *
-     * @param username
+     * @param username 用户名称
      * @return R<UserInfo>
      */
     @GetMapping(value = "/user/info/{username}")
