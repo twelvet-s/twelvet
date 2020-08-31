@@ -14,9 +14,9 @@ import java.util.Date;
  * @WebSite www.twelvet.cn
  * @Description: 基础控制器
  */
-public class TController {
+public class TWTController {
 
-    protected final Logger logger = LoggerFactory.getLogger(TController.class);
+    protected final Logger logger = LoggerFactory.getLogger(TWTController.class);
 
     /**
      * 将前台传递过来的日期格式的字符串，自动转化为Date类型

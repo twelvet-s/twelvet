@@ -24,15 +24,14 @@ import java.util.Set;
  * @WebSite www.twelvet.cn
  * @Description: 自定义用户信息处理
  */
-@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
-@Service("twelvetUserDetails")
-public class TwelveTUserDetailsServiceImpl implements UserDetailsService {
+@Service("TWTUserDetails")
+public class TwTUserDetailsServiceImpl implements UserDetailsService {
 
-    private static final Logger log = LoggerFactory.getLogger(TwelveTUserDetailsServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(TwTUserDetailsServiceImpl.class);
 
     private final RemoteUserService remoteUserService;
 
-    public TwelveTUserDetailsServiceImpl(RemoteUserService remoteUserService) {
+    public TwTUserDetailsServiceImpl(RemoteUserService remoteUserService) {
         this.remoteUserService = remoteUserService;
     }
 
@@ -45,8 +44,8 @@ public class TwelveTUserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 自定义账号状态检测
-     * @param userResult
-     * @param username
+     * @param userResult userResult
+     * @param username username
      */
     private void auth(R<UserInfo> userResult, String username){
         if (TWTUtil.isEmpty(userResult) || TWTUtil.isEmpty(userResult.getData()))
@@ -58,7 +57,7 @@ public class TwelveTUserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 得到UserDetails
-     * @param result
+     * @param result result
      * @return UserDetails
      */
     private UserDetails getUserDetails(R<UserInfo> result){

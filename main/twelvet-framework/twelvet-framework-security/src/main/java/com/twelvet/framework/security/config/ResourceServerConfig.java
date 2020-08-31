@@ -1,5 +1,6 @@
 package com.twelvet.framework.security.config;
 
+import com.twelvet.framework.security.AuthenticationEntryPointImpl;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -46,7 +47,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return restTemplate;
     }
 
-   /* @Bean
+    /*@Bean
     public ResourceServerTokenServices tokenServices()
     {
         RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
@@ -63,7 +64,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http
+                .csrf().disable()
+                // 认证失败处理类
+                .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointImpl());
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         // 不登录可以访问

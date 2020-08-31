@@ -1,9 +1,9 @@
 package com.twelvet.security.config;
 
-import com.twelvet.security.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,21 +15,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
- * @Description: Web安全配置
+ * @Description:
+ * Web安全配置
+ * Oauth2依赖于Security 默认情况下WebSecurityConfig执行比ResourceServerConfig优先
  */
+@Order(99)
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    public WebSecurityConfig(@Qualifier("twelvetUserDetails") UserDetailsService userDetailsService) {
+    public WebSecurityConfig(@Qualifier("TWTUserDetails") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     /**
      * 加密编码模式
      *
-     * @return
+     * @return PasswordEncoder
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 认证管理器
      *
-     * @return
-     * @throws Exception
+     * @return AuthenticationManager
+     * @throws Exception Exception
      */
     @Bean
     @Override
@@ -51,8 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 、编码模式
      *
-     * @param auth
-     * @throws Exception
+     * @param auth auth
+     * @throws Exception Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -62,16 +65,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Http安全配置
      *
-     * @param http
-     * @throws Exception
+     * @param http http
+     * @throws Exception Exception
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // 认证失败处理类
-                .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 // 设置安全
-                .and().authorizeRequests()
+                .authorizeRequests()
                 // 放行路径
                 .antMatchers(
                         "/actuator/**",

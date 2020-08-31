@@ -2,7 +2,7 @@ package com.twelvet.server.system.controller;
 
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
-import com.twelvet.framework.core.application.controller.TController;
+import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.domain.R;
 import com.twelvet.framework.utils.TWTUtil;
 import com.twelvet.server.system.service.ISysPermissionService;
@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/user")
-public class SysUserController extends TController {
+public class SysUserController extends TWTController {
 
     private final ISysUserService userService;
 

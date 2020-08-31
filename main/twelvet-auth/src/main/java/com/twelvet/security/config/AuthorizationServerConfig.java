@@ -64,7 +64,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public AuthorizationServerConfig(AuthenticationManager authenticationManager,
                                      DataSource dataSource,
                                      RedisConnectionFactory redisConnectionFactory,
-                                     @Qualifier("twelvetUserDetails") UserDetailsService userDetailsService,
+                                     @Qualifier("TWTUserDetails") UserDetailsService userDetailsService,
                                      WebResponseExceptionTranslator<OAuth2Exception> customWebResponseExceptionTranslator) {
         this.authenticationManager = authenticationManager;
         this.dataSource = dataSource;
@@ -95,10 +95,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
-     * 配置ResourceServer信息
+     * 配置客户端信息
      *
-     * @param clients
-     * @throws Exception
+     * @param clients clients
+     * @throws Exception Exception
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -125,7 +125,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * 定义授权和令牌端点以及令牌服务
      *
-     * @param endpoints
+     * @param endpoints endpoints
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
@@ -149,13 +149,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * 配置Oauth2安全
      *
-     * @param oauthServer
+     * @param oauthServer oauthServer
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
-        oauthServer
-                .allowFormAuthenticationForClients()
-                .checkTokenAccess("permitAll()");
+        oauthServer.allowFormAuthenticationForClients().checkTokenAccess("permitAll()");
     }
 
 }
