@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.twelvet.framework.security.handler.CustomAccessDeniedHandler
+
+

@@ -9,7 +9,7 @@ import java.util.Date;
  * @WebSite www.twelvet.cn
  * @Description: 时间格式工具
  */
-public class DateUtil {
+public class DateUtils {
 
     public static String YYYY = "yyyy";
 

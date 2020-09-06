@@ -1,5 +1,6 @@
 package com.twelvet.security.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
@@ -16,11 +17,6 @@ public class CustomWebResponseExceptionTranslator implements WebResponseExceptio
     @Override
     public ResponseEntity<OAuth2Exception> translate(Exception e)
     {
-        OAuth2Exception oAuth2Exception = (OAuth2Exception) e;
-        return ResponseEntity.status(
-                oAuth2Exception.getHttpErrorCode())
-                .body(
-                        new CustomOauth2Exception(oAuth2Exception.getMessage())
-        );
+        return ResponseEntity.status(HttpStatus.OK).body(new CustomOauth2Exception(e.getMessage()));
     }
 }

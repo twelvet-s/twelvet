@@ -78,6 +78,11 @@ const Login: LoginType = (props) => {
             <div className={classNames(className, styles.login)}>
                 <Form
                     form={props.from}
+                    // 初始化值
+                    initialValues={{
+                        username: 'admin',
+                        password: 123456
+                    }}
                     onFinish={(values) => {
                         if (props.onSubmit) {
                             props.onSubmit(values as LoginParamsType);

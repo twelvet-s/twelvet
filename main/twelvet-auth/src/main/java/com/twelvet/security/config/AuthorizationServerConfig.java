@@ -2,6 +2,7 @@ package com.twelvet.security.config;
 
 import com.twelvet.framework.security.constans.CacheConstants;
 import com.twelvet.framework.security.constans.SecurityConstants;
+import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.service.RedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -112,11 +113,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
             if (accessToken instanceof DefaultOAuth2AccessToken) {
-                DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
+                LoginUser user = (LoginUser) authentication.getUserAuthentication().getPrincipal();
                 Map<String, Object> additionalInformation = new LinkedHashMap<>();
                 additionalInformation.put("code", HttpStatus.OK.value());
-                additionalInformation.put(SecurityConstants.DETAILS_USERNAME, authentication.getName());
-                token.setAdditionalInformation(additionalInformation);
+                additionalInformation.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
+                additionalInformation.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
+                ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
             }
             return accessToken;
         };

@@ -18,7 +18,6 @@ export default [
         routes: [{
             path: '/',
             component: '../layouts/Layout',
-            authority: ['admin', 'user'],
             routes: [
                 {
                     path: '/',
@@ -26,6 +25,7 @@ export default [
                 },
                 // 首页
                 {
+                    authority: ['admin', 'user'],
                     path: '/index',
                     name: 'home',
                     icon: 'HomeOutlined',

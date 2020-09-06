@@ -65,10 +65,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             pathname: '/',
         },
     } = props;
-    /**
-     * constructor
-     */
 
+    // 获取用户信息
     useEffect(() => {
         if (dispatch) {
             dispatch({

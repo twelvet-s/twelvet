@@ -81,6 +81,11 @@
             <artifactId>twelvet-framework-redis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-framework-core</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

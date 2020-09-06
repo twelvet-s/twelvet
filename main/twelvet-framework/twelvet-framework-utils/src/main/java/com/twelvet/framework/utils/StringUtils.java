@@ -5,7 +5,7 @@ package com.twelvet.framework.utils;
  * @WebSite www.twelvet.cn
  * @Description: 字符串工具类
  */
-public class StringUtil {
+public class StringUtils {
 
     /**
      * 空格字符串

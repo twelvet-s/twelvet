@@ -1,4 +1,4 @@
-package com.twelvet.framework.security.pojo;
+package com.twelvet.framework.security.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

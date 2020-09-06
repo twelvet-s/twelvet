@@ -1,13 +1,11 @@
 package com.twelvet.framework.utils;
 
-import java.util.Collection;
-
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
  * @Description: twelvet工具类
  */
-public class TWTUtil {
+public class TWTUtils {
 
     /**
      * * 判断一个Collection是否非空，包含List，Set，Queue

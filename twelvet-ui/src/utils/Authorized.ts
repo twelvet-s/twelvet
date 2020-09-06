@@ -6,7 +6,7 @@ let Authorized = RenderAuthorize(getAuthority());
 
 // Reload the rights component
 const reloadAuthorized = (): void => {
-  Authorized = RenderAuthorize(getAuthority());
+    Authorized = RenderAuthorize(getAuthority());
 };
 
 /**

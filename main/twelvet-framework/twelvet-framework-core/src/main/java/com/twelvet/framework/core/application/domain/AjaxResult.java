@@ -1,18 +1,17 @@
 package com.twelvet.framework.core.application.domain;
 
 
-
-import com.twelvet.framework.utils.TWTUtil;
+import com.twelvet.framework.utils.TWTUtils;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
  * @Description: 统一操作信息实体
  */
-public class AjaxResult extends HashMap<String, Object>
+public class AjaxResult extends LinkedHashMap<String, Object>
 {
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +57,7 @@ public class AjaxResult extends HashMap<String, Object>
     {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
-        if (!TWTUtil.isEmpty(data))
+        if (!TWTUtils.isEmpty(data))
         {
             super.put(DATA_TAG, data);
         }

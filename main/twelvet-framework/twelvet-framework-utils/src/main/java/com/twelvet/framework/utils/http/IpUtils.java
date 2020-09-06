@@ -1,8 +1,7 @@
 package com.twelvet.framework.utils.http;
 
-import com.twelvet.framework.utils.StringUtil;
-import com.twelvet.framework.utils.TWTUtil;
-import org.omg.CORBA.UNKNOWN;
+import com.twelvet.framework.utils.StringUtils;
+import com.twelvet.framework.utils.TWTUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -23,7 +22,7 @@ public class IpUtils {
      * @return
      */
     public static String getIpAddr() {
-        return getIpAddr(ServletUtil.getRequest());
+        return getIpAddr(ServletUtils.getRequest());
     }
 
     /**
@@ -34,26 +33,26 @@ public class IpUtils {
      */
     public static String getIpAddr(HttpServletRequest request) {
 
-        if (TWTUtil.isEmpty(request)) {
+        if (TWTUtils.isEmpty(request)) {
             return UNKNOWN;
         }
 
         String ip = request.getHeader("x-forwarded-for");
 
-        if (StringUtil.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (StringUtil.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Forwarded-For");
         }
-        if (StringUtil.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (StringUtil.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Real-IP");
         }
 
-        if (StringUtil.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
 

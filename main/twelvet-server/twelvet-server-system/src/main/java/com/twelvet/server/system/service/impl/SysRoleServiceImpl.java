@@ -1,7 +1,7 @@
 package com.twelvet.server.system.service.impl;
 
 import com.twelvet.api.system.domain.SysRole;
-import com.twelvet.framework.utils.TWTUtil;
+import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysRoleMapper;
 import com.twelvet.server.system.service.ISysRoleService;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         Set<String> permsSet = new HashSet<>();
         for (SysRole perm : perms)
         {
-            if (TWTUtil.isNotEmpty(perm))
+            if (TWTUtils.isNotEmpty(perm))
             {
                 permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
             }

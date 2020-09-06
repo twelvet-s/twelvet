@@ -1,5 +1,6 @@
 package com.twelvet;
 
+import com.twelvet.framework.core.annotation.EnableTWTFeignClients;
 import com.twelvet.framework.core.annotation.EnableTwelveTConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Description: 启动程序
  * @EnableFeignClients 开启服务扫描
  */
-@EnableFeignClients
+@EnableTWTFeignClients
 @EnableTwelveTConfig
 @SpringBootApplication
 public class TWTSystemTApp {

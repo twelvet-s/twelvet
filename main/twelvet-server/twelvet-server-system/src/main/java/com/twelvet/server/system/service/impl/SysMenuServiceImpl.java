@@ -1,6 +1,6 @@
 package com.twelvet.server.system.service.impl;
 
-import com.twelvet.framework.utils.TWTUtil;
+import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysMenuMapper;
 import com.twelvet.server.system.service.ISysMenuService;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {
-            if (TWTUtil.isNotEmpty(perm))
+            if (TWTUtils.isNotEmpty(perm))
             {
                 permsSet.addAll(Arrays.asList(perm.trim().split(",")));
             }

@@ -4,8 +4,8 @@ import com.twelvet.api.system.RemoteUserService;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.domain.R;
-import com.twelvet.framework.security.pojo.LoginUser;
-import com.twelvet.framework.utils.TWTUtil;
+import com.twelvet.framework.security.domain.LoginUser;
+import com.twelvet.framework.utils.TWTUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,7 +48,7 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
      * @param username username
      */
     private void auth(R<UserInfo> userResult, String username){
-        if (TWTUtil.isEmpty(userResult) || TWTUtil.isEmpty(userResult.getData()))
+        if (TWTUtils.isEmpty(userResult) || TWTUtils.isEmpty(userResult.getData()))
         {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
@@ -64,7 +64,7 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
         UserInfo info = result.getData();
 
         Set<String> dbAuthsSet = new HashSet<>();
-        if (TWTUtil.isNotEmpty(info.getRoles()))
+        if (TWTUtils.isNotEmpty(info.getRoles()))
         {
             // 获取角色
             dbAuthsSet.addAll(info.getRoles());

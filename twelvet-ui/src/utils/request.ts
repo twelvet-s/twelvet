@@ -2,9 +2,9 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
-import TWT from '../setting';
+import { extend } from 'umi-request'
+import { notification } from 'antd'
+import TWT from '../setting'
 
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -22,38 +22,49 @@ const codeMessage = {
     502: '网关错误。',
     503: '服务不可用，服务器暂时过载或维护。',
     504: '网关超时。',
-};
+}
 
 /**
  * 异常处理程序
  */
 const errorHandler = (error: { response: Response }): Response => {
-    const { response } = error;
+    const { response } = error
+
     if (response && response.status) {
-        const errorText = codeMessage[response.status] || response.statusText;
-        const { status, url } = response;
+        const errorText = codeMessage[response.status] || response.statusText
+        const { status, url } = response
 
         notification.error({
             message: `请求错误 ${status}: ${url}`,
             description: errorText,
-        });
+        })
+
+        // 401状态立即要求登录
+        // if (status === 401) {
+        //     // 进行一次续签操作，继续失败将要求重新登录
+        //     return history.push('/login');
+        // }
+
     } else if (!response) {
         notification.error({
             description: '您的网络发生异常，无法连接服务器',
             message: '网络异常',
-        });
+        })
     }
-    return response;
-};
+    return response
+}
 
 /**
  * 配置request请求时的默认参数
  */
 const request = extend({
-    errorHandler, // 默认错误处理
+    // 默认错误处理
+    errorHandler,
+    // 超时时间（毫秒）
+    timeout: 8888,
     // 默认请求是否带上cookie(配置后无法跨域)
     // credentials: 'include',
-});
+})
 
 // 请求前的处理
 request.use(
@@ -63,15 +74,15 @@ request.use(
 
         if (url.indexOf('http') && (url.indexOf('/api') !== 0)) {
             // 给url添加前缀
-            ctx.req.url = `${TWT.urlPrefix}${url}`;
+            ctx.req.url = `${TWT.urlPrefix}${url}`
         }
 
         // 统一传递的参数名称【get请求时参数传递需要放到params下】
-        const _method: string = options.method.toLocaleLowerCase();
-        if (_method == 'get' && options.data) {
+        const _method: string = options.method?.toLocaleUpperCase()
+        if (_method == 'GET' && options.data) {
             options.params = {
                 ...options.data
-            };
+            }
         }
 
         // 附加参数
@@ -80,12 +91,31 @@ request.use(
             headers: {
                 ...options.headers,
                 // 加入认证信息
-                'Authorization': `${localStorage.getItem(TWT.accessToken)}`
-            },
-            foo: 'foo'
-        };
-        await next();
+                'Authorization': `Bearer ${localStorage.getItem(TWT.accessToken)}`
+            }
+        }
+        await next()
     }
 )
 
-export default request;
+// Filter【请求后的处理】
+request.interceptors.response.use(async (response, request) => {
+
+    const data = await response.clone().json();
+    if (data && data.code == 403) {
+        notification.error({
+            message: data.msg,
+        });
+        // 跳转到登陆页
+        //return router.replace('/user/login');
+    } else if (data && data.status == -998) {
+        // 无操作权限
+        notification.error({
+            message: data.msg
+        });
+    }
+    return response;
+
+})
+
+export default request

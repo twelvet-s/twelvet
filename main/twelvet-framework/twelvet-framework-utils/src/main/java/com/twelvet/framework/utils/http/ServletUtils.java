@@ -1,6 +1,5 @@
 package com.twelvet.framework.utils.http;
 
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -19,7 +18,7 @@ import java.util.Map;
  * @WebSite www.twelvet.cn
  * @Description: Servlet工具
  */
-public class ServletUtil {
+public class ServletUtils {
 
     public static final String METHOD_DELETE = "DELETE";
     public static final String METHOD_HEAD = "HEAD";

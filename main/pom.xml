@@ -39,10 +39,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring.maven.plugin.version>2.3.0.RELEASE</spring.maven.plugin.version>
 
         <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
         <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
+        <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
         <spring-boot.mybatis>2.1.2</spring-boot.mybatis>
         <druid.version>1.1.22</druid.version>
         <fastjson.version>1.2.47</fastjson.version>
@@ -79,6 +81,14 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- SpringBoot Admin -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+
+            <!--druid-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
@@ -153,6 +163,8 @@
         <module>twelvet-framework</module>
         <module>twelvet-api</module>
         <module>twelvet-server</module>
+        <module>twelvet-visual</module>
+        <module>twelvet-visual-monitor</module>
     </modules>
 
     <build>

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.twelvet.framework.core.application.domain.AjaxResult;
-import com.twelvet.framework.utils.http.ServletUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author twelvet
@@ -17,26 +17,28 @@ import java.util.Map;
  */
 public class CustomOauthExceptionSerializer extends StdSerializer<CustomOauth2Exception> {
 
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(CustomOauthExceptionSerializer.class);
+
+    public static final String BAD_CREDENTIALS = "Bad credentials";
+
     protected CustomOauthExceptionSerializer() {
         super(CustomOauth2Exception.class);
     }
 
     @Override
-    public void serialize(CustomOauth2Exception value, JsonGenerator jgen, SerializerProvider serializerProvider) throws IOException {
-        HttpServletRequest request = ServletUtil.getRequest();
+    public void serialize(CustomOauth2Exception e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
 
-        jgen.writeStartObject();
-        jgen.writeObjectField(AjaxResult.CODE_TAG, value.getHttpErrorCode());
-        jgen.writeStringField(AjaxResult.MSG_TAG, value.getMessage());
-        jgen.writeStringField(AjaxResult.PATH_TAG,request.getServletPath());
-        if(value.getAdditionalInformation()!=null){
-            for (Map.Entry<String, String> entry : value.getAdditionalInformation().entrySet()) {
-                String key = entry.getKey();
-                String add = entry.getValue();
-                jgen.writeStringField(key, add);
-            }
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeNumberField(AjaxResult.CODE_TAG, e.getHttpErrorCode());
+        if (StringUtils.equals(e.getMessage(), BAD_CREDENTIALS)) {
+            jsonGenerator.writeStringField(AjaxResult.MSG_TAG, "用户名或密码错误");
+        } else {
+            log.warn("oauth2 认证异常 {} ", e.getMessage());
+            jsonGenerator.writeStringField(AjaxResult.MSG_TAG, e.getMessage());
         }
-        jgen.writeEndObject();
+        jsonGenerator.writeEndObject();
 
     }
 }
