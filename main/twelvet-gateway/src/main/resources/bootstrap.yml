@@ -32,11 +32,14 @@ spring:
       transport:
         # 控制台地址
         dashboard: 127.0.0.1:8718
-      # nacos配置持久化
+      # 规则持久化配置
       datasource:
-        ds1:
+        ds:
+          # 采用nacos
           nacos:
             server-addr: http://nacos.twelvet.cn
+            # 命名空间
+            namespace: eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e
             dataId: sentinel-twelvet-gateway
             groupId: DEFAULT_GROUP
             data-type: json
