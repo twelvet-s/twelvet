@@ -1,11 +1,27 @@
 import TWT from '@/setting'
 
 /**
- * 
- * @param args 日志输出工具
+ * 系统日志输出
  */
-export const log = (...args: any) => {
-    if (TWT.isDev) {
-        console.log('【TWT】', ...args)
+export const system = {
+    log: (...args: any) => {
+        if (TWT.isDev) {
+            console.log('【TWT】Log:', ...args)
+        }
+    },
+    table: (...args: [any]) => {
+        if (TWT.isDev) {
+            console.table('【TWT】Table:', ...args)
+        }
+    },
+    error: (...args: any) => {
+        if (TWT.isDev) {
+            console.error('【TWT】Error:', ...args)
+        }
+    },
+    trace: (...args: any) => {
+        if (TWT.isDev) {
+            console.trace('【TWT】Trace:', ...args)
+        }
     }
 }

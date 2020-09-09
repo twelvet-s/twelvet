@@ -4,6 +4,7 @@ import { ProTableProps } from '@ant-design/pro-table/lib/index'
 import { ParamsType } from '@ant-design/pro-provider'
 import { useState } from 'react'
 import ProTable from '@ant-design/pro-table'
+import { system } from '@/utils/twelvet'
 
 let searchConfig: { [key: string]: any } | false = {
     span: {
@@ -168,28 +169,32 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             // 请求数据地址
             request={async (params, _sort, _filter) => {
                 const { current = 1, pageSize = 10, ...otherParams } = params;
-                const res: any = await request({
-                    ...otherParams,
-                    ...postData,
-                    page: current,
-                    pagesize: pageSize,
-                }, _sort, _filter);
-                const { status, msg, data = {} } = res;
-                const { records, total } = data;
-                let success = true;
-                if (status != 1) {
-                    success = false
-                    message.error(msg);
-                }
-                return {
-                    // 表格数据
-                    data: records,
-                    // 当前页码
-                    page: current,
-                    // 是否请求成功
-                    success,
-                    // 总条数
-                    total,
+                try {
+                    const res: any = await request({
+                        ...otherParams,
+                        ...postData,
+                        page: current,
+                        pagesize: pageSize,
+                    }, _sort, _filter);
+                    const { status, msg, data = {} } = res;
+                    const { records, total } = data;
+                    let success = true;
+                    if (status != 1) {
+                        success = false
+                        message.error(msg);
+                    }
+                    return {
+                        // 表格数据
+                        data: records,
+                        // 当前页码
+                        page: current,
+                        // 是否请求成功
+                        success,
+                        // 总条数
+                        total,
+                    }
+                } catch (e) {
+                    system.trace("TWTProTable：", e)
                 }
             }}
             // 表头参数

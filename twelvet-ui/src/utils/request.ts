@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request'
 import { notification } from 'antd'
+import { history } from 'umi'
 import TWT from '../setting'
 
 const codeMessage = {
@@ -40,10 +41,10 @@ const errorHandler = (error: { response: Response }): Response => {
         })
 
         // 401状态立即要求登录
-        // if (status === 401) {
-        //     // 进行一次续签操作，继续失败将要求重新登录
-        //     return history.push('/login');
-        // }
+        if (status === 401) {
+            // 进行一次续签操作，继续失败将要求重新登录
+            return history.push('/login');
+        }
 
     } else if (!response) {
         notification.error({
