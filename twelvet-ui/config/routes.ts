@@ -28,13 +28,13 @@ export default [
                     authority: ['admin', 'user'],
                     name: 'home',
                     path: '/index',
-                    icon: 'HomeOutlined',
+                    icon: 'icon-home',
                     component: './index',
                 },
                 // 系统管理
                 {
                     name: 'systemManagement',
-                    icon: 'setting',
+                    icon: 'icon-setting',
                     routes: [
                         // 职员管理
                         {
@@ -47,7 +47,7 @@ export default [
                 // 工具
                 {
                     name: 'tool',
-                    icon: 'tool',
+                    icon: 'icon-toolbox',
                     routes: [
                         // 图形化编辑器
                         {
