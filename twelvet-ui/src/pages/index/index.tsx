@@ -2,7 +2,7 @@ import { Row, Col, Card } from 'antd'
 import FastCtr from './components/FastCtr'
 import History from './components/History'
 import Panel from './components/Panel'
-import { log } from '@/utils/twelvet'
+import { system } from '@/utils/twelvet'
 
 import LineChart from './components/LineChart'
 import BarChart from './components/BarChart'
@@ -22,7 +22,7 @@ const Index: React.FC<{}> = () => {
 
 
     useEffect(() => {
-        log("组件装载，数据模拟定时器开启")
+        system.log("组件装载，数据模拟定时器开启")
         const timer = setInterval(() => {
             const random1 = Math.ceil(Math.random() * 1000)
             const random2 = Math.ceil(Math.random() * 1000)
@@ -48,7 +48,7 @@ const Index: React.FC<{}> = () => {
         }, 2000)
 
         return () => {
-            log("组件卸载，数据模拟定时器关闭")
+            system.log("组件卸载，数据模拟定时器关闭")
             clearInterval(timer)
         }
     }, [])

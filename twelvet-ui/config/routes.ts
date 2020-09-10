@@ -26,8 +26,8 @@ export default [
                 // 首页
                 {
                     authority: ['admin', 'user'],
-                    path: '/index',
                     name: 'home',
+                    path: '/index',
                     icon: 'HomeOutlined',
                     component: './index',
                 },
@@ -38,14 +38,32 @@ export default [
                     routes: [
                         // 职员管理
                         {
-                            path: '/staff',
                             name: 'staffManagement',
+                            path: '/staff',
                             component: './system/staff'
                         }
                     ]
                 },
+                // 工具
                 {
-                    component: './404',
+                    name: 'tool',
+                    icon: 'tool',
+                    routes: [
+                        // 图形化编辑器
+                        {
+                            name: 'graphicalEditor',
+                            icon: 'setting',
+                            path: '/tool/graphicalEditor',
+                            routes: [
+                                {
+                                    // 脑图
+                                    name: 'mind',
+                                    path: '/tool/graphicalEditor/mind',
+                                    component: './tool/graphicalEditor/mind'
+                                }
+                            ]
+                        }
+                    ]
                 },
             ],
         },
