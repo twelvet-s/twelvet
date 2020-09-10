@@ -1,11 +1,13 @@
 export default [
     // 登录
     {
+        title: '登录',
         name: 'login',
         path: '/login',
         component: '../layouts/Login',
         routes: [
             {
+                title: '首页页',
                 name: 'login',
                 path: '/login',
                 component: './login',
@@ -20,43 +22,46 @@ export default [
             component: '../layouts/Layout',
             routes: [
                 {
+                    title: '首页',
                     path: '/',
                     redirect: '/index',
                 },
-                // 首页
                 {
                     authority: ['admin', 'user'],
+                    title: '首页',
                     name: 'home',
                     path: '/index',
-                    icon: 'icon-home',
+                    icon: 'home',
                     component: './index',
                 },
-                // 系统管理
                 {
+                    title: '系统管理',
                     name: 'systemManagement',
                     icon: 'icon-setting',
+                    path: '/system',
                     routes: [
-                        // 职员管理
                         {
+                            title: '职员管理',
                             name: 'staffManagement',
-                            path: '/staff',
+                            path: '/system/staff',
                             component: './system/staff'
                         }
                     ]
                 },
-                // 工具
                 {
+                    title: '工具箱',
                     name: 'tool',
                     icon: 'icon-toolbox',
+                    path: '/tool',
                     routes: [
-                        // 图形化编辑器
                         {
+                            title: '图形化编辑器',
                             name: 'graphicalEditor',
-                            icon: 'setting',
+                            icon: 'icon-setting',
                             path: '/tool/graphicalEditor',
                             routes: [
                                 {
-                                    // 脑图
+                                    title: '脑图编辑器',
                                     name: 'mind',
                                     path: '/tool/graphicalEditor/mind',
                                     component: './tool/graphicalEditor/mind'

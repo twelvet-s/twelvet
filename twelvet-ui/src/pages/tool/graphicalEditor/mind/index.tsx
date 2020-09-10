@@ -14,28 +14,21 @@ import styles from './index.less';
 GGEditor.setTrackable(false);
 
 export default () => (
-	<PageHeaderWrapper
-		content={formatMessage({
-			id: 'editorandmind.description',
-			defaultMessage: 'description',
-		})}
-	>
-		<GGEditor className={styles.editor}>
-			<Row className={styles.editorHd}>
-				<Col span={24}>
-					<MindToolbar />
-				</Col>
-			</Row>
-			<Row className={styles.editorBd}>
-				<Col span={20} className={styles.editorContent}>
-					<Mind data={data} className={styles.mind} />
-				</Col>
-				<Col span={4} className={styles.editorSidebar}>
-					<MindDetailPanel />
-					<EditorMinimap />
-				</Col>
-			</Row>
-			<MindContextMenu />
-		</GGEditor>
-	</PageHeaderWrapper>
+    <GGEditor className={styles.editor}>
+        <Row className={styles.editorHd}>
+            <Col span={24}>
+                <MindToolbar />
+            </Col>
+        </Row>
+        <Row className={styles.editorBd}>
+            <Col span={20} className={styles.editorContent}>
+                <Mind data={data} className={styles.mind} />
+            </Col>
+            <Col span={4} className={styles.editorSidebar}>
+                <MindDetailPanel />
+                <EditorMinimap />
+            </Col>
+        </Row>
+        <MindContextMenu />
+    </GGEditor>
 );
