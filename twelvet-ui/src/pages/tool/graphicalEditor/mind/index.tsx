@@ -18,10 +18,10 @@ export default () => (
 			</Col>
 		</Row>
 		<Row className={styles.editorBd}>
-			<Col span={20} className={styles.editorContent}>
+			<Col sm={{ span: 20 }} xs={{ span: 24 }} className={styles.editorContent}>
 				<Mind className={styles.mind} />
 			</Col>
-			<Col span={4} className={styles.editorSidebar}>
+			<Col sm={{ span: 4 }} xs={{ span: 24 }} className={styles.editorSidebar}>
 				<MindDetailPanel />
 				<EditorMinimap />
 			</Col>

@@ -20,13 +20,13 @@ export default () => (
 			</Col>
 		</Row>
 		<Row className={styles.editorBd}>
-			<Col span={2} className={styles.editorSidebar}>
+			<Col sm={{ span: 2 }} xs={{ span: 24 }} className={styles.editorSidebar}>
 				<KoniItemPanel />
 			</Col>
-			<Col span={16} className={styles.editorContent}>
+			<Col sm={{ span: 16 }} xs={{ span: 24 }} className={styles.editorContent}>
 				<Koni className={styles.koni} />
 			</Col>
-			<Col span={6} className={styles.editorSidebar}>
+			<Col sm={{ span: 6 }} xs={{ span: 24 }} className={styles.editorSidebar}>
 				<KoniDetailPanel />
 				<EditorMinimap />
 			</Col>

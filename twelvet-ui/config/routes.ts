@@ -49,6 +49,26 @@ export default [
                     ]
                 },
                 {
+                    title: '账号管理',
+                    name: 'account',
+                    icon: 'icon-setting',
+                    path: '/account',
+                    routes: [
+                        {
+                            title: '个人中心',
+                            name: 'center',
+                            path: '/account/center',
+                            component: './account/center'
+                        },
+                        {
+                            title: '个人设置',
+                            name: 'settings',
+                            path: '/account/settings',
+                            component: './account/settings'
+                        }
+                    ]
+                },
+                {
                     title: '工具箱',
                     name: 'tool',
                     icon: 'icon-toolbox',

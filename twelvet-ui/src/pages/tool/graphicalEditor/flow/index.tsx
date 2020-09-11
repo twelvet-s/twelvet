@@ -19,13 +19,13 @@ export default () => (
 			</Col>
 		</Row>
 		<Row className={styles.editorBd}>
-			<Col span={4} className={styles.editorSidebar}>
+			<Col sm={{ span: 4 }} xs={{ span: 24 }} className={styles.editorSidebar}>
 				<FlowItemPanel />
 			</Col>
-			<Col span={16} className={styles.editorContent}>
+			<Col sm={{ span: 16 }} xs={{ span: 24 }} className={styles.editorContent}>
 				<Flow className={styles.flow} />
 			</Col>
-			<Col span={4} className={styles.editorSidebar}>
+			<Col sm={{ span: 4 }} xs={{ span: 24 }} className={styles.editorSidebar}>
 				<FlowDetailPanel />
 				<EditorMinimap />
 			</Col>

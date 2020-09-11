@@ -6,6 +6,11 @@ export default {
     'menu.systemManagement': '系统管理',
     'menu.systemManagement.staffManagement': '职员管理',
 
+    // 个人中心
+    'menu.account': '账号管理',
+    'menu.account.center': '个人中心',
+    'menu.account.settings': '个人设置',
+
     // 登录页面
     'menu.tool': '工具箱',
     'menu.tool.graphicalEditor': '图形编辑器',
