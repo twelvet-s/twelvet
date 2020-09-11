@@ -31,13 +31,13 @@ export default [
                     title: '首页',
                     name: 'home',
                     path: '/index',
-                    icon: 'home',
+                    icon: 'icon-home',
                     component: './index',
                 },
                 {
                     title: '系统管理',
                     name: 'systemManagement',
-                    icon: 'icon-setting',
+                    icon: 'icon-system',
                     path: '/system',
                     routes: [
                         {
@@ -51,7 +51,7 @@ export default [
                 {
                     title: '账号管理',
                     name: 'account',
-                    icon: 'icon-setting',
+                    icon: 'icon-account',
                     path: '/account',
                     routes: [
                         {
@@ -71,13 +71,12 @@ export default [
                 {
                     title: '工具箱',
                     name: 'tool',
-                    icon: 'icon-toolbox',
+                    icon: 'icon-tool-box',
                     path: '/tool',
                     routes: [
                         {
                             title: '图形化编辑器',
                             name: 'graphicalEditor',
-                            icon: 'icon-setting',
                             path: '/tool/graphicalEditor',
                             routes: [
                                 {
