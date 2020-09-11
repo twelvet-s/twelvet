@@ -45,7 +45,6 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "gg-editor": "^2.0.2",
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-layout": "^6.4.1",
     "@ant-design/pro-table": "^2.5.3",
