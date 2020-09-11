@@ -122,6 +122,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             footerRender={() => <Footer />}
             menuDataRender={menuDataRender}
             rightContentRender={() => <RightContent />}
+            menuFooterRender={() => {
+                return <Link to={"/"}>TwelveT</Link>;
+            }}
             {...props}
             {...settings}
         >
