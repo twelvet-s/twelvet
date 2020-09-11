@@ -61,11 +61,23 @@ export default [
                             path: '/tool/graphicalEditor',
                             routes: [
                                 {
+                                    title: '流程编辑器',
+                                    name: 'flow',
+                                    path: '/tool/graphicalEditor/flow',
+                                    component: './tool/graphicalEditor/flow'
+                                },
+                                {
                                     title: '脑图编辑器',
                                     name: 'mind',
                                     path: '/tool/graphicalEditor/mind',
                                     component: './tool/graphicalEditor/mind'
-                                }
+                                },
+                                {
+                                    title: '拓扑编辑器',
+                                    name: 'koni',
+                                    path: '/tool/graphicalEditor/koni',
+                                    component: './tool/graphicalEditor/koni'
+                                },
                             ]
                         }
                     ]

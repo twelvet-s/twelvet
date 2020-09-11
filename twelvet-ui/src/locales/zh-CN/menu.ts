@@ -10,6 +10,8 @@ export default {
     'menu.tool': '工具箱',
     'menu.tool.graphicalEditor': '图形编辑器',
     'menu.tool.graphicalEditor.mind': '脑图编辑器',
+    'menu.tool.graphicalEditor.koni': '流程编辑器',
+    'menu.tool.graphicalEditor.flow': '拓扑编辑器',
 
     // 登录页面
     'menu.register': '注册',
