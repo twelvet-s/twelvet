@@ -3,17 +3,20 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { MenuDataItem, BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
-import { Link, useIntl, connect, Dispatch, history } from 'umi';
-import { Result, Button } from 'antd';
-import Authorized from '@/utils/Authorized';
-import RightContent from '@/components/GlobalHeader/RightContent';
-import { ConnectState } from '@/models/connect';
-import { getAuthorityFromRouter } from '@/utils/utils';
-import logo from '../assets/logo.svg';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import Footer from '@/components/TwelveT/Footer';
+import ProLayout, { MenuDataItem, BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout'
+import { createFromIconfontCN } from '@ant-design/icons'
+import React, { useEffect } from 'react'
+import { Link, useIntl, connect, Dispatch, history } from 'umi'
+import { Result, Button } from 'antd'
+import Authorized from '@/utils/Authorized'
+import RightContent from '@/components/GlobalHeader/RightContent'
+import { ConnectState } from '@/models/connect'
+import { getAuthorityFromRouter } from '@/utils/utils'
+import logo from '../assets/logo.svg'
+import { PageHeaderWrapper } from '@ant-design/pro-layout'
+import Footer from '@/components/TwelveT/Footer'
+
+const IconFont = createFromIconfontCN();
 
 const noMatch = (
     <Result
@@ -26,22 +29,22 @@ const noMatch = (
             </Button>
         }
     />
-);
+)
 export interface BasicLayoutProps extends ProLayoutProps {
     breadcrumbNameMap: {
-        [path: string]: MenuDataItem;
-    };
+        [path: string]: MenuDataItem
+    }
     route: ProLayoutProps['route'] & {
-        authority: string[];
-    };
-    settings: Settings;
-    dispatch: Dispatch;
+        authority: string[]
+    }
+    settings: Settings
+    dispatch: Dispatch
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     breadcrumbNameMap: {
-        [path: string]: MenuDataItem;
-    };
-};
+        [path: string]: MenuDataItem
+    }
+}
 /**
  * use Authorized check all menu item
  */
@@ -51,9 +54,9 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
         const localItem = {
             ...item,
             children: item.children ? menuDataRender(item.children) : undefined,
-        };
-        return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-    });
+        }
+        return Authorized.check(item.authority, localItem, null) as MenuDataItem
+    })
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
@@ -64,16 +67,16 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         location = {
             pathname: '/',
         },
-    } = props;
+    } = props
 
     // 获取用户信息
     useEffect(() => {
         if (dispatch) {
             dispatch({
                 type: 'user/fetchCurrent',
-            });
+            })
         }
-    }, []);
+    }, [])
     /**
      * init variables
      */
@@ -83,26 +86,37 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             dispatch({
                 type: 'global/changeLayoutCollapsed',
                 payload,
-            });
+            })
         }
-    }; // get children authority
+    } // get children authority
 
     const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
         authority: undefined,
-    };
-    const { formatMessage } = useIntl();
+    }
+    const { formatMessage } = useIntl()
 
     return (
         <ProLayout
             logo={logo}
             formatMessage={formatMessage}
             onCollapse={handleMenuCollapse}
+            // 点击头部Logo
             onMenuHeaderClick={() => history.push('/')}
-            menuItemRender={(menuItemProps, defaultDom) => {
-                if (menuItemProps.isUrl || !menuItemProps.path) {
-                    return defaultDom;
-                }
-                return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+            // 重写菜单渲染
+            menuItemRender={(TWTProps, TWTDom) => {
+                return (
+                    <Link to={TWTProps.path ? TWTProps.path : '#'}>
+                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTDom}
+                    </Link>
+                )
+            }}
+            // 重写拥有子菜单菜单项的 render 方法
+            subMenuItemRender={(TWTProps) => {
+                return (
+                    <>
+                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTProps.name}
+                    </>
+                )
             }}
             breadcrumbRender={(routers = []) => [
                 {
@@ -112,18 +126,19 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 ...routers,
             ]}
             itemRender={(route, params, routes, paths) => {
-                const first = routes.indexOf(route) === 0;
+                const first = routes.indexOf(route) === 0
                 return first ? (
                     <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
                 ) : (
                         <span>{route.breadcrumbName}</span>
-                    );
+                    )
             }}
             footerRender={() => <Footer />}
             menuDataRender={menuDataRender}
             rightContentRender={() => <RightContent />}
+            // 渲染菜单栏底部按钮
             menuFooterRender={() => {
-                return <Link to={"/"}>TwelveT</Link>;
+                return <Link to={"/"}>TwelveT</Link>
             }}
             {...props}
             {...settings}
@@ -136,10 +151,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 </PageHeaderWrapper>
             </Authorized>
         </ProLayout>
-    );
-};
+    )
+}
 
 export default connect(({ global, settings }: ConnectState) => ({
     collapsed: global.collapsed,
     settings,
-}))(BasicLayout);
+}))(BasicLayout)

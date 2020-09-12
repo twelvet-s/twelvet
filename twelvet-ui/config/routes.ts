@@ -42,6 +42,7 @@ export default [
                     routes: [
                         {
                             title: '职员管理',
+                            icon: 'icon-team',
                             name: 'staffManagement',
                             path: '/system/staff',
                             component: './system/staff'
@@ -57,12 +58,14 @@ export default [
                         {
                             title: '个人中心',
                             name: 'center',
+                            icon: 'icon-user-info',
                             path: '/account/center',
                             component: './account/center'
                         },
                         {
                             title: '个人设置',
                             name: 'settings',
+                            icon: 'icon-settings',
                             path: '/account/settings',
                             component: './account/settings'
                         }
@@ -77,23 +80,27 @@ export default [
                         {
                             title: '图形化编辑器',
                             name: 'graphicalEditor',
+                            icon: 'icon-graphical-edit',
                             path: '/tool/graphicalEditor',
                             routes: [
                                 {
                                     title: '流程编辑器',
                                     name: 'flow',
+                                    icon: 'icon-flow-edit',
                                     path: '/tool/graphicalEditor/flow',
                                     component: './tool/graphicalEditor/flow'
                                 },
                                 {
                                     title: '脑图编辑器',
                                     name: 'mind',
+                                    icon: 'icon-mind-edit',
                                     path: '/tool/graphicalEditor/mind',
                                     component: './tool/graphicalEditor/mind'
                                 },
                                 {
                                     title: '拓扑编辑器',
                                     name: 'koni',
+                                    icon: 'icon-koni-edit',
                                     path: '/tool/graphicalEditor/koni',
                                     component: './tool/graphicalEditor/koni'
                                 },
