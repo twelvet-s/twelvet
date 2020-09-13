@@ -8,7 +8,6 @@ import { setAuthority } from '@/utils/authority'
 import { getPageQuery, } from '@/utils/utils'
 
 export interface StateType {
-    username?: string
     accessToken?: string
     refreshToken?: string
     type?: string
@@ -33,7 +32,6 @@ const LoginModel: LoginModelType = {
     namespace: 'login',
 
     state: {
-        username: undefined,
         accessToken: undefined,
         refreshToken: undefined
     },
@@ -42,7 +40,7 @@ const LoginModel: LoginModelType = {
         // 登录
         *login({ payload }, { call, put }) {
             const response = yield call(login, payload)
-            const { code, msg, username } = response
+            const { code, msg } = response
 
             // 请求错误立即返回
             if (code != 200) {
@@ -52,29 +50,26 @@ const LoginModel: LoginModelType = {
                 type: 'changeLoginStatus',
                 payload: response,
             })
-            return message.success(username)
-
-
 
             // Login successfully
-            // if (response.status === 'ok') {
-            //     const urlParams = new URL(window.location.href)
-            //     const params = getPageQuery()
-            //     let { redirect } = params as { redirect: string }
-            //     if (redirect) {
-            //         const redirectUrlParams = new URL(redirect)
-            //         if (redirectUrlParams.origin === urlParams.origin) {
-            //             redirect = redirect.substr(urlParams.origin.length)
-            //             if (redirect.match(/^\/.*#/)) {
-            //                 redirect = redirect.substr(redirect.indexOf('#') + 1)
-            //             }
-            //         } else {
-            //             window.location.href = '/'
-            //             return
-            //         }
-            //     }
-            //     history.replace(redirect || '/')
-            // }
+            if (code === 200) {
+                const urlParams = new URL(window.location.href)
+                const params = getPageQuery()
+                let { redirect } = params as { redirect: string }
+                if (redirect) {
+                    const redirectUrlParams = new URL(redirect)
+                    if (redirectUrlParams.origin === urlParams.origin) {
+                        redirect = redirect.substr(urlParams.origin.length)
+                        if (redirect.match(/^\/.*#/)) {
+                            redirect = redirect.substr(redirect.indexOf('#') + 1)
+                        }
+                    } else {
+                        window.location.href = '/'
+                        return
+                    }
+                }
+                history.replace(redirect || '/')
+            }
         },
         // 刷新令牌
         *refreshToken({ payload }, { call, put }) {

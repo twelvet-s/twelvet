@@ -114,7 +114,16 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             subMenuItemRender={(TWTProps) => {
                 return (
                     <>
-                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTProps.name}
+                        <span className="ant-pro-menu-item">
+                            <span role="img" className="anticon">
+                                {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
+                            </span>
+
+                            <span>
+                                {TWTProps.name}
+                            </span>
+                        </span>
+
                     </>
                 )
             }}
@@ -136,10 +145,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             footerRender={() => <Footer />}
             menuDataRender={menuDataRender}
             rightContentRender={() => <RightContent />}
-            // 渲染菜单栏底部按钮
-            menuFooterRender={() => {
-                return <Link to={"/"}>TwelveT</Link>
-            }}
             {...props}
             {...settings}
         >
@@ -150,7 +155,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     {children}
                 </PageHeaderWrapper>
             </Authorized>
-        </ProLayout>
+        </ProLayout >
     )
 }
 

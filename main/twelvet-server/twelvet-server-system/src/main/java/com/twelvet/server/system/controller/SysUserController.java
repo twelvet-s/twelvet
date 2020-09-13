@@ -77,4 +77,9 @@ public class SysUserController extends TWTController {
         return ajax;
     }
 
+    @GetMapping("/demo")
+    public AjaxResult demo(){
+        return AjaxResult.success();
+    }
+
 }

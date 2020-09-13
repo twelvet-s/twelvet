@@ -164,7 +164,6 @@
         <module>twelvet-api</module>
         <module>twelvet-server</module>
         <module>twelvet-visual</module>
-        <module>twelvet-visual-monitor</module>
     </modules>
 
     <build>
