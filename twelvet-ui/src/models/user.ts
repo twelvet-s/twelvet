@@ -1,22 +1,13 @@
 import { Effect, Reducer } from 'umi'
 
-import { queryCurrent, query as queryUsers } from '@/services/user'
+import { queryCurrent, query as queryUsers, currentUser } from '@/services/user'
 
 export interface CurrentUser {
-    avatar?: string
-    name?: string
-    title?: string
-    group?: string
-    signature?: string
-    tags?: {
-        key: string
-        label: string
-    }[]
-    userid?: string
-    unreadCount?: number
+    username?: string
 }
 
 export interface UserModelState {
+    username?: string
     currentUser?: CurrentUser
 }
 
@@ -26,8 +17,10 @@ export interface UserModelType {
     effects: {
         fetch: Effect
         fetchCurrent: Effect
+        currentUser: Effect
     }
     reducers: {
+        setCurrentUser: Reducer<UserModelState>
         saveCurrentUser: Reducer<UserModelState>
         changeNotifyCount: Reducer<UserModelState>
     }
@@ -37,10 +30,26 @@ const UserModel: UserModelType = {
     namespace: 'user',
 
     state: {
+        username: undefined,
         currentUser: {},
     },
 
     effects: {
+        /**
+         * 
+         * @param _ 获取当前登录用户的信息
+         * @param param1 
+         */
+        *currentUser(_, { call, put }) {
+            const res = yield call(currentUser)
+            yield put({
+                type: 'setCurrentUser',
+                payload: res.user,
+            })
+        },
+
+
+
         *fetch(_, { call, put }) {
             const response = yield call(queryUsers)
             yield put({
@@ -58,6 +67,18 @@ const UserModel: UserModelType = {
     },
 
     reducers: {
+        /**
+         * 设置当前用户信息
+         * @param state 
+         * @param action 
+         */
+        setCurrentUser(state, action) {
+            return {
+                ...state,
+                username: action.payload.username,
+            }
+        },
+
         saveCurrentUser(state, action) {
             return {
                 ...state,

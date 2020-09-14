@@ -30,7 +30,7 @@ spring:
       # 取消控制台懒加载
       eager: true
       transport:
-        # 控制台地址
+        # 控制台地址：Port端口
         dashboard: 127.0.0.1:8718
       # 规则持久化配置
       datasource:

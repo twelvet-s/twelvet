@@ -73,7 +73,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     useEffect(() => {
         if (dispatch) {
             dispatch({
-                type: 'user/fetchCurrent',
+                type: 'user/currentUser',
             })
         }
     }, [])
