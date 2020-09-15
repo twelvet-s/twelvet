@@ -152,8 +152,8 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                 columns[index]['ellipsis'] = true
             }
             // 设置placeholder
-            if (columns[index]['formItemProps'] == undefined) {
-                columns[index]['formItemProps'] = { "placeholder": columns[index]['title'] }
+            if (columns[index]['fieldProps'] == undefined) {
+                columns[index]['fieldProps'] = { "placeholder": columns[index]['title'] }
             }
             // 处理columns数据的标题渲染(搜索框不显示标题，由placeholder代替)
             if (item.hideInSearch != true) {

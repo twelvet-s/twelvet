@@ -8,7 +8,6 @@ import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
 export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
-    username?: string;
     currentUser?: CurrentUser;
     menu?: boolean;
 }
@@ -42,7 +41,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
             currentUser = {
                 username: '',
             },
-            username,
             menu,
 
         } = this.props;
@@ -51,28 +49,28 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                 {menu && (
                     <Menu.Item key="center">
                         <UserOutlined />
-            个人中心
+                        个人中心
                     </Menu.Item>
                 )}
                 {menu && (
                     <Menu.Item key="settings">
                         <SettingOutlined />
-            个人设置
+                        个人设置
                     </Menu.Item>
                 )}
                 {menu && <Menu.Divider />}
 
                 <Menu.Item key="logout">
                     <LogoutOutlined />
-          退出登录
-        </Menu.Item>
+                    退出登录
+                </Menu.Item>
             </Menu>
         );
-        return currentUser ? (
+        return false ? (
             <HeaderDropdown overlay={menuHeaderDropdown}>
                 <span className={`${styles.action} ${styles.account}`}>
-                    {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" /> */}
-                    <span className={`${styles.name} anticon`}>{username}</span>
+                    <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+                    <span className={`${styles.name} anticon`}>{currentUser.username}</span>
                 </span>
             </HeaderDropdown>
         ) : (
@@ -90,6 +88,5 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 }
 
 export default connect(({ user }: ConnectState) => ({
-    username: user.username,
     currentUser: user.currentUser,
 }))(AvatarDropdown);

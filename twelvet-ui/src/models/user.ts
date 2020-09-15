@@ -7,7 +7,6 @@ export interface CurrentUser {
 }
 
 export interface UserModelState {
-    username?: string
     currentUser?: CurrentUser
 }
 
@@ -30,7 +29,6 @@ const UserModel: UserModelType = {
     namespace: 'user',
 
     state: {
-        username: undefined,
         currentUser: {},
     },
 
@@ -44,7 +42,7 @@ const UserModel: UserModelType = {
             const res = yield call(currentUser)
             yield put({
                 type: 'setCurrentUser',
-                payload: res.user,
+                payload: res.data,
             })
         },
 
@@ -75,7 +73,6 @@ const UserModel: UserModelType = {
         setCurrentUser(state, action) {
             return {
                 ...state,
-                username: action.payload.username,
             }
         },
 

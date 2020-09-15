@@ -24,11 +24,6 @@ public class R<T> implements Serializable {
 
     private T data;
 
-    public static <T> R<T> ok()
-    {
-        return restResult(null, SUCCESS, null);
-    }
-
     public static <T> R<T> ok(T data)
     {
         return restResult(data, SUCCESS, null);

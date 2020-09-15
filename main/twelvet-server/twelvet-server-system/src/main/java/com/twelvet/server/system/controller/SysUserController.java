@@ -65,16 +65,20 @@ public class SysUserController extends TWTController {
     @GetMapping("/getInfo")
     public AjaxResult getInfo()
     {
+        // 获取当前登录用户
         Long userId = SecurityUtils.getLoginUser().getUserId();
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(userId);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(userId);
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("user", userService.selectUserById(userId));
-        ajax.put("roles", roles);
-        ajax.put("permissions", permissions);
-        return ajax;
+        // 获取用户信息
+        SysUser sysUser = userService.selectUserById(userId);
+        // 用户信息实体
+        UserInfo sysUserVo = new UserInfo();
+        sysUserVo.setSysUser(sysUser);
+        sysUserVo.setRoles(roles);
+        sysUserVo.setPermissions(permissions);
+        return AjaxResult.success(sysUserVo);
     }
 
 }
