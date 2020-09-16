@@ -4,6 +4,7 @@ import { queryCurrent, query as queryUsers, currentUser } from '@/services/user'
 
 export interface CurrentUser {
     username?: string
+    avatar?: string
 }
 
 export interface UserModelState {
@@ -39,10 +40,10 @@ const UserModel: UserModelType = {
          * @param param1 
          */
         *currentUser(_, { call, put }) {
-            const res = yield call(currentUser)
+            //const res = yield call(currentUser)
             yield put({
                 type: 'setCurrentUser',
-                payload: res.data,
+                //payload: res.data,
             })
         },
 
@@ -73,13 +74,16 @@ const UserModel: UserModelType = {
         setCurrentUser(state, action) {
             return {
                 ...state,
+                currentUser: {
+                    username: 'admin',
+                    avatar: '/update'
+                }
             }
         },
 
         saveCurrentUser(state, action) {
             return {
                 ...state,
-                currentUser: action.payload || {},
             }
         },
         changeNotifyCount(

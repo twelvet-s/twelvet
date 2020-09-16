@@ -13,6 +13,7 @@ export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
 }
 
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
+    
     onMenuClick = (event: {
         key: React.Key;
         keyPath: React.Key[];
@@ -66,7 +67,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                 </Menu.Item>
             </Menu>
         );
-        return false ? (
+        return true ? (
             <HeaderDropdown overlay={menuHeaderDropdown}>
                 <span className={`${styles.action} ${styles.account}`}>
                     <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
