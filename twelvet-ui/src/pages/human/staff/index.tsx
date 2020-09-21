@@ -9,19 +9,19 @@ const Staff: React.FC<{}> = () => {
 
     const columns: ProColumns<columns>[] = [
         {
-            title: '订单编号', tip: "132", align: 'left', hideInSearch: true, dataIndex: 'goodsId', 
+            title: '账号', tip: "132", align: 'left', hideInSearch: true, dataIndex: 'goodsId', 
         },
         {
-            title: '获佣用户', valueType: "text", hideInSearch: true, dataIndex: 'goodsName'
+            title: '用户昵称', valueType: "text", hideInSearch: true, dataIndex: 'goodsName'
         },
         {
-            title: '佣金描述', hideInSearch: true, dataIndex: 'goodsImg'
+            title: '部门', hideInSearch: true, dataIndex: 'goodsImg'
         },
         {
-            title: '商品金额', hideInSearch: true, dataIndex: 'shopPrice'
+            title: '状态', hideInSearch: true, dataIndex: 'shopPrice'
         },
         {
-            title: '佣金', dataIndex: 'saleNum'
+            title: '创建时间', dataIndex: 'saleNum'
         },
     ]
 

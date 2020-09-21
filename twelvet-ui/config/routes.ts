@@ -41,16 +41,38 @@ export default [
                     path: '/system',
                     routes: [
                         {
-                            title: '职员管理',
-                            icon: 'icon-team',
-                            name: 'staffManagement',
-                            path: '/system/staff',
-                            component: './system/staff'
+                            title: '菜单管理',
+                            icon: 'icon-menu',
+                            name: 'menu',
+                            path: '/system/menu',
+                            component: './system/menu'
                         }
                     ]
                 },
                 {
-                    title: '账号管理',
+                    title: '人力管理',
+                    icon: 'icon-human-resources',
+                    name: 'human',
+                    path: '/human',
+                    routes: [
+                        {
+                            title: '职员管理',
+                            icon: 'icon-team',
+                            name: 'staffManagement',
+                            path: '/human/staff',
+                            component: './human/staff'
+                        },
+                        {
+                            title: '角色管理',
+                            icon: 'icon-role',
+                            name: 'role',
+                            path: '/human/role',
+                            component: './human/role'
+                        }
+                    ]
+                },
+                {
+                    title: '个人账号',
                     name: 'account',
                     icon: 'icon-account',
                     path: '/account',
@@ -108,6 +130,9 @@ export default [
                         }
                     ]
                 },
+                {
+                    component: './404',
+                }
             ],
         },
         {

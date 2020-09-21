@@ -106,7 +106,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             menuItemRender={(TWTProps, TWTDom) => {
                 return (
                     <Link to={TWTProps.path ? TWTProps.path : '#'}>
-                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTDom}
+                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTProps.name}
                     </Link>
                 )
             }}

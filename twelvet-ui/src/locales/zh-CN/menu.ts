@@ -4,10 +4,16 @@ export default {
 
     // 系统设置模块
     'menu.systemManagement': '系统管理',
-    'menu.systemManagement.staffManagement': '职员管理',
+    'menu.systemManagement.menu': '菜单管理',
+    
+
+    // 人力管理
+    'menu.human': '人力管理',
+    'menu.human.staffManagement': '职员管理',
+    'menu.human.role': '角色管理',
 
     // 个人中心
-    'menu.account': '账号管理',
+    'menu.account': '个人账号',
     'menu.account.center': '个人中心',
     'menu.account.settings': '个人设置',
 
