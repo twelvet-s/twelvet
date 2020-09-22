@@ -8,6 +8,7 @@ import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.utils.TWTUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,11 +30,9 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(TwTUserDetailsServiceImpl.class);
 
-    private final RemoteUserService remoteUserService;
+    @Autowired
+    private RemoteUserService remoteUserService;
 
-    public TwTUserDetailsServiceImpl(RemoteUserService remoteUserService) {
-        this.remoteUserService = remoteUserService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -44,12 +43,12 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 自定义账号状态检测
+     *
      * @param userResult userResult
-     * @param username username
+     * @param username   username
      */
-    private void auth(R<UserInfo> userResult, String username){
-        if (TWTUtils.isEmpty(userResult) || TWTUtils.isEmpty(userResult.getData()))
-        {
+    private void auth(R<UserInfo> userResult, String username) {
+        if (TWTUtils.isEmpty(userResult) || TWTUtils.isEmpty(userResult.getData())) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
         }
@@ -57,15 +56,15 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 得到UserDetails
+     *
      * @param result result
      * @return UserDetails
      */
-    private UserDetails getUserDetails(R<UserInfo> result){
+    private UserDetails getUserDetails(R<UserInfo> result) {
         UserInfo info = result.getData();
 
         Set<String> dbAuthsSet = new HashSet<>();
-        if (TWTUtils.isNotEmpty(info.getRoles()))
-        {
+        if (TWTUtils.isNotEmpty(info.getRoles())) {
             // 获取角色
             dbAuthsSet.addAll(info.getRoles());
             // 获取权限

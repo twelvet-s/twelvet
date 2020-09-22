@@ -1,5 +1,6 @@
 package com.twelvet.framework.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.OAuth2ClientProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -28,20 +29,18 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    private final ResourceServerProperties resourceServerProperties;
 
-    private final OAuth2ClientProperties oAuth2ClientProperties;
+    @Autowired
+    private ResourceServerProperties resourceServerProperties;
 
-    private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    public ResourceServerConfig(
-            ResourceServerProperties resourceServerProperties,
-            OAuth2ClientProperties oAuth2ClientProperties,
-            AuthenticationEntryPoint authenticationEntryPoint) {
-        this.resourceServerProperties = resourceServerProperties;
-        this.oAuth2ClientProperties = oAuth2ClientProperties;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-    }
+    @Autowired
+    private OAuth2ClientProperties oAuth2ClientProperties;
+
+
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
 
     @Bean
     public AuthIgnoreConfig authIgnoreConfig() {
@@ -58,8 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Primary
     @Bean
-    public ResourceServerTokenServices tokenServices()
-    {
+    public ResourceServerTokenServices tokenServices() {
         RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
         DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
         UserAuthenticationConverter userTokenConverter = new CommonUserConverter();

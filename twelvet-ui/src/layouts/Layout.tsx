@@ -69,14 +69,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         },
     } = props
 
-    // 获取用户信息
-    useEffect(() => {
-        if (dispatch) {
-            dispatch({
-                type: 'user/currentUser',
-            })
-        }
-    }, [])
     /**
      * init variables
      */

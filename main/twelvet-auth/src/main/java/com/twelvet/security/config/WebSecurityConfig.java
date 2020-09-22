@@ -1,5 +1,6 @@
 package com.twelvet.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,19 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
- * @Description:
- * Web安全配置
+ * @Description: Web安全配置
  * Oauth2依赖于Security 默认情况下WebSecurityConfig执行比ResourceServerConfig优先
  */
 @Order(99)
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-
-    public WebSecurityConfig(@Qualifier("TWTUserDetails") UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /**
      * 加密编码模式

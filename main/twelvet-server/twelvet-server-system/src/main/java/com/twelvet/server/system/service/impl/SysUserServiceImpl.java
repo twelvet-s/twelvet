@@ -3,6 +3,7 @@ package com.twelvet.server.system.service.impl;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.server.system.mapper.SysUserMapper;
 import com.twelvet.server.system.service.ISysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,14 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysUserServiceImpl implements ISysUserService {
 
-    private final SysUserMapper userMapper;
-
-    public SysUserServiceImpl(SysUserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 通过用户名称搜索
+     *
      * @param username
      * @return
      */

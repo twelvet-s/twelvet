@@ -34,12 +34,11 @@ const Menu: React.FC<{}> = () => {
 
     return (
         <TWTProTable
-            rowKey="goodsId"
+            rowKey="menuId"
             request={pageQuery}
             columns={columns}
             toolBarRender={() => [
-                <Button type="primary">新增</Button>,
-                <Button type="primary" danger>批量删除</Button>
+                <Button type="primary">新增</Button>
             ]}
         />
     )

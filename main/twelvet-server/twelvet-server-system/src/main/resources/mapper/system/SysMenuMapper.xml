@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.twelvet.server.system.mapper.SysMenuMapper">
 
-    <!--<resultMap type="SysMenu" id="SysMenuResult">
+    <resultMap type="SysMenu" id="SysMenuResult">
         <id     property="menuId"         column="menu_id"        />
         <result property="menuName"       column="menu_name"      />
         <result property="parentName"     column="parent_name"    />
@@ -23,7 +23,12 @@
         <result property="updateTime"     column="update_time"    />
         <result property="updateBy"       column="update_by"      />
         <result property="remark"         column="remark"         />
-    </resultMap>-->
+    </resultMap>
+
+    <sql id="selectMenuVo">
+        select menu_id, menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, status, ifnull(perms,'') as perms, icon, create_time
+		from sys_menu
+    </sql>
 
     <select id="selectMenuPermsByUserId" parameterType="Long" resultType="String">
 		select distinct m.perms
@@ -34,5 +39,40 @@
 		where m.status = '0' and r.status = '0' and ur.user_id = #{userId}
 	</select>
 
+    <select id="selectMenuList" parameterType="SysMenu" resultMap="SysMenuResult">
+        <include refid="selectMenuVo"/>
+        <where>
+            <if test="menuName != null and menuName != ''">
+                AND menu_name like concat('%', #{menuName}, '%')
+            </if>
+            <if test="visible != null and visible != ''">
+                AND visible = #{visible}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        order by parent_id, order_num
+    </select>
+
+    <select id="selectMenuListByUserId" parameterType="SysMenu" resultMap="SysMenuResult">
+        select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.visible, m.status,
+        ifnull(m.perms,'') as perms, m.is_frame, m.menu_type, m.icon, m.order_num, m.create_time
+        from sys_menu m
+        left join sys_role_menu rm on m.menu_id = rm.menu_id
+        left join sys_user_role ur on rm.role_id = ur.role_id
+        left join sys_role ro on ur.role_id = ro.role_id
+        where ur.user_id = #{params.userId}
+        <if test="menuName != null and menuName != ''">
+            AND menu_name like concat('%', #{menuName}, '%')
+        </if>
+        <if test="visible != null and visible != ''">
+            AND visible = #{visible}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        order by m.parent_id, m.order_num
+    </select>
 
 </mapper>

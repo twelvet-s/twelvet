@@ -13,7 +13,7 @@ export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
 }
 
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
-    
+
     onMenuClick = (event: {
         key: React.Key;
         keyPath: React.Key[];
@@ -38,13 +38,17 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     };
 
     render(): React.ReactNode {
-        const {
-            currentUser = {
-                username: '',
-            },
-            menu,
 
-        } = this.props;
+        const { currentUser = {
+            sysUser: {
+                username: undefined,
+                avatar: undefined
+            }
+        }, menu } = this.props;
+
+        // 当前用户信息
+        const { sysUser } = currentUser
+
         const menuHeaderDropdown = (
             <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
                 {menu && (
@@ -67,11 +71,13 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                 </Menu.Item>
             </Menu>
         );
-        return true ? (
+
+
+        return currentUser && sysUser?.username ? (
             <HeaderDropdown overlay={menuHeaderDropdown}>
                 <span className={`${styles.action} ${styles.account}`}>
-                    <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-                    <span className={`${styles.name} anticon`}>{currentUser.username}</span>
+                    <Avatar size="small" className={styles.avatar} src={sysUser.avatar} alt="avatar" />
+                    <span className={`${styles.name} anticon`}>{sysUser.username}</span>
                 </span>
             </HeaderDropdown>
         ) : (

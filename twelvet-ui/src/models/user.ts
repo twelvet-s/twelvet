@@ -3,8 +3,15 @@ import { Effect, Reducer } from 'umi'
 import { queryCurrent, query as queryUsers, currentUser } from '@/services/user'
 
 export interface CurrentUser {
-    username?: string
-    avatar?: string
+    sysUser?: {
+        username?: string
+        avatar?: string
+        email?: string
+        phonenumber?: number
+        sex?: number
+    }
+    role?: string
+    permissions?: string
 }
 
 export interface UserModelState {
@@ -40,10 +47,10 @@ const UserModel: UserModelType = {
          * @param param1 
          */
         *currentUser(_, { call, put }) {
-            //const res = yield call(currentUser)
+            const { data } = yield call(currentUser)
             yield put({
                 type: 'setCurrentUser',
-                //payload: res.data,
+                payload: data,
             })
         },
 
@@ -75,8 +82,10 @@ const UserModel: UserModelType = {
             return {
                 ...state,
                 currentUser: {
-                    username: 'admin',
-                    avatar: '/update'
+                    sysUser: {
+                        ...action.payload.sysUser || {}
+                    }
+
                 }
             }
         },

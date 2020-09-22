@@ -4,6 +4,7 @@ import com.twelvet.framework.security.constans.CacheConstants;
 import com.twelvet.framework.security.constans.SecurityConstants;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.service.RedisClientDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,39 +41,32 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * 用户信息认证管理器
      */
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     /**
      * 数据源
      */
-    private final DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * Redis工厂
      */
-    private final RedisConnectionFactory redisConnectionFactory;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
 
     /**
      * 自定义用户信息
      */
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /**
      * 自定义认证失败处理
      */
-    private final WebResponseExceptionTranslator<OAuth2Exception> customWebResponseExceptionTranslator;
-
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager,
-                                     DataSource dataSource,
-                                     RedisConnectionFactory redisConnectionFactory,
-                                     @Qualifier("TWTUserDetails") UserDetailsService userDetailsService,
-                                     WebResponseExceptionTranslator<OAuth2Exception> customWebResponseExceptionTranslator) {
-        this.authenticationManager = authenticationManager;
-        this.dataSource = dataSource;
-        this.redisConnectionFactory = redisConnectionFactory;
-        this.userDetailsService = userDetailsService;
-        this.customWebResponseExceptionTranslator = customWebResponseExceptionTranslator;
-    }
+    @Autowired
+    private WebResponseExceptionTranslator<OAuth2Exception> customWebResponseExceptionTranslator;
 
     /**
      * 获取ResourceServer信息(使用Redis缓存信息)

@@ -4,6 +4,7 @@ import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysRoleMapper;
 import com.twelvet.server.system.service.ISysRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -18,20 +19,16 @@ import java.util.Set;
  */
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
-    private final SysRoleMapper roleMapper;
 
-    public SysRoleServiceImpl(SysRoleMapper roleMapper) {
-        this.roleMapper = roleMapper;
-    }
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     @Override
     public Set<String> selectRolePermissionByUserId(Long userId) {
         List<SysRole> perms = roleMapper.selectRolePermissionByUserId(userId);
         Set<String> permsSet = new HashSet<>();
-        for (SysRole perm : perms)
-        {
-            if (TWTUtils.isNotEmpty(perm))
-            {
+        for (SysRole perm : perms) {
+            if (TWTUtils.isNotEmpty(perm)) {
                 permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
             }
         }

@@ -12,7 +12,7 @@ import java.util.Date;
  * @Description: sys_user实体
  */
 public class SysUser extends BaseEntity {
-    private static final long   serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID
@@ -259,13 +259,11 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
-    public boolean isAdmin()
-    {
+    public boolean isAdmin() {
         return isAdmin(this.userId);
     }
 
-    public static boolean isAdmin(Long userId)
-    {
+    public static boolean isAdmin(Long userId) {
         return userId != null && 1L == userId;
     }
 
