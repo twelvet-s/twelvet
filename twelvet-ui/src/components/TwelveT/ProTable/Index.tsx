@@ -46,7 +46,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
         /**
          * 一个获得 dataSource 的方法
          */
-        request = async (params, _sort, _filter) => { },
+        request = async (params, sorter, filter) => { },
         /**
          * 对数据进行一些处理
          */
@@ -167,23 +167,23 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             // 支持横向超出自适应
             scroll={{ x: 'max-content' }}
             // 请求数据地址
-            request={async (params, _sort, _filter) => {
+            request={async (params, sort, filter) => {
                 const { current = 1, pageSize = 10, ...otherParams } = params;
                 try {
-                    const res: any = await request({
+                    const res: { [key: string]: string | number | Array<{[key: string]: string}> } = await request({
                         ...otherParams,
                         ...postData,
                         page: current,
                         pagesize: pageSize,
-                    }, _sort, _filter);
-                    const { status, msg, data = {} } = res;
+                    }, sort, filter);
+                    const { status, msg, data } = res;
                     const { records, total } = data;
                     let success = true;
                     if (status != 1) {
                         success = false
-                        message.error(msg);
+                        return message.error(msg);
                     }
-                    return {
+                    return Promise.resolve({
                         // 表格数据
                         data: records,
                         // 当前页码
@@ -192,7 +192,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                         success,
                         // 总条数
                         total,
-                    }
+                    })
                 } catch (e) {
                     system.trace("TWTProTable：", e)
                 }

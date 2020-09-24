@@ -1,11 +1,13 @@
 import request from '@/utils/request'
 
 // 请求的控制器名称
-const controller = "/system/goods";
+const controller = "/system/menu";
 
-export async function pageQuery(params: { [key: string]: any }) {
-    return request(`${controller}`, {
+export async function list(params: { [key: string]: any }) {
+    return request(`${controller}/list`, {
         method: 'GET',
-        data: params,
+        data: {
+            ...params
+        },
     });
 }
