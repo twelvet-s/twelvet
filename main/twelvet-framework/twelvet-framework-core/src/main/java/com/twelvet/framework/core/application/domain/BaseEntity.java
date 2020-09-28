@@ -1,5 +1,7 @@
 package com.twelvet.framework.core.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
  */
 public class BaseEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * 搜索值
      */
@@ -25,6 +28,7 @@ public class BaseEntity implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
@@ -35,6 +39,7 @@ public class BaseEntity implements Serializable {
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**
@@ -117,7 +122,7 @@ public class BaseEntity implements Serializable {
 
     public Map<String, Object> getParams() {
         if (params == null) {
-            params = new HashMap<>();
+            params = new HashMap<>(0);
         }
         return params;
     }

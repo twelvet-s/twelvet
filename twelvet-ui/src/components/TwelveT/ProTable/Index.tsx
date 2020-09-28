@@ -16,7 +16,7 @@ let searchConfig: { [key: string]: any } | false = {
         xxl: 4,
     }
 
-};
+}
 
 /**
  * TWTProTable，用于更好的控制全局Table样式
@@ -35,9 +35,32 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
         columns,
         params,
         columnsStateMap,
+        /**
+         * 分页数据配置
+         */
+        pagination = {
+            showSizeChanger: true,
+            // 每页显示条数
+            pageSize: 10,
+            // 当前页码
+            current: page,
+        },
         onColumnsStateChange,
         onSizeChange,
         rowSelection,
+        loading,
+        /**
+         * 展开数据行触发
+         */
+        onExpand,
+        /**
+         * 展开数据目录
+         */
+        childrenColumnName = 'children',
+        /**
+         * 展开缩进
+         */
+        indentSize = 50,
         /**
          * 渲染 table
          */
@@ -46,7 +69,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
         /**
          * 一个获得 dataSource 的方法
          */
-        request = async (params, sorter, filter) => { },
+        request = async () => { },
         /**
          * 对数据进行一些处理
          */
@@ -137,7 +160,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
         /**
          * 空值时显示
          */
-        columnEmptyText,
+        columnEmptyText = false,
         /**
          * 是否手动触发请求
          */
@@ -168,24 +191,28 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             scroll={{ x: 'max-content' }}
             // 请求数据地址
             request={async (params, sort, filter) => {
-                const { current = 1, pageSize = 10, ...otherParams } = params;
+                const { current = 1, pageSize = 10, ...otherParams } = params
                 try {
-                    const res: { [key: string]: string | number | Array<{[key: string]: string}> } = await request({
+                    const res: { [key: string]: string | number | Array<{ [key: string]: any }> } = await request({
                         ...otherParams,
-                        ...postData,
                         page: current,
                         pagesize: pageSize,
-                    }, sort, filter);
-                    const { status, msg, data } = res;
-                    const { records, total } = data;
-                    let success = true;
-                    if (status != 1) {
+                    }, sort, filter)
+
+
+                    const { code, msg, data } = res
+                    const { total = 0 } = data
+
+                    let success = true
+
+                    if (code != 200) {
                         success = false
-                        return message.error(msg);
+                        return message.error(msg)
                     }
+
                     return Promise.resolve({
                         // 表格数据
-                        data: records,
+                        data: data,
                         // 当前页码
                         page: current,
                         // 是否请求成功
@@ -197,6 +224,14 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                     system.trace("TWTProTable：", e)
                 }
             }}
+            expandable={{
+                // 展开列名称
+                childrenColumnName,
+                // 展开缩进px
+                indentSize,
+                // 列表展开时触发
+                onExpand
+            }}
             // 表头参数
             columns={columns}
             // 以数据ID作为key值
@@ -204,13 +239,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             rowSelection={rowSelection}
             // 搜索前进行一下修改
             beforeSearchSubmit={beforeSearchSubmit}
-            pagination={{
-                showSizeChanger: true,
-                // 每页显示条数
-                pageSize: 10,
-                // 当前页码
-                current: page,
-            }}
+            pagination={pagination}
             // 是否开启搜索
             search={search}
             // dateFormatter类型
@@ -244,6 +273,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             manualRequest={manualRequest}
             postData={postData}
             defaultData={defaultData}
+            loading={loading}
         />
     )
 
