@@ -8,6 +8,7 @@ import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.server.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class SysMenuController extends TWTController {
     private ISysMenuService iSysMenuService;
 
     /**
-     * 获取当前用户可管理的菜单列表
+     * 获取菜单列表
      *
      * @param sysMenu sysMenu
      * @return 菜单数据
@@ -37,6 +38,15 @@ public class SysMenuController extends TWTController {
         Long userId = loginUser.getUserId();
         List<SysMenu> menus = iSysMenuService.selectMenuList(sysMenu, userId);
         return AjaxResult.success(menus);
+    }
+
+    /**
+     * 根据ID获取菜单信息
+     */
+    @GetMapping(value = "/{menuId}")
+    public AjaxResult getInfo(@PathVariable Long menuId)
+    {
+        return AjaxResult.success(iSysMenuService.selectMenuById(menuId));
     }
 
 }

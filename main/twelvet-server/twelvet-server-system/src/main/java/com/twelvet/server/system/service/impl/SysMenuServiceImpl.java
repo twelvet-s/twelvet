@@ -60,4 +60,16 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
         return menuList;
     }
+
+    /**
+     * 根据菜单ID查询信息
+     *
+     * @param menuId 菜单ID
+     * @return 菜单信息
+     */
+    @Override
+    public SysMenu selectMenuById(Long menuId)
+    {
+        return SysMenuMapper.selectMenuById(menuId);
+    }
 }

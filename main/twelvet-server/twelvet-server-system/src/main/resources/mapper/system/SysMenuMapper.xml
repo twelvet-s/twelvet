@@ -75,4 +75,9 @@
         order by m.parent_id, m.order_num
     </select>
 
+    <select id="selectMenuById" parameterType="Long" resultMap="SysMenuResult">
+        <include refid="selectMenuVo"/>
+        where menu_id = #{menuId}
+    </select>
+
 </mapper>

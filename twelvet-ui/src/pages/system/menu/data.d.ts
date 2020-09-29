@@ -6,7 +6,7 @@ export interface TableListItem {
     icon?: string
     orderNum: number
     perms?: string
-    path?: string
+    component?: string
     createTime: Date
     operation: option
 }

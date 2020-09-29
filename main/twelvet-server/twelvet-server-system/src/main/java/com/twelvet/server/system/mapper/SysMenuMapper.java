@@ -35,4 +35,12 @@ public interface SysMenuMapper {
      */
     List<SysMenu> selectMenuListByUserId(SysMenu menu);
 
+    /**
+     * 根据菜单ID查询信息
+     *
+     * @param menuId 菜单ID
+     * @return 菜单信息
+     */
+    SysMenu selectMenuById(Long menuId);
+
 }

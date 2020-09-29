@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable from '@/components/TwelveT/ProTable/Index'
 import { createFromIconfontCN } from '@ant-design/icons'
-import { Row, Col, Button, Space, Popconfirm, Modal, Form, Input, InputNumber, Radio, TreeSelect } from 'antd'
+import { Row, Col, Button, message, Space, Popconfirm, Modal, Form, Input, InputNumber, Radio, TreeSelect } from 'antd'
 import { TableListItem } from './data'
-import { list } from './service'
+import { list, getInfo } from './service'
+import { system } from '@/utils/twelvet'
 
 
 const Menu: React.FC<{}> = () => {
@@ -15,13 +16,14 @@ const Menu: React.FC<{}> = () => {
     const [modal, setModal] = useState({ title: ``, visible: false })
     // 菜单类型参数设置的显示
     const [menuType, setMenuType] = useState(`M`)
+    const [form] = Form.useForm()
 
     // 创建远程Icon
     const IconFont = createFromIconfontCN()
 
     const columns: ProColumns<TableListItem> = [
         {
-            title: '菜单名称', ellipsis: true, valueType: "text", hideInSearch: true, dataIndex: 'menuName',
+            title: '菜单名称', ellipsis: true, valueType: "text", dataIndex: 'menuName',
         },
         {
             title: 'Icon', ellipsis: false, valueType: "text", hideInSearch: true, dataIndex: 'icon', render: (item: string) => {
@@ -35,22 +37,11 @@ const Menu: React.FC<{}> = () => {
             title: '权限标识', hideInSearch: true, dataIndex: 'perms'
         },
         {
-            title: '组件路径', hideInSearch: true, dataIndex: 'path'
+            title: '组件路径', hideInSearch: true, dataIndex: 'component'
         },
         {
             title: '状态',
-            hideInSearch: true,
             dataIndex: 'status',
-            valueEnum: {
-                1: { text: '正常', status: 'success' },
-                0: { text: '关闭', status: 'error' },
-            },
-        },
-        {
-            title: '状态',
-            hideInSearch: true,
-            dataIndex: 'status',
-            valueType: "text",
             valueEnum: {
                 1: { text: '正常', status: 'success' },
                 0: { text: '关闭', status: 'error' },
@@ -63,21 +54,35 @@ const Menu: React.FC<{}> = () => {
             title: '操作', hideInSearch: true, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
-                        <Button type="default" onClick={(row) => {
-                            setModal({
-                                title: "新增",
-                                visible: true
-                            })
-                        }}>
-                            新增
-                        </Button>
+                        {
+                            row.menuType == `M` && (
+                                <Button type="default" onClick={(row) => {
+                                    setModal({
+                                        title: "新增",
+                                        visible: true
+                                    })
+                                }}>
+                                    新增
+                                </Button>
+                            )
+                        }
 
-                        <Button type="primary" onClick={(row) => {
-                            setModal({
-                                title: "修改",
-                                visible: true
-                            })
-                        }}>
+                        <Button type="primary" onClick={
+                            async () => {
+                                try {
+                                    const { code, msg, data } = await getInfo(row.menuId)
+                                    if (code != 200) {
+                                        return message.error(msg)
+                                    }
+                                    setModal({
+                                        title: "修改",
+                                        visible: true
+                                    })
+                                } catch (e) {
+                                    system.error(e)
+                                }
+                            }}
+                        >
                             修改
                         </Button>
 
@@ -119,11 +124,16 @@ const Menu: React.FC<{}> = () => {
      */
     const handleCancel = () => {
         setMenuType(`M`)
-        setModal({title: "",visible: false})
+        setModal({ title: "", visible: false })
     }
 
-    const onFinish = (values: any) => {
-        console.log('Success:', values)
+    const onSave = async () => {
+        try {
+            const values = await form.getFieldsValue();
+            console.log('Success:', values);
+        } catch (errorInfo) {
+            console.log('Failed:', errorInfo);
+        }
     }
 
     const onFinishFailed = (errorInfo: any) => {
@@ -143,8 +153,17 @@ const Menu: React.FC<{}> = () => {
                     return tree
                 }}
                 request={list}
+                toolBarRender={() => [
+                    <Button type="primary" onClick={(row) => {
+                        setModal({
+                            title: "新增",
+                            visible: true
+                        })
+                    }}>
+                        新增
+                    </Button>
+                ]}
                 pagination={false}
-                search={false}
             />
 
             <Modal
@@ -152,23 +171,23 @@ const Menu: React.FC<{}> = () => {
                 width={700}
                 visible={modal.visible}
                 //confirmLoading={true}
+                onOk={onSave}
                 onCancel={handleCancel}
             >
 
                 <Form
                     name="basic"
                     initialValues={{ remember: true }}
-                    onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
                         label="上级菜单"
                         name="parentId"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
+                        rules={[{ required: true, message: '不能为空' }]}
                     >
                         <TreeSelect
                             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="Please select"
+                            placeholder="上级菜单"
                             allowClear
                             treeDefaultExpandAll
                         >
@@ -188,12 +207,13 @@ const Menu: React.FC<{}> = () => {
                         label="菜单类型"
                         name="menuType"
                         initialValue="M"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
+                        rules={[{ required: true, message: '不能为空' }]}
                     >
-                        <Radio.Group onChange={(e) => {
-                            // 设置菜单状态
-                            setMenuType(e.target.value)
-                        }}>
+                        <Radio.Group
+                            onChange={(e) => {
+                                // 设置菜单状态
+                                setMenuType(e.target.value)
+                            }}>
                             <Radio value="M">目录</Radio>
                             <Radio value="C">菜单</Radio>
                             <Radio value="F">按钮</Radio>
@@ -203,9 +223,9 @@ const Menu: React.FC<{}> = () => {
                     <Form.Item
                         label="菜单图标"
                         name="icon"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
+                        rules={[{ required: true, message: '不能为空' }]}
                     >
-                        <Input />
+                        <Input placeholder="菜单图标" />
                     </Form.Item>
 
                     <Row>
@@ -213,9 +233,9 @@ const Menu: React.FC<{}> = () => {
                             <Form.Item
                                 label="菜单名称"
                                 name="menuName"
-                                rules={[{ required: true, message: 'Please input your username!' }]}
+                                rules={[{ required: true, message: '不能为空' }]}
                             >
-                                <Input />
+                                <Input placeholder="菜单图标" />
                             </Form.Item>
                         </Col>
 
@@ -223,9 +243,9 @@ const Menu: React.FC<{}> = () => {
                             <Form.Item
                                 label="显示排序"
                                 name="orderNum"
-                                rules={[{ required: true, message: 'Please input your username!' }]}
+                                rules={[{ required: true, message: '不能为空' }]}
                             >
-                                <InputNumber />
+                                <InputNumber placeholder="排序" min={0} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -238,11 +258,12 @@ const Menu: React.FC<{}> = () => {
                                         <Form.Item
                                             label="是否外链"
                                             name="isFrame"
-                                            rules={[{ required: true, message: 'Please input your username!' }]}
+                                            initialValue={0}
+                                            rules={[{ required: true, message: '不能为空' }]}
                                         >
                                             <Radio.Group>
-                                                <Radio value="a">是</Radio>
-                                                <Radio value="b">否</Radio>
+                                                <Radio value={1}>是</Radio>
+                                                <Radio value={0}>否</Radio>
                                             </Radio.Group>
                                         </Form.Item>
                                     </Col>
@@ -251,9 +272,9 @@ const Menu: React.FC<{}> = () => {
                                         <Form.Item
                                             label="路由地址"
                                             name="path"
-                                            rules={[{ required: true, message: 'Please input your username!' }]}
+                                            rules={[{ required: true, message: '不能为空' }]}
                                         >
-                                            <Input />
+                                            <Input placeholder="路由地址" />
                                         </Form.Item>
                                     </Col>
                                 </Row>
@@ -263,9 +284,9 @@ const Menu: React.FC<{}> = () => {
                                         <Form.Item
                                             label="组件路径"
                                             name="component"
-                                            rules={[{ required: true, message: 'Please input your username!' }]}
+                                            rules={[{ required: true, message: '不能为空' }]}
                                         >
-                                            <Input />
+                                            <Input placeholder="组件路径" />
                                         </Form.Item>
                                     </Col>
 
@@ -273,7 +294,7 @@ const Menu: React.FC<{}> = () => {
                                         <Form.Item
                                             label="权限标识"
                                             name="perms"
-                                            rules={[{ required: true, message: 'Please input your username!' }]}
+                                            rules={[{ required: true, message: '不能为空' }]}
                                         >
                                             <Input />
                                         </Form.Item>
@@ -289,11 +310,12 @@ const Menu: React.FC<{}> = () => {
                             <Form.Item
                                 label="显示状态"
                                 name="visible"
-                                rules={[{ required: true, message: 'Please input your username!' }]}
+                                initialValue={1}
+                                rules={[{ required: true, message: '不能为空' }]}
                             >
                                 <Radio.Group>
-                                    <Radio value="a">是</Radio>
-                                    <Radio value="b">否</Radio>
+                                    <Radio value={1}>是</Radio>
+                                    <Radio value={0}>否</Radio>
                                 </Radio.Group>
                             </Form.Item>
                         </Col>
@@ -302,11 +324,12 @@ const Menu: React.FC<{}> = () => {
                             <Form.Item
                                 label="菜单状态"
                                 name="status"
-                                rules={[{ required: true, message: 'Please input your username!' }]}
+                                initialValue={1}
+                                rules={[{ required: true, message: '不能为空' }]}
                             >
                                 <Radio.Group>
-                                    <Radio value="a">是</Radio>
-                                    <Radio value="b">否</Radio>
+                                    <Radio value={1}>正常</Radio>
+                                    <Radio value={0}>停用</Radio>
                                 </Radio.Group>
                             </Form.Item>
                         </Col>
