@@ -136,7 +136,7 @@ public class AjaxResult extends LinkedHashMap<String, Object>
      */
     public static AjaxResult error(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.NOT_FOUND.value(), msg, data);
+        return new AjaxResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg, data);
     }
 
     /**

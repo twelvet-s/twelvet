@@ -17,7 +17,7 @@ export default {
     },
     test: {
         '/api/': {
-            target: 'localhost:8080',
+            target: 'http://192.168.3.28',
             changeOrigin: true,
             pathRewrite: {
                 '^/api': '',

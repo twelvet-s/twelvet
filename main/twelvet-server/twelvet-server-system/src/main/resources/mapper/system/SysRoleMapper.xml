@@ -19,6 +19,7 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
+    <!--通用代码块-->
     <sql id="selectRoleVo">
 	    select distinct r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope,
             r.status, r.del_flag, r.create_time, r.remark
@@ -28,9 +29,15 @@
 	        left join sys_dept d on u.dept_id = d.dept_id
     </sql>
 
+    <!--查询用户角色-->
     <select id="selectRolePermissionByUserId" parameterType="Long" resultMap="SysRoleResult">
         <include refid="selectRoleVo"/>
         WHERE r.del_flag = '0' and ur.user_id = #{userId}
     </select>
+
+    <!--检测菜单是否存在权限角色中-->
+    <select id="checkMenuExistRole" resultType="Integer">
+	    select count(1) from sys_role_menu where menu_id = #{menuId}
+	</select>
 
 </mapper>

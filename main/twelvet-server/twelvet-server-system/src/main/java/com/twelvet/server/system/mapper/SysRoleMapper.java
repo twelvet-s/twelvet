@@ -19,4 +19,12 @@ public interface SysRoleMapper {
      */
     List<SysRole> selectRolePermissionByUserId(Long userId);
 
+    /**
+     * 查询菜单使用数量
+     *
+     * @param menuId 菜单ID
+     * @return 结果
+     */
+    int checkMenuExistRole(Long menuId);
+
 }

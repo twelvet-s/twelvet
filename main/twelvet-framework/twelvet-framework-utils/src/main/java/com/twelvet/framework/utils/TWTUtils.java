@@ -24,12 +24,11 @@ public class TWTUtils {
      * @param object Object
      * @return true：为空 false：非空
      */
-    public static boolean isEmpty(Object object)
-    {
+    public static boolean isEmpty(Object object) {
         return object == null;
     }
 
-    public static boolean isNotEmpty(Object object){
+    public static boolean isNotEmpty(Object object) {
         return !isEmpty(object);
     }
 

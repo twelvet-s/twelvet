@@ -1,5 +1,6 @@
 package com.twelvet.api.system.domain;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.twelvet.framework.core.application.domain.BaseEntity;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class SysMenu extends BaseEntity {
     /**
      * 是否为外链（0是 1否）
      */
-    private String isFrame;
+    private Boolean isFrame;
 
     /**
      * 类型（M目录 C菜单 F按钮）
@@ -61,12 +62,12 @@ public class SysMenu extends BaseEntity {
     /**
      * 显示状态（0显示 1隐藏）
      */
-    private String visible;
+    private Boolean visible;
 
     /**
      * 菜单状态（0显示 1隐藏）
      */
-    private String status;
+    private Boolean status;
 
     /**
      * 权限字符串
@@ -81,7 +82,7 @@ public class SysMenu extends BaseEntity {
     /**
      * 子菜单
      */
-    private List<SysMenu> children = new ArrayList<SysMenu>();
+    private List<SysMenu> children = new ArrayList<>();
 
     public Long getMenuId() {
         return menuId;
@@ -139,11 +140,11 @@ public class SysMenu extends BaseEntity {
         this.component = component;
     }
 
-    public String getIsFrame() {
+    public Boolean getIsFrame() {
         return isFrame;
     }
 
-    public void setIsFrame(String isFrame) {
+    public void setIsFrame(Boolean isFrame) {
         this.isFrame = isFrame;
     }
 
@@ -155,19 +156,19 @@ public class SysMenu extends BaseEntity {
         this.menuType = menuType;
     }
 
-    public String getVisible() {
+    public Boolean getVisible() {
         return visible;
     }
 
-    public void setVisible(String visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

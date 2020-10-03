@@ -6,6 +6,16 @@ import { useState } from 'react'
 import ProTable from '@ant-design/pro-table'
 import { system } from '@/utils/twelvet'
 
+/**
+ * Form Ref类型
+ */
+export interface ActionType {
+    reload: () => void;
+    reloadAndRest?: () => void;
+    reset?: () => void;
+    clearSelected?: () => void;
+}
+
 let searchConfig: { [key: string]: any } | false = {
     span: {
         xs: 24,
