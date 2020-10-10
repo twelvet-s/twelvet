@@ -5,7 +5,7 @@ package com.twelvet.framework.core.constants;
  * @WebSite www.twelvet.cn
  * @Description: 服务名称
  */
-public interface ServiceNameConstant {
+public interface ServiceNameConstants {
 
     /**
      * 认证服务

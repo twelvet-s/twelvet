@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { message } from 'antd'
-import { ProTableProps } from '@ant-design/pro-table/lib/index'
+import { ProTableProps, RequestData } from '@ant-design/pro-table/lib/index'
 import { ParamsType } from '@ant-design/pro-provider'
 import { useState } from 'react'
 import ProTable from '@ant-design/pro-table'
@@ -201,17 +201,12 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             scroll={{ x: 'max-content' }}
             // 请求数据地址
             request={async (params, sort, filter) => {
-                const { current = 1, pageSize = 10, ...otherParams } = params
                 try {
-                    const res: { [key: string]: string | number | Array<{ [key: string]: any }> } = await request({
-                        ...otherParams,
-                        page: current,
-                        pagesize: pageSize,
-                    }, sort, filter)
-
+                    const res: any = await request(params, sort, filter)
 
                     const { code, msg, data } = res
-                    const { total = 0 } = data
+
+                    const { total, records } = data
 
                     let success = true
 
@@ -221,10 +216,10 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                     }
 
                     return Promise.resolve({
-                        // 表格数据
-                        data: data,
+                        // 表格数据（如果不是分页数据将采用直接采用data列表）
+                        data: records ? records : data,
                         // 当前页码
-                        page: current,
+                        page: params.current,
                         // 是否请求成功
                         success,
                         // 总条数

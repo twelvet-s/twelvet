@@ -17,6 +17,10 @@ export default {
     'menu.account.center': '个人中心',
     'menu.account.settings': '个人设置',
 
+    'menu.log': '日志管理',
+    'menu.log.operation': '操作日志',
+    'menu.log.login': '登录日志',
+
     // 登录页面
     'menu.tool': '工具箱',
     'menu.tool.graphicalEditor': '图形编辑器',

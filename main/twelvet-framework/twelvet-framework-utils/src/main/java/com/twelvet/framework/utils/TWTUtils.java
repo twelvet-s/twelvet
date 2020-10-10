@@ -8,17 +8,6 @@ package com.twelvet.framework.utils;
 public class TWTUtils {
 
     /**
-     * * 判断一个Collection是否非空，包含List，Set，Queue
-     *
-     * @param coll 要判断的Collection
-     * @return true：非空 false：空
-     */
-    /*public static boolean isEmpty(Collection<?> coll)
-    {
-        return !isEmpty(coll);
-    }*/
-
-    /**
      * 判断一个对象是否为空
      *
      * @param object Object

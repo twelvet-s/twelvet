@@ -1,13 +1,22 @@
 package com.twelvet.framework.core.application.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.twelvet.framework.core.application.domain.AjaxResult;
+import com.twelvet.framework.core.web.page.PageDomain;
+import com.twelvet.framework.core.web.page.TableDataInfo;
+import com.twelvet.framework.core.web.page.TableSupport;
+import com.twelvet.framework.utils.TWTUtils;
+import com.twelvet.framework.utils.sql.SqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author twelvet
@@ -30,6 +39,32 @@ public class TWTController {
                 //setValue(DateUtil.parseDate(text));
             }
         });
+    }
+
+    /**
+     * 注入分页信息
+     */
+    protected void bindPage() {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer page = pageDomain.getCurrent();
+        Integer pageSize = pageDomain.getPageSize();
+        if (TWTUtils.isNotEmpty(page) && TWTUtils.isNotEmpty(pageSize)) {
+            String orderBy = SqlUtils.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.startPage(page, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 响应请求分页数据
+     *
+     * @param list 数据列表
+     * @return 适应Json
+     */
+    protected TableDataInfo getDataTable(List<?> list) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setRecords(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
     }
 
     /**

@@ -2,7 +2,7 @@ package com.twelvet.api.system;
 
 import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
 import com.twelvet.api.system.model.UserInfo;
-import com.twelvet.framework.core.constants.ServiceNameConstant;
+import com.twelvet.framework.core.constants.ServiceNameConstants;
 import com.twelvet.framework.core.domain.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @FeignClient(
         contextId = "remoteUserService",
-        value = ServiceNameConstant.SYSTEM_SERVICE,
+        value = ServiceNameConstants.SYSTEM_SERVICE,
         fallbackFactory = RemoteUserFallbackFactory.class
 )
 public interface RemoteUserService {

@@ -94,6 +94,28 @@ export default [
                     ]
                 },
                 {
+                    title: '日志管理',
+                    name: 'log',
+                    icon: 'icon-log',
+                    path: '/log',
+                    routes: [
+                        {
+                            title: '操作日志',
+                            name: 'operation',
+                            icon: 'icon-log-operation',
+                            path: '/log/operation',
+                            component: './log/operation'
+                        },
+                        {
+                            title: '登录日志',
+                            name: 'login',
+                            icon: 'icon-log-login',
+                            path: '/log/login',
+                            component: './log/login'
+                        }
+                    ]
+                },
+                {
                     title: '工具箱',
                     name: 'tool',
                     icon: 'icon-tool-box',

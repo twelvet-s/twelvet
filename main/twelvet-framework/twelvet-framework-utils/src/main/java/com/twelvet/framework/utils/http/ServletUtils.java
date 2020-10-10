@@ -1,5 +1,6 @@
 package com.twelvet.framework.utils.http;
 
+import com.twelvet.framework.utils.text.Convert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -139,6 +140,23 @@ public class ServletUtils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    /**
+     * 获取Integer参数
+     *
+     * @param name 参数名称
+     * @return 返回参数数据
+     */
+    public static Integer getParameterToInt(String name) {
+        return Convert.toInt(getRequest().getParameter(name));
+    }
+
+    /**
+     * 获取String参数
+     */
+    public static String getParameter(String name) {
+        return getRequest().getParameter(name);
     }
 
 }

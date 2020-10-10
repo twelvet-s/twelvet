@@ -5,7 +5,6 @@ import com.twelvet.framework.security.constans.SecurityConstants;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.service.RedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

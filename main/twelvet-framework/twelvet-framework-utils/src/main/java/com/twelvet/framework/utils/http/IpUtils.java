@@ -19,7 +19,7 @@ public class IpUtils {
     /**
      * 获取客户端IP
      *
-     * @return
+     * @return IP
      */
     public static String getIpAddr() {
         return getIpAddr(ServletUtils.getRequest());

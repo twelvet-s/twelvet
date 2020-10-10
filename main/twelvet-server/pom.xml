@@ -24,6 +24,12 @@
             <artifactId>twelvet-framework-core</artifactId>
         </dependency>
 
+        <!--日志模块-->
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-framework-log</artifactId>
+        </dependency>
+
         <!-- SpringCloud Ailibaba Nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

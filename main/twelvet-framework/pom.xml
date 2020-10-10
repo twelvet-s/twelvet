@@ -18,6 +18,7 @@
         <module>twelvet-framework-redis</module>
         <module>twelvet-framework-utils</module>
         <module>twelvet-framework-core</module>
+        <module>twelvet-framework-log</module>
     </modules>
 
 </project>

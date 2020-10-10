@@ -4,11 +4,12 @@ import com.twelvet.api.system.domain.SysMenu;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.exception.TWTException;
+import com.twelvet.framework.log.annotation.Log;
+import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.server.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class SysMenuController extends TWTController {
      * @param menu SysMenu
      * @return 操作信息
      */
+    @Log(service = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult insert(@Validated @RequestBody SysMenu menu) {
         if (iSysMenuService.checkMenuNameUnique(menu)) {
@@ -48,6 +50,7 @@ public class SysMenuController extends TWTController {
      * @param menuId menuId
      * @return 操作提示
      */
+    @Log(service = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")
     public AjaxResult remove(@PathVariable("menuId") Long menuId) {
         if (iSysMenuService.hasChildByMenuId(menuId)) {
@@ -62,6 +65,7 @@ public class SysMenuController extends TWTController {
     /**
      * 修改菜单
      */
+    @Log(service = "菜单管理", businessType = BusinessType.PUT)
     @PutMapping
     public AjaxResult update(@Validated @RequestBody SysMenu menu) {
         if (iSysMenuService.checkMenuNameUnique(menu)) {
@@ -77,7 +81,7 @@ public class SysMenuController extends TWTController {
      * @param sysMenu sysMenu
      * @return 菜单数据
      */
-    @GetMapping("/list")
+    @GetMapping
     public AjaxResult list(SysMenu sysMenu) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();
