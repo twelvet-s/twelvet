@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 06/10/2020 09:57:52
+ Date: 11/10/2020 00:21:21
 */
 
 SET NAMES utf8mb4;
@@ -65,12 +65,18 @@ CREATE TABLE `sys_login_info`  (
   `msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '提示信息',
   `access_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_login_info
 -- ----------------------------
-INSERT INTO `sys_login_info` VALUES (8, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-06 09:56:45');
+INSERT INTO `sys_login_info` VALUES (16, 'admin', '172.18.71.1', '1', '登录成功', '2020-10-07 16:51:00');
+INSERT INTO `sys_login_info` VALUES (17, 'admin', '172.18.71.1', '1', '登录成功', '2020-10-07 17:52:22');
+INSERT INTO `sys_login_info` VALUES (18, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-07 22:39:03');
+INSERT INTO `sys_login_info` VALUES (21, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-08 16:53:09');
+INSERT INTO `sys_login_info` VALUES (22, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-08 22:08:59');
+INSERT INTO `sys_login_info` VALUES (23, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-10 23:09:58');
+INSERT INTO `sys_login_info` VALUES (24, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-10 23:28:52');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -95,7 +101,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1061 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1076 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -206,6 +212,36 @@ CREATE TABLE `sys_oauth_client_details`  (
 -- Records of sys_oauth_client_details
 -- ----------------------------
 INSERT INTO `sys_oauth_client_details` VALUES ('twelvet', NULL, '$2a$10$tv2UtR9XN.ElCoy.stJKY.4NGh1BLXDhT82KNlw4wTCX6c.ODNc8K', 'server', 'password,refresh_token', NULL, NULL, 3600, 7200, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_operation_log`;
+CREATE TABLE `sys_operation_log`  (
+  `oper_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '模块标题',
+  `business_type` int(2) NULL DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '方法名称',
+  `request_method` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求方式',
+  `operator_type` int(1) NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `oper_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '操作人员',
+  `dept_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '部门名称',
+  `oper_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求URL',
+  `oper_ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '主机地址',
+  `oper_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '操作地点',
+  `oper_param` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求参数',
+  `json_result` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '返回参数',
+  `status` int(1) NULL DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+  `error_msg` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '错误消息',
+  `oper_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
+  PRIMARY KEY (`oper_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_operation_log
+-- ----------------------------
+INSERT INTO `sys_operation_log` VALUES (1, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asd\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 0, NULL, '2020-10-10 23:58:27');
+INSERT INTO `sys_operation_log` VALUES (2, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asdad\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 0, NULL, '2020-10-10 23:59:02');
 
 -- ----------------------------
 -- Table structure for sys_role
