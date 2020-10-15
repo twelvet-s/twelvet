@@ -17,16 +17,16 @@ import java.util.List;
 public class ISysLoginInfoServiceImpl implements ISysLoginInfoService {
 
     @Autowired
-    private SysLoginInfoMapper loginInfoMapper;
+    private SysLoginInfoMapper SysLoginInfoMapper;
 
-    /**
+    /**2
      * 查询系统登录日志集合
      * <p>
      * loginInfo     * @return 登录记录集合
      */
     @Override
     public List<SysLoginInfo> selectLoginInfoList(SysLoginInfo loginInfo) {
-        return loginInfoMapper.selectLoginInfoList(loginInfo);
+        return SysLoginInfoMapper.selectLoginInfoList(loginInfo);
     }
 
     /**
@@ -37,7 +37,16 @@ public class ISysLoginInfoServiceImpl implements ISysLoginInfoService {
      */
     @Override
     public int deleteLoginInfoByIds(Long[] infoIds) {
-        return loginInfoMapper.deleteLoginInfoByIds(infoIds);
+        return SysLoginInfoMapper.deleteLoginInfoByIds(infoIds);
+    }
+
+    /**
+     * 清空系统登录日志
+     */
+    @Override
+    public void cleanLoginInfo()
+    {
+        SysLoginInfoMapper.cleanLoginInfo();
     }
 
     /**
@@ -47,6 +56,6 @@ public class ISysLoginInfoServiceImpl implements ISysLoginInfoService {
      */
     @Override
     public int insertLoginInfo(SysLoginInfo loginInfo) {
-        return loginInfoMapper.insertLoginInfo(loginInfo);
+        return SysLoginInfoMapper.insertLoginInfo(loginInfo);
     }
 }

@@ -28,6 +28,11 @@ public interface ISysLoginInfoService {
     int deleteLoginInfoByIds(Long[] infoIds);
 
     /**
+     * 清空系统登录日志
+     */
+    void cleanLoginInfo();
+
+    /**
      * 新增系统登录日志
      *
      * @param loginInfo 访问日志对象

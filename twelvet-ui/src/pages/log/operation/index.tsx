@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, EditOutlined } from '@ant-design/icons'
+import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form } from 'antd'
 import { TableListItem } from './data'
 import { pageQuery, remove } from './service'
@@ -27,34 +27,38 @@ const Menu: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
-            title: '用户名称', ellipsis: true, valueType: "text", dataIndex: 'userName',
+            title: '系统模块', ellipsis: true, valueType: "text", dataIndex: 'service',
         },
         {
-            title: 'IP', valueType: "text", dataIndex: 'ipaddr'
+            title: '请求方式', valueType: "text", dataIndex: 'requestMethod'
         },
         {
-            title: '登录地区', valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
+            title: '操作类型', valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
         },
         {
-            title: '终端', hideInSearch: true, valueType: "text", dataIndex: 'perms'
+            title: '操作人员', hideInSearch: true, valueType: "text", dataIndex: 'operName'
         },
         {
-            title: '操作系统', hideInSearch: true, dataIndex: 'component'
+            title: '操作地点', hideInSearch: true, dataIndex: 'component'
         },
         {
-            title: '状态',
-            ellipsis: false,
-            dataIndex: 'status',
-            valueEnum: {
-                true: { text: '正常', status: 'success' },
-                false: { text: '停用', status: 'error' },
+            title: '操作状态', hideInSearch: true, dataIndex: 'status', valueEnum: {
+                0: { text: '失败', status: 'error' },
+                1: { text: '成功', status: 'success' },
             },
         },
         {
-            title: '登录信息', valueType: "text", hideInSearch: true, dataIndex: 'msg'
+            title: '操作时间', valueType: "dateTime", dataIndex: 'operTime'
         },
         {
-            title: '登录时间', valueType: "dateTime", dataIndex: 'accessTime'
+            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+                return (
+                    <Button type="link">
+                        <EyeOutlined />
+                        详情
+                    </Button>
+                )
+            }
         },
     ]
 
@@ -181,7 +185,7 @@ const Menu: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="infoId"
+                rowKey="operId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}

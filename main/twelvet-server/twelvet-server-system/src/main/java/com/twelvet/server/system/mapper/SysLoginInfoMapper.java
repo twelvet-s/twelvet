@@ -28,6 +28,13 @@ public interface SysLoginInfoMapper {
     int deleteLoginInfoByIds(Long[] infoIds);
 
     /**
+     * 清空系统登录日志
+     *
+     * @return 结果
+     */
+    int cleanLoginInfo();
+
+    /**
      * 新增系统登录日志
      *
      * @param loginInfo SysLoginInfo

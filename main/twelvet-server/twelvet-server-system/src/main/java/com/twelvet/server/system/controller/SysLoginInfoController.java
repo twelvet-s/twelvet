@@ -3,6 +3,8 @@ package com.twelvet.server.system.controller;
 import com.twelvet.api.system.domain.SysLoginInfo;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
+import com.twelvet.framework.log.annotation.Log;
+import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.utils.http.IpUtils;
 import com.twelvet.server.system.service.ISysLoginInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class SysLoginInfoController extends TWTController {
      */
     @GetMapping
     public AjaxResult pageQuery(SysLoginInfo loginInfo) {
-        bindPage();
+        startPage();
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
         return AjaxResult.success(getDataTable(list));
     }
@@ -44,6 +46,18 @@ public class SysLoginInfoController extends TWTController {
     @DeleteMapping("/{infoIds}")
     public AjaxResult remove(@PathVariable Long[] infoIds) {
         return json(iSysLoginInfoService.deleteLoginInfoByIds(infoIds));
+    }
+
+    /**
+     * 清空登录日志
+     *
+     * @return AjaxResult
+     */
+    @Log(service = "登陆日志", businessType = BusinessType.CLEAN)
+    @DeleteMapping("/clean")
+    public AjaxResult clean() {
+        iSysLoginInfoService.cleanLoginInfo();
+        return AjaxResult.success();
     }
 
     /**

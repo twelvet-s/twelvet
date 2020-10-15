@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 请求的控制器名称
-const controller = "/system/loginInfo";
+const controller = "/system/operationLog";
 
 /**
  * 获取分页 Data

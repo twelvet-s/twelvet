@@ -44,7 +44,7 @@ public class TWTController {
     /**
      * 注入分页信息
      */
-    protected void bindPage() {
+    protected void startPage() {
         PageDomain pageDomain = TableSupport.buildPageRequest();
         Integer page = pageDomain.getCurrent();
         Integer pageSize = pageDomain.getPageSize();

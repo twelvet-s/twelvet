@@ -21,7 +21,7 @@ public class SysOperationLog extends BaseEntity {
     /**
      * 操作模块
      */
-    private String title;
+    private String service;
 
     /**
      * 业务类型（0其它 1新增 2修改 3删除）
@@ -102,12 +102,12 @@ public class SysOperationLog extends BaseEntity {
         this.operId = operId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getService() {
+        return service;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setService(String service) {
+        this.service = service;
     }
 
     public Integer getBusinessType() {
