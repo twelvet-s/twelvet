@@ -5,11 +5,15 @@ import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
+import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.framework.utils.http.IpUtils;
 import com.twelvet.server.system.service.ISysLoginInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -85,6 +89,20 @@ public class SysLoginInfoController extends TWTController {
         loginInfo.setMsg(message);
 
         return json(iSysLoginInfoService.insertLoginInfo(loginInfo));
+    }
+
+    /**
+     * 导入Excel
+     *
+     * @param response  HttpServletResponse
+     * @param loginInfo SysLoginInfo
+     */
+    @Log(service = "登陆日志", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, SysLoginInfo loginInfo) throws IOException {
+        List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
+        ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<SysLoginInfo>(SysLoginInfo.class);
+        excelUtils.exportExcel(response, list, "登陆日志");
     }
 
 }

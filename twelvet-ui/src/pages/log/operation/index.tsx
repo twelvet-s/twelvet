@@ -2,7 +2,8 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, DatePicker } from 'antd'
+import moment from 'moment'
 import { TableListItem } from './data'
 import { pageQuery, remove } from './service'
 import { system, makeTree } from '@/utils/twelvet'
@@ -24,19 +25,21 @@ const Menu: React.FC<{}> = () => {
     // 创建远程Icon
     const IconFont = createFromIconfontCN()
 
+    const { RangePicker } = DatePicker
+
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
             title: '系统模块', ellipsis: true, valueType: "text", dataIndex: 'service',
         },
         {
-            title: '请求方式', valueType: "text", dataIndex: 'requestMethod'
+            title: '请求方式', hideInSearch: true, valueType: "text", dataIndex: 'requestMethod'
         },
         {
             title: '操作类型', valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
         },
         {
-            title: '操作人员', hideInSearch: true, valueType: "text", dataIndex: 'operName'
+            title: '操作人员', valueType: "text", dataIndex: 'operName'
         },
         {
             title: '操作地点', hideInSearch: true, dataIndex: 'component'
@@ -48,7 +51,19 @@ const Menu: React.FC<{}> = () => {
             },
         },
         {
-            title: '操作时间', valueType: "dateTime", dataIndex: 'operTime'
+            title: '搜索日期',
+            key: 'between',
+            hideInTable: true,
+            dataIndex: 'between',
+            renderFormItem: () => (
+                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: moment) => {
+                    // 不允许选择大于今天的日期
+                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
+                }} />
+            )
+        },
+        {
+            title: '操作时间', valueType: "dateTime", hideInSearch: true, dataIndex: 'operTime'
         },
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
@@ -189,6 +204,20 @@ const Menu: React.FC<{}> = () => {
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
+                beforeSearchSubmit={(params) => {
+                    console.log(params)
+                    // 分隔搜索参数
+                    if (params.between) {
+                        const between = params.between
+                        // 移除参数
+                        delete params.between
+
+                        // 适配参数
+                        params.beginTime = between[0]
+                        params.endTime = between[1]
+                    }
+                    return params
+                }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}

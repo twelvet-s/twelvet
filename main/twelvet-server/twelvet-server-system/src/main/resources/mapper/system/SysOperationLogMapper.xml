@@ -62,7 +62,7 @@
                     #{businessType}
                 </foreach>
             </if>
-            <if test="status != null">
+            <if test="status != null and status != ''">
                 AND status = #{status}
             </if>
             <if test="operName != null and operName != ''">

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 11/10/2020 00:21:21
+ Date: 18/10/2020 11:57:28
 */
 
 SET NAMES utf8mb4;
@@ -65,7 +65,7 @@ CREATE TABLE `sys_login_info`  (
   `msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '提示信息',
   `access_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_login_info
@@ -77,6 +77,14 @@ INSERT INTO `sys_login_info` VALUES (21, 'admin', '172.18.71.1', NULL, '登录�
 INSERT INTO `sys_login_info` VALUES (22, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-08 22:08:59');
 INSERT INTO `sys_login_info` VALUES (23, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-10 23:09:58');
 INSERT INTO `sys_login_info` VALUES (24, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-10 23:28:52');
+INSERT INTO `sys_login_info` VALUES (25, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-11 00:26:11');
+INSERT INTO `sys_login_info` VALUES (26, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-12 21:46:52');
+INSERT INTO `sys_login_info` VALUES (27, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-12 22:51:18');
+INSERT INTO `sys_login_info` VALUES (28, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-13 21:01:00');
+INSERT INTO `sys_login_info` VALUES (29, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-13 22:10:37');
+INSERT INTO `sys_login_info` VALUES (30, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-13 23:34:04');
+INSERT INTO `sys_login_info` VALUES (31, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-14 21:18:25');
+INSERT INTO `sys_login_info` VALUES (32, 'admin', '172.18.71.1', NULL, '登录成功', '2020-10-14 22:56:48');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -101,15 +109,15 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1076 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1061 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-10-03 20:55:43', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-10-14 21:41:37', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'twelvet', '2018-03-16 11:33:00', '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, 'tool', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-10-03 21:05:06', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, 'TwelveT', 0, 4, 'https://www.twelvet.com', NULL, 1, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-10-03 21:05:02', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (4, 'TwelveT', 0, 4, 'https://www.twelvet.com', NULL, 1, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-10-11 00:42:14', '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', 0, 'C', 1, 1, 'system:user:list', 'icon-system', 'admin', '2018-03-16 11:33:00', 'twelvet', '2018-03-16 11:33:00', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', 0, 'C', 1, 1, 'system:role:list', 'icon-system', 'admin', '2018-03-16 11:33:00', 'twelvet', '2018-03-16 11:33:00', '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', 0, 'C', 1, 1, 'system:menu:list', 'icon-system', 'admin', '2018-03-16 11:33:00', 'twelvet', '2018-03-16 11:33:00', '菜单管理菜单');
@@ -193,17 +201,18 @@ INSERT INTO `sys_menu` VALUES (1060, '生成代码', 114, 5, '#', '', 0, 'F', 1,
 -- Table structure for sys_oauth_client_details
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_oauth_client_details`;
+DROP TABLE IF EXISTS `sys_oauth_client_details`;
 CREATE TABLE `sys_oauth_client_details`  (
-  `client_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端唯一标识',
-  `resource_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '资源ID标识',
-  `client_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端安全码',
-  `scope` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端授权范围',
-  `authorized_grant_types` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端授权类型',
-  `web_server_redirect_uri` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器回调地址',
-  `authorities` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问资源所需权限',
+  `client_id` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端唯一标识',
+  `resource_ids` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '资源ID标识',
+  `client_secret` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端安全码',
+  `scope` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端授权范围',
+  `authorized_grant_types` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户端授权类型',
+  `web_server_redirect_uri` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '服务器回调地址',
+  `authorities` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问资源所需权限',
   `access_token_validity` int(11) NULL DEFAULT NULL COMMENT '设定客户端的access_token的有效时间值（秒）',
   `refresh_token_validity` int(11) NULL DEFAULT NULL COMMENT '设定客户端的refresh_token的有效时间值（秒）',
-  `additional_information` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '预留字段',
+  `additional_information` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '预留字段',
   `autoapprove` tinyint(4) NULL DEFAULT NULL COMMENT '是否登录时跳过授权（默认false）',
   PRIMARY KEY (`client_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '客户端配置表' ROW_FORMAT = Dynamic;
@@ -219,11 +228,11 @@ INSERT INTO `sys_oauth_client_details` VALUES ('twelvet', NULL, '$2a$10$tv2UtR9X
 DROP TABLE IF EXISTS `sys_operation_log`;
 CREATE TABLE `sys_operation_log`  (
   `oper_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
-  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '模块标题',
+  `service` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '模块标题',
   `business_type` int(2) NULL DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
   `method` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '方法名称',
   `request_method` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求方式',
-  `operator_type` int(1) NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `operator_type` tinyint(1) NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
   `oper_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '操作人员',
   `dept_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '部门名称',
   `oper_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求URL',
@@ -231,17 +240,23 @@ CREATE TABLE `sys_operation_log`  (
   `oper_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '操作地点',
   `oper_param` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '请求参数',
   `json_result` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '返回参数',
-  `status` int(1) NULL DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+  `status` tinyint(1) NULL DEFAULT 0 COMMENT '操作状态（1正常 0异常）',
   `error_msg` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '错误消息',
   `oper_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`oper_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_operation_log
 -- ----------------------------
-INSERT INTO `sys_operation_log` VALUES (1, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asd\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 0, NULL, '2020-10-10 23:58:27');
-INSERT INTO `sys_operation_log` VALUES (2, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asdad\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 0, NULL, '2020-10-10 23:59:02');
+INSERT INTO `sys_operation_log` VALUES (1, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asd\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-10 23:58:27');
+INSERT INTO `sys_operation_log` VALUES (2, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asdad\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"asd\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-10 23:59:02');
+INSERT INTO `sys_operation_log` VALUES (3, '菜单管理', 2, 'com.twelvet.server.system.controller.SysMenuController.update()', 'PUT', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"icon-system\",\"orderNum\":\"1\",\"menuName\":\"系统管理\",\"params\":{},\"parentId\":0,\"path\":\"system\",\"children\":[],\"updateBy\":\"admin\",\"isFrame\":false,\"menuId\":1,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-11 00:26:18');
+INSERT INTO `sys_operation_log` VALUES (4, '菜单管理', 1, 'com.twelvet.server.system.controller.SysMenuController.insert()', 'POST', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"asd\",\"orderNum\":\"12\",\"menuName\":\"asd\",\"params\":{},\"parentId\":0,\"path\":\"12\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":false,\"menuId\":0,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-11 00:26:27');
+INSERT INTO `sys_operation_log` VALUES (5, '菜单管理', 3, 'com.twelvet.server.system.controller.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/menu/1076', '127.0.0.1', '', '{menuId=1076}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-11 00:26:29');
+INSERT INTO `sys_operation_log` VALUES (6, '菜单管理', 2, 'com.twelvet.server.system.controller.SysMenuController.update()', 'PUT', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"icon-system\",\"orderNum\":\"4\",\"menuName\":\"TwelveT\",\"params\":{},\"parentId\":0,\"path\":\"https://www.twelvet.com\",\"children\":[],\"updateBy\":\"admin\",\"isFrame\":true,\"menuId\":4,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-11 00:42:14');
+INSERT INTO `sys_operation_log` VALUES (7, '菜单管理', 2, 'com.twelvet.server.system.controller.SysMenuController.update()', 'PUT', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"icon-system\",\"orderNum\":\"1\",\"menuName\":\"系统管理\",\"params\":{},\"parentId\":0,\"path\":\"system\",\"children\":[],\"updateBy\":\"admin\",\"isFrame\":false,\"menuId\":1,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-14 21:41:32');
+INSERT INTO `sys_operation_log` VALUES (8, '菜单管理', 2, 'com.twelvet.server.system.controller.SysMenuController.update()', 'PUT', 1, 'admin', NULL, '/menu', '127.0.0.1', '', '{\"visible\":true,\"icon\":\"icon-system\",\"orderNum\":\"1\",\"menuName\":\"系统管理\",\"params\":{},\"parentId\":0,\"path\":\"system\",\"children\":[],\"updateBy\":\"admin\",\"isFrame\":false,\"menuId\":1,\"menuType\":\"M\",\"status\":true}', '{\"code\":200,\"msg\":\"操作成功\"}', 1, NULL, '2020-10-14 21:41:37');
 
 -- ----------------------------
 -- Table structure for sys_role

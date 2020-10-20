@@ -21,4 +21,14 @@
         <module>twelvet-framework-log</module>
     </modules>
 
+    <dependencies>
+
+        <!--日志工具-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+    </dependencies>
+
 </project>
