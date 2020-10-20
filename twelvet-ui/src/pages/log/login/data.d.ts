@@ -2,11 +2,12 @@
  * columns参数
  */
 export interface TableListItem {
-    menuName: string
-    icon?: string
+    userName: string
+    ipaddr: string
     orderNum: number
     perms?: string
     component?: string
-    createTime: Date
-    operation: option
+    status: Date
+    msg: option
+    dateTime: Date
 }
