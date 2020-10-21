@@ -14,6 +14,9 @@ public class TWTUtils {
      * @return true：为空 false：非空
      */
     public static boolean isEmpty(Object object) {
+        if(object instanceof String){
+            return StringUtils.EMPTY.equals(object.toString().trim());
+        }
         return object == null;
     }
 

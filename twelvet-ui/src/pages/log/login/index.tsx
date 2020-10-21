@@ -5,7 +5,8 @@ import { DeleteOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, DatePicker } from 'antd'
 import moment from 'moment'
 import { TableListItem } from './data'
-import { pageQuery, remove } from './service'
+import { pageQuery, remove, exportExcel } from './service'
+import request, { download } from '@/utils/request'
 import { system } from '@/utils/twelvet'
 
 /**
@@ -96,10 +97,9 @@ const Menu: React.FC<{}> = () => {
                 request={pageQuery}
                 rowSelection={{}}
                 beforeSearchSubmit={(params) => {
-                    console.log(params)
                     // 分隔搜索参数
                     if (params.between) {
-                        const between = params.between
+                        const {between} = params
                         // 移除参数
                         delete params.between
 
@@ -123,7 +123,7 @@ const Menu: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default">
+                    <Button type="default" onClick={() => exportExcel({s: 1})}>
                         <FundProjectionScreenOutlined />
                         导出数据
                     </Button>

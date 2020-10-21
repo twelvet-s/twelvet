@@ -1,8 +1,11 @@
 package com.twelvet.framework.utils;
 
-import com.twelvet.framework.utils.annotation.Excel;
-import com.twelvet.framework.utils.annotation.Excel.Type;
-import com.twelvet.framework.utils.text.Convert;
+import com.twelvet.framework.utils.annotation.excel.Excel;
+import com.twelvet.framework.utils.annotation.excel.Excel.ColumnType;
+import com.twelvet.framework.utils.annotation.excel.Excel.Type;
+import com.twelvet.framework.utils.annotation.excel.Excels;
+import com.twelvet.framework.utils.exception.TWTUtilsException;
+import com.twelvet.framework.utils.reflect.ReflectUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -10,17 +13,15 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.core.ReflectUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.List;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,13 @@ import java.util.stream.Collectors;
 public class ExcelUtils<T> {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtils.class);
 
+    private final static String xls = "xls";
+    private final static String xlsx = "xlsx";
+
     /**
      * Excel sheet最大行数，默认65536
      */
-    public static final int sheetSize = 65536;
+    private static final int SHEET_SIZE = 65536;
 
     /**
      * 工作表名称
@@ -83,7 +87,7 @@ public class ExcelUtils<T> {
 
     public void init(List<T> list, String sheetName, Type type) {
         if (list == null) {
-            list = new ArrayList<T>();
+            list = new ArrayList<>();
         }
         this.list = list;
         this.sheetName = sheetName;
@@ -114,7 +118,7 @@ public class ExcelUtils<T> {
         this.wb = WorkbookFactory.create(is);
         List<T> list = new ArrayList<>();
         Sheet sheet;
-        if (StringUtils.isNotEmpty(sheetName)) {
+        if (TWTUtils.isNotEmpty(sheetName)) {
             // 如果指定sheet名,则取指定sheet中的内容.
             sheet = wb.getSheet(sheetName);
         } else {
@@ -195,12 +199,12 @@ public class ExcelUtils<T> {
                             val = DateUtil.getJavaDate((Double) val);
                         }
                     }
-                    if (StringUtils.isNotNull(fieldType)) {
+                    if (TWTUtils.isNotEmpty(fieldType)) {
                         Excel attr = field.getAnnotation(Excel.class);
                         String propertyName = field.getName();
-                        if (StringUtils.isNotEmpty(attr.targetAttr())) {
+                        if (TWTUtils.isNotEmpty(attr.targetAttr())) {
                             propertyName = field.getName() + "." + attr.targetAttr();
-                        } else if (StringUtils.isNotEmpty(attr.readConverterExp())) {
+                        } else if (TWTUtils.isNotEmpty(attr.readConverterExp())) {
                             val = reverseByExp(Convert.toStr(val), attr.readConverterExp(), attr.separator());
                         }
                         ReflectUtils.invokeSetter(entity, propertyName, val);
@@ -219,13 +223,42 @@ public class ExcelUtils<T> {
      * @param list      导出数据集合
      * @param sheetName 工作表的名称
      * @return 结果
-     * @throws IOException
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding("utf-8");
-        this.init(list, sheetName, Type.EXPORT);
-        exportExcel(response.getOutputStream());
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String filtename) {
+        try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding(CharsetKit.UTF_8);
+
+            // 文件名称为空将采用工作表名称
+            if (TWTUtils.isEmpty(filtename)) {
+                filtename = sheetName;
+            }
+
+            filtename = filtename + "." + xlsx;
+
+            // Url编码，前台需自行还原
+            filtename = "attachment; filename=" + URLEncoder.encode(filtename, "UTF-8");
+
+            // 设置Excel导出的名称
+            response.setHeader("Content-Disposition", filtename);
+
+            this.init(list, sheetName, Type.EXPORT);
+            exportExcel(response.getOutputStream());
+        } catch (IOException e) {
+            throw new TWTUtilsException("数据导出出错");
+        }
+    }
+
+    /**
+     * 对list数据源将其里面的数据导入到excel表单
+     *
+     * @param response  返回数据
+     * @param list      导出数据集合
+     * @param sheetName 工作表的名称
+     * @return 结果
+     */
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
+        exportExcel(response, list, sheetName, null);
     }
 
     /**
@@ -236,7 +269,7 @@ public class ExcelUtils<T> {
      */
     public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding(CharsetKit.UTF_8);
         this.init(null, sheetName, Type.IMPORT);
         exportExcel(response.getOutputStream());
     }
@@ -249,7 +282,7 @@ public class ExcelUtils<T> {
     public void exportExcel(OutputStream outputStream) {
         try {
             // 取出一共有多少个sheet.
-            double sheetNo = Math.ceil(list.size() / sheetSize);
+            double sheetNo = Math.ceil(list.size() / SHEET_SIZE);
             for (int index = 0; index <= sheetNo; index++) {
                 createSheet(sheetNo, index);
 
@@ -293,8 +326,8 @@ public class ExcelUtils<T> {
      * @param row   单元格行
      */
     public void fillExcelData(int index, Row row) {
-        int startNo = index * sheetSize;
-        int endNo = Math.min(startNo + sheetSize, list.size());
+        int startNo = index * SHEET_SIZE;
+        int endNo = Math.min(startNo + SHEET_SIZE, list.size());
         for (int i = startNo; i < endNo; i++) {
             row = sheet.createRow(i + 1 - startNo);
             // 得到导出对象.
@@ -376,7 +409,7 @@ public class ExcelUtils<T> {
     public void setCellVo(Object value, Excel attr, Cell cell) {
         if (ColumnType.STRING == attr.cellType()) {
             cell.setCellType(CellType.NUMERIC);
-            cell.setCellValue(StringUtils.isNull(value) ? attr.defaultValue() : value + attr.suffix());
+            cell.setCellValue(TWTUtils.isEmpty(value) ? attr.defaultValue() : value + attr.suffix());
         } else if (ColumnType.NUMERIC == attr.cellType()) {
             cell.setCellType(CellType.NUMERIC);
             cell.setCellValue(Integer.parseInt(value + ""));
@@ -395,7 +428,7 @@ public class ExcelUtils<T> {
             row.setHeight((short) (attr.height() * 20));
         }
         // 如果设置了提示信息则鼠标放上去提示.
-        if (StringUtils.isNotEmpty(attr.prompt())) {
+        if (TWTUtils.isNotEmpty(attr.prompt())) {
             // 这里默认设了2-101列提示.
             setXSSFPrompt(sheet, "", attr.prompt(), 1, 100, column, column);
         }
@@ -425,9 +458,9 @@ public class ExcelUtils<T> {
                 String dateFormat = attr.dateFormat();
                 String readConverterExp = attr.readConverterExp();
                 String separator = attr.separator();
-                if (StringUtils.isNotEmpty(dateFormat) && StringUtils.isNotNull(value)) {
+                if (TWTUtils.isNotEmpty(dateFormat) && TWTUtils.isNotEmpty(value)) {
                     cell.setCellValue(DateUtils.parseDateToStr(dateFormat, (Date) value));
-                } else if (StringUtils.isNotEmpty(readConverterExp) && StringUtils.isNotNull(value)) {
+                } else if (TWTUtils.isNotEmpty(readConverterExp) && TWTUtils.isNotEmpty(value)) {
                     cell.setCellValue(convertByExp(Convert.toStr(value), readConverterExp, separator));
                 } else {
                     // 设置列类型
@@ -561,9 +594,9 @@ public class ExcelUtils<T> {
      */
     private Object getTargetValue(T vo, Field field, Excel excel) throws Exception {
         Object o = field.get(vo);
-        if (StringUtils.isNotEmpty(excel.targetAttr())) {
+        if (TWTUtils.isNotEmpty(excel.targetAttr())) {
             String target = excel.targetAttr();
-            if (target.indexOf(".") > -1) {
+            if (".".contains(target)) {
                 String[] targets = target.split("[.]");
                 for (String name : targets) {
                     o = getValue(o, name);
@@ -584,7 +617,7 @@ public class ExcelUtils<T> {
      * @throws Exception
      */
     private Object getValue(Object o, String name) throws Exception {
-        if (StringUtils.isNotEmpty(name)) {
+        if (TWTUtils.isNotEmpty(name)) {
             Class<?> clazz = o.getClass();
             String methodName = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
             Method method = clazz.getMethod(methodName);
@@ -597,7 +630,7 @@ public class ExcelUtils<T> {
      * 得到所有定义字段
      */
     private void createExcelField() {
-        this.fields = new ArrayList<Object[]>();
+        this.fields = new ArrayList<>();
         List<Field> tempFields = new ArrayList<>();
         tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
         tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
@@ -666,13 +699,15 @@ public class ExcelUtils<T> {
         Object val = "";
         try {
             Cell cell = row.getCell(column);
-            if (StringUtils.isNotNull(cell)) {
+            if (TWTUtils.isNotEmpty(cell)) {
                 if (cell.getCellTypeEnum() == CellType.NUMERIC || cell.getCellTypeEnum() == CellType.FORMULA) {
                     val = cell.getNumericCellValue();
                     if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                        val = DateUtil.getJavaDate((Double) val); // POI Excel 日期格式转换
+                        // POI Excel 日期格式转换
+                        val = DateUtil.getJavaDate((Double) val);
                     } else {
-                        val = new BigDecimal(val.toString()); // 浮点格式处理
+                        // 浮点格式处理
+                        val = new BigDecimal(val.toString());
                     }
                 } else if (cell.getCellTypeEnum() == CellType.STRING) {
                     val = cell.getStringCellValue();

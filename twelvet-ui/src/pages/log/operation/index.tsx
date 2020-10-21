@@ -5,7 +5,7 @@ import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, Eye
 import { Popconfirm, Button, message, Modal, Form, DatePicker } from 'antd'
 import moment from 'moment'
 import { TableListItem } from './data'
-import { pageQuery, remove } from './service'
+import { pageQuery, remove, exportExcel } from './service'
 import { system, makeTree } from '@/utils/twelvet'
 import { FormInstance } from 'antd/lib/form'
 
@@ -68,7 +68,7 @@ const Menu: React.FC<{}> = () => {
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
-                    <Button type="link">
+                    <Button type="link" onClick={() => handleView(row)}>
                         <EyeOutlined />
                         详情
                     </Button>
@@ -78,51 +78,14 @@ const Menu: React.FC<{}> = () => {
     ]
 
     /**
-     * 获取新增菜单信息
+     * 查看详情
      * @param row row
      */
-    const refPost = async (row: { [key: string]: any }) => {
-        // 更新数据
-        putData()
-
-        const field: { [key: string]: any } = { parentId: row.menuId }
+    const handleView = (row: { [key: string]: String }) => {
         // 设置表单数据
-        form.setFieldsValue(field)
+        form.setFieldsValue(row)
 
         setModal({ title: "新增", visible: true })
-    }
-
-    /**
-     * 更新菜单数据(保证菜单数据的最新)
-     */
-    const putData = async () => {
-        try {
-            const { code, msg, data } = await list({})
-            if (code != 200) {
-                return message.error(msg)
-            }
-
-            const children = makeTree({
-                dataSource: data,
-                id: `menuId`,
-                enhance: {
-                    key: `menuId`,
-                    title: `menuName`,
-                    value: `menuId`
-                }
-            })
-
-            setDataSource([
-                {
-                    key: 0,
-                    title: `主目录`,
-                    value: 0,
-                    children
-                }
-            ])
-        } catch (e) {
-            system.error(e)
-        }
     }
 
     /**
@@ -135,7 +98,7 @@ const Menu: React.FC<{}> = () => {
                 return true
             }
             const { code, msg } = await remove(infoIds.join(","))
-            if (code != 200) {
+            if (code !== 200) {
                 return message.error(msg)
             }
 
@@ -157,43 +120,6 @@ const Menu: React.FC<{}> = () => {
         setModal({ title: "", visible: false })
 
         form.resetFields()
-
-        setMenuType(`M`)
-    }
-
-    /**
-     * 保存数据
-     */
-    const onSave = () => {
-        form
-            .validateFields()
-            .then(
-                async (fields) => {
-                    try {
-                        // 开启加载中
-                        setLoadingModal(true)
-                        // menuId为0则insert，否则将update
-                        const { code, msg } = fields.menuId == 0 ? await insert(fields) : await update(fields)
-                        if (code != 200) {
-                            return message.error(msg)
-                        }
-
-                        message.success(msg)
-
-                        if (acForm.current) {
-                            acForm.current.reload()
-                        }
-
-                        // 关闭模态框
-                        handleCancel()
-                    } catch (e) {
-                        system.error(e)
-                    } finally {
-                        setLoadingModal(false)
-                    }
-                }).catch(e => {
-                    system.error(e)
-                })
     }
 
     return (
@@ -205,10 +131,9 @@ const Menu: React.FC<{}> = () => {
                 request={pageQuery}
                 rowSelection={{}}
                 beforeSearchSubmit={(params) => {
-                    console.log(params)
                     // 分隔搜索参数
                     if (params.between) {
-                        const between = params.between
+                        const { between } = params
                         // 移除参数
                         delete params.between
 
@@ -220,19 +145,19 @@ const Menu: React.FC<{}> = () => {
                 }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Popconfirm
-                        disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
+                        disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
                         onConfirm={() => refRemove(selectedRowKeys)}
                         title="是否删除选中数据，请再次确认！！！"
                     >
                         <Button
-                            disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
+                            disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
                             type="primary" danger
                         >
                             <DeleteOutlined />
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default">
+                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
                         <FundProjectionScreenOutlined />
                         导出数据
                     </Button>
@@ -241,13 +166,13 @@ const Menu: React.FC<{}> = () => {
             />
 
             <Modal
-                title={`${modal.title}菜单`}
+                title={`查看详情`}
                 width={700}
                 visible={modal.visible}
                 confirmLoading={loadingModal}
                 okText={`${modal.title}`}
-                onOk={onSave}
                 onCancel={handleCancel}
+                footer={null}
             >
             </Modal>
         </>

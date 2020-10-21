@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { download } from '@/utils/request'
 
 // 请求的控制器名称
 const controller = "/system/operationLog";
@@ -24,4 +24,12 @@ export async function remove(infoIds: string) {
     return request(`${controller}/${infoIds}`, {
         method: 'DELETE',
     });
+}
+
+/**
+ * 导出Excel
+ * @param params
+ */
+export async function exportExcel(params?: { [key: string]: any }) {
+    return download(`${controller}/exportExcel`, params);
 }

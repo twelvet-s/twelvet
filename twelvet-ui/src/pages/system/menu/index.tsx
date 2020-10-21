@@ -300,8 +300,7 @@ const Menu: React.FC<{}> = () => {
                             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                             placeholder="上级菜单"
                             treeData={dataSource}
-                        >
-                        </TreeSelect>
+                         />
                     </Form.Item>
 
                     <Form.Item
@@ -381,7 +380,7 @@ const Menu: React.FC<{}> = () => {
 
                     <Row>
                         {
-                            menuType == `C` && (
+                            menuType === `C` && (
                                 <Col span={12}>
                                     <Form.Item
                                         label="组件路径"
@@ -396,7 +395,7 @@ const Menu: React.FC<{}> = () => {
 
 
                         {
-                            menuType != `M` && (
+                            menuType !== `M` && (
                                 <Col span={12}>
                                     <Form.Item
                                         label="权限标识"
@@ -411,7 +410,7 @@ const Menu: React.FC<{}> = () => {
                     </Row>
 
                     {
-                        menuType != 'F' && (
+                        menuType !== 'F' && (
                             <Row>
                                 <Col span={12}>
                                     <Form.Item

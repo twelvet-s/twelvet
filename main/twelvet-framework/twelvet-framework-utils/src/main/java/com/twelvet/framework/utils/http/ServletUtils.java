@@ -1,6 +1,6 @@
 package com.twelvet.framework.utils.http;
 
-import com.twelvet.framework.utils.text.Convert;
+import com.twelvet.framework.utils.Convert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

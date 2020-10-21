@@ -5,10 +5,12 @@ import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
+import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysOperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -68,6 +70,20 @@ public class SysOperationLogController extends TWTController {
         startPage();
         List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
         return AjaxResult.success(getDataTable(list));
+    }
+
+    /**
+     * Excel导出
+     *
+     * @param response     HttpServletResponse
+     * @param operationLog SysOperationLog
+     */
+    @Log(service = "操作日志", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportExcel")
+    public void exportExcel(HttpServletResponse response, SysOperationLog operationLog) {
+        List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
+        ExcelUtils<SysOperationLog> exportExcel = new ExcelUtils<>(SysOperationLog.class);
+        exportExcel.exportExcel(response, list, "操作日志");
     }
 
 }

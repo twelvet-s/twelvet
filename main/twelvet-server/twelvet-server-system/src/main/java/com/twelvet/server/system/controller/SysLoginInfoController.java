@@ -98,10 +98,10 @@ public class SysLoginInfoController extends TWTController {
      * @param loginInfo SysLoginInfo
      */
     @Log(service = "登陆日志", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, SysLoginInfo loginInfo) throws IOException {
+    @PostMapping("/exportExcel")
+    public void exportExcel(HttpServletResponse response, SysLoginInfo loginInfo) {
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
-        ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<SysLoginInfo>(SysLoginInfo.class);
+        ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<>(SysLoginInfo.class);
         excelUtils.exportExcel(response, list, "登陆日志");
     }
 

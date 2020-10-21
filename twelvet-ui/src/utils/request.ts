@@ -5,7 +5,9 @@
 import { extend } from 'umi-request'
 import { notification } from 'antd'
 import { history } from 'umi'
+import { system } from '@/utils/twelvet'
 import TWT from '../setting'
+import { isArray } from 'lodash'
 
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -101,15 +103,19 @@ request.use(
 
 // Filter【请求后的处理】
 request.interceptors.response.use(async (response, request) => {
+    // blob类型直接返回
+    if (request.responseType === 'blob') {
+        return response;
+    }
 
     const data = await response.clone().json();
-    if (data && data.code == 403) {
+    if (data && data.code === 403) {
         notification.error({
             message: data.msg,
         });
         // 跳转到登陆页
-        //return router.replace('/user/login');
-    } else if (data && data.status == -998) {
+        // return router.replace('/user/login');
+    } else if (data && data.status === -998) {
         // 无操作权限
         notification.error({
             message: data.msg
@@ -118,5 +124,55 @@ request.interceptors.response.use(async (response, request) => {
     return response;
 
 })
+
+/**
+ * 通用下载方法
+ * @param url 地址
+ * @param params 参数
+ * @param filename 文件名称(空即为输出默认)
+ */
+export function download(url: string, params?: { [key: string]: any }, filename?: string) {
+    return request(url, {
+        method: 'POST',
+        data: {
+            ...params
+        },
+        responseType: 'blob',
+        parseResponse: false
+    })
+        .then((response) => {
+            // 空的将采用默认
+            if (!filename) {
+                const contentDisposition = response.headers.get('content-disposition')
+                const name = contentDisposition.split("filename=")
+                if (isArray(name)) {
+                    // 获取并还原编码
+                    filename = decodeURIComponent(name[1])
+                } else {
+                    filename = '文件名称未知'
+                }
+            }
+            return response.blob()
+
+        })
+        .then((blob) => {
+            if ('download' in document.createElement('a')) {
+                // 非IE下载
+                const elink = document.createElement('a')
+                elink.download = filename
+                elink.style.display = 'none'
+                elink.href = URL.createObjectURL(blob)
+                document.body.appendChild(elink)
+                elink.click()
+                URL.revokeObjectURL(elink.href)
+                document.body.removeChild(elink)
+            } else {
+                // IE10+下载
+                navigator.msSaveBlob(blob, filename)
+            }
+        }).catch((r) => {
+            system.error(r)
+        })
+}
 
 export default request

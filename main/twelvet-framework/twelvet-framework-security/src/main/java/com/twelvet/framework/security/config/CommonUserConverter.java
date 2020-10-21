@@ -2,7 +2,7 @@ package com.twelvet.framework.security.config;
 
 import com.twelvet.framework.security.constans.SecurityConstants;
 import com.twelvet.framework.security.domain.LoginUser;
-import com.twelvet.framework.utils.text.Convert;
+import com.twelvet.framework.utils.Convert;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
