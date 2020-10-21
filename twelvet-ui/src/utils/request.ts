@@ -132,7 +132,7 @@ request.interceptors.response.use(async (response, request) => {
  * @param filename 文件名称(空即为输出默认)
  */
 export function download(url: string, params?: { [key: string]: any }, filename?: string) {
-    return request(url, {
+    return request(`${url}?refresh=${new Date().getTime()}`, {
         method: 'POST',
         data: {
             ...params

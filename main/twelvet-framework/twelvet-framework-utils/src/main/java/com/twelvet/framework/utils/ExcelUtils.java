@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 public class ExcelUtils<T> {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtils.class);
 
-    private final static String xls = "xls";
-    private final static String xlsx = "xlsx";
+    private final static String XLS = "xls";
+    private final static String XLSX = "xlsx";
 
     /**
      * Excel sheet最大行数，默认65536
@@ -234,10 +234,10 @@ public class ExcelUtils<T> {
                 filtename = sheetName;
             }
 
-            filtename = filtename + "." + xlsx;
+            filtename = URLEncoder.encode(filtename, CharsetKit.UTF_8);
 
             // Url编码，前台需自行还原
-            filtename = "attachment; filename=" + URLEncoder.encode(filtename, "UTF-8");
+            filtename = "attachment; filename=" + filtename + "." + XLSX;
 
             // 设置Excel导出的名称
             response.setHeader("Content-Disposition", filtename);
@@ -265,7 +265,6 @@ public class ExcelUtils<T> {
      * 对list数据源将其里面的数据导入到excel表单
      *
      * @param sheetName 工作表的名称
-     * @return 结果
      */
     public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException {
         response.setContentType("application/vnd.ms-excel");

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, DatePicker } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, DatePicker, Input, Descriptions } from 'antd'
 import moment from 'moment'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
@@ -16,14 +16,13 @@ const Menu: React.FC<{}> = () => {
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
+    const [descriptions, setDescriptions] = useState({})
+
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
     const acForm = useRef<ActionType>()
     const [form] = Form.useForm<FormInstance>()
-
-    // 创建远程Icon
-    const IconFont = createFromIconfontCN()
 
     const { RangePicker } = DatePicker
 
@@ -82,8 +81,8 @@ const Menu: React.FC<{}> = () => {
      * @param row row
      */
     const handleView = (row: { [key: string]: String }) => {
-        // 设置表单数据
-        form.setFieldsValue(row)
+        // 设置描述数据
+        setDescriptions(row)
 
         setModal({ title: "新增", visible: true })
     }
@@ -174,6 +173,47 @@ const Menu: React.FC<{}> = () => {
                 onCancel={handleCancel}
                 footer={null}
             >
+
+                <Descriptions>
+                    <Descriptions.Item label="操作模块">
+                        {descriptions.service}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="请求地址">
+                        {descriptions.operUrl}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="登录信息">
+                        {descriptions.operName}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="请求方式">
+                        {descriptions.requestMethod}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="操作方法">
+                        {descriptions.method}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="请求参数">
+                        {descriptions.operParam}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="返回参数">
+                        {descriptions.jsonResult}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="操作状态">
+                        {
+                            descriptions.status === 1 ? '正常' : '失败'
+                        }
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="操作时间">
+                        {descriptions.operTime}
+                    </Descriptions.Item>
+                </Descriptions>
+
             </Modal>
         </>
     )
