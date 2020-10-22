@@ -1,28 +1,24 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { createFromIconfontCN, DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, DatePicker, Input, Descriptions } from 'antd'
-import moment from 'moment'
+import { DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Modal, DatePicker, Descriptions } from 'antd'
+import moment, { Moment } from 'moment'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
-import { system, makeTree } from '@/utils/twelvet'
-import { FormInstance } from 'antd/lib/form'
+import { system } from '@/utils/twelvet'
 
 /**
- * 菜单模块
+ * 操作日志
  */
-const Menu: React.FC<{}> = () => {
-    // 是否执行Modal数据操作中
-    const [loadingModal, setLoadingModal] = useState<boolean>(false)
+const Operation: React.FC<{}> = () => {
 
-    const [descriptions, setDescriptions] = useState({})
+    const [descriptions, setDescriptions] = useState<{ [key: string]: String | number }>()
 
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
     const acForm = useRef<ActionType>()
-    const [form] = Form.useForm<FormInstance>()
 
     const { RangePicker } = DatePicker
 
@@ -55,7 +51,7 @@ const Menu: React.FC<{}> = () => {
             hideInTable: true,
             dataIndex: 'between',
             renderFormItem: () => (
-                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: moment) => {
+                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
                     // 不允许选择大于今天的日期
                     return moment(new Date(), 'YYYY-MM-DD') < currentDate
                 }} />
@@ -80,7 +76,7 @@ const Menu: React.FC<{}> = () => {
      * 查看详情
      * @param row row
      */
-    const handleView = (row: { [key: string]: String }) => {
+    const handleView = (row: { [key: string]: String | number }) => {
         // 设置描述数据
         setDescriptions(row)
 
@@ -115,10 +111,7 @@ const Menu: React.FC<{}> = () => {
      * 取消Modal的显示
      */
     const handleCancel = () => {
-
         setModal({ title: "", visible: false })
-
-        form.resetFields()
     }
 
     return (
@@ -146,7 +139,7 @@ const Menu: React.FC<{}> = () => {
                     <Popconfirm
                         disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
                         onConfirm={() => refRemove(selectedRowKeys)}
-                        title="是否删除选中数据，请再次确认！！！"
+                        title="是否删除选中数据"
                     >
                         <Button
                             disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
@@ -168,49 +161,52 @@ const Menu: React.FC<{}> = () => {
                 title={`查看详情`}
                 width={700}
                 visible={modal.visible}
-                confirmLoading={loadingModal}
                 okText={`${modal.title}`}
                 onCancel={handleCancel}
                 footer={null}
             >
 
-                <Descriptions>
+                <Descriptions column={2}>
                     <Descriptions.Item label="操作模块">
-                        {descriptions.service}
-                    </Descriptions.Item>
-
-                    <Descriptions.Item label="请求地址">
-                        {descriptions.operUrl}
-                    </Descriptions.Item>
-
-                    <Descriptions.Item label="登录信息">
-                        {descriptions.operName}
+                        {descriptions && descriptions.service}
                     </Descriptions.Item>
 
                     <Descriptions.Item label="请求方式">
-                        {descriptions.requestMethod}
+                        {descriptions && descriptions.requestMethod}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="操作方法">
-                        {descriptions.method}
+                    <Descriptions.Item label="请求地址" span={2}>
+                        {descriptions && descriptions.operUrl}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="请求参数">
-                        {descriptions.operParam}
+                    <Descriptions.Item label="操作方法" span={2}>
+                        {descriptions && descriptions.method}
                     </Descriptions.Item>
 
-                    <Descriptions.Item label="返回参数">
-                        {descriptions.jsonResult}
+                    <Descriptions.Item label="请求参数" span={2}>
+                        {descriptions && descriptions.operParam}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="返回参数" span={2}>
+                        {descriptions && descriptions.jsonResult}
                     </Descriptions.Item>
 
                     <Descriptions.Item label="操作状态">
                         {
-                            descriptions.status === 1 ? '正常' : '失败'
+                            descriptions && descriptions.status === 1 ? '正常' : '失败'
                         }
                     </Descriptions.Item>
 
+                    <Descriptions.Item label="操作人员">
+                        {descriptions && descriptions.operName}
+                    </Descriptions.Item>
+
                     <Descriptions.Item label="操作时间">
-                        {descriptions.operTime}
+                        {descriptions && descriptions.operTime}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label="操作地点">
+                        {descriptions && descriptions.operIp}
                     </Descriptions.Item>
                 </Descriptions>
 
@@ -220,4 +216,4 @@ const Menu: React.FC<{}> = () => {
 
 }
 
-export default Menu
+export default Operation

@@ -1,6 +1,5 @@
 package com.twelvet.api.system.domain;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.twelvet.framework.core.application.domain.BaseEntity;
 
 import java.util.ArrayList;

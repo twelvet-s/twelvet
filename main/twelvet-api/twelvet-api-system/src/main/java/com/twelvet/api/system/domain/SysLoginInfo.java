@@ -8,9 +8,9 @@ import com.twelvet.framework.utils.annotation.excel.Excel.ColumnType;
 import java.util.Date;
 
 /**
- * 系统访问记录表 sys_login_info
- *
- * @author ruoyi
+ * @author twelvet
+ * @WebSite www.twelvet.cn
+ * @Description: 系统访问记录表 sys_login_info
  */
 public class SysLoginInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;

@@ -4,7 +4,7 @@ import com.twelvet.api.system.domain.SysMenu;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysMenuMapper;
-import com.twelvet.server.system.mapper.SysRoleMapper;
+import com.twelvet.server.system.mapper.SysRoleMenuMapper;
 import com.twelvet.server.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     private SysMenuMapper sysMenuMapper;
 
     @Autowired
-    private SysRoleMapper sysRoleMapper;
+    private SysRoleMenuMapper sysRoleMenuMapper;
 
     /**
      * 新增保存菜单信息
@@ -129,7 +129,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public boolean checkMenuExistRole(Long menuId) {
-        int result = sysRoleMapper.checkMenuExistRole(menuId);
+        int result = sysRoleMenuMapper.checkMenuExistRole(menuId);
         return result > 0;
     }
 

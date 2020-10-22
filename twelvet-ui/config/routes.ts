@@ -68,6 +68,13 @@ export default [
                             name: 'role',
                             path: '/human/role',
                             component: './human/role'
+                        },
+                        {
+                            title: '岗位管理',
+                            icon: 'icon-post',
+                            name: 'post',
+                            path: '/human/post',
+                            component: './human/post'
                         }
                     ]
                 },

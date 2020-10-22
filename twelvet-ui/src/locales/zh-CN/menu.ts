@@ -11,6 +11,7 @@ export default {
     'menu.human': '人力管理',
     'menu.human.staffManagement': '职员管理',
     'menu.human.role': '角色管理',
+    'menu.human.post': '岗位管理',
 
     // 个人中心
     'menu.account': '个人账号',

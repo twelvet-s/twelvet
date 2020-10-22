@@ -3,16 +3,15 @@ import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, DatePicker } from 'antd'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
-import request, { download } from '@/utils/request'
 import { system } from '@/utils/twelvet'
 
 /**
- * 菜单模块
+ * 登录日志
  */
-const Menu: React.FC<{}> = () => {
+const Login: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
 
@@ -53,7 +52,7 @@ const Menu: React.FC<{}> = () => {
             hideInTable: true,
             dataIndex: 'between',
             renderFormItem: () => (
-                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: moment) => {
+                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
                     // 不允许选择大于今天的日期
                     return moment(new Date(), 'YYYY-MM-DD') < currentDate
                 }} />
@@ -99,7 +98,7 @@ const Menu: React.FC<{}> = () => {
                 beforeSearchSubmit={(params) => {
                     // 分隔搜索参数
                     if (params.between) {
-                        const {between} = params
+                        const { between } = params
                         // 移除参数
                         delete params.between
 
@@ -113,7 +112,7 @@ const Menu: React.FC<{}> = () => {
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
                         onConfirm={() => refRemove(selectedRowKeys)}
-                        title="是否删除选中数据，请再次确认！！！"
+                        title="是否删除选中数据"
                     >
                         <Button
                             disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
@@ -123,7 +122,7 @@ const Menu: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default" onClick={() => exportExcel({s: 1})}>
+                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
                         <FundProjectionScreenOutlined />
                         导出数据
                     </Button>
@@ -135,4 +134,4 @@ const Menu: React.FC<{}> = () => {
 
 }
 
-export default Menu
+export default Login

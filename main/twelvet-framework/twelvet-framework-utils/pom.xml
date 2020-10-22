@@ -38,6 +38,14 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!--Spring Context-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
