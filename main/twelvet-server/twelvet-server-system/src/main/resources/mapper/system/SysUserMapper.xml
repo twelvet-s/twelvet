@@ -61,7 +61,7 @@
         left join sys_dept d on u.dept_id = d.dept_id
         where u.del_flag = '0'
         <if test="userName != null and userName != ''">
-            AND u.user_name like concat('%', #{userName}, '%')
+            AND u.user_name like concat('%', #{username}, '%')
         </if>
         <if test="status != null and status != ''">
             AND u.status = #{status}
@@ -84,8 +84,7 @@
     </select>
 
     <select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
-        <include refid="selectUserVo"/>
-        where u.user_name = #{userName}
+        select * from sys_user where user_name = #{userName}
     </select>
 
     <select id="selectUserById" parameterType="Long" resultMap="SysUserResult">
@@ -94,7 +93,7 @@
     </select>
 
     <select id="checkUserNameUnique" parameterType="String" resultType="int">
-		select count(1) from sys_user where user_name = #{userName}
+		select count(1) from sys_user where user_name = #{username}
 	</select>
 
     <select id="checkPhoneUnique" parameterType="String" resultMap="SysUserResult">
@@ -123,7 +122,7 @@
         )values(
         <if test="userId != null and userId != ''">#{userId},</if>
         <if test="deptId != null and deptId != ''">#{deptId},</if>
-        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="userName != null and userName != ''">#{username},</if>
         <if test="nickName != null and nickName != ''">#{nickName},</if>
         <if test="email != null and email != ''">#{email},</if>
         <if test="avatar != null and avatar != ''">#{avatar},</if>
@@ -141,7 +140,7 @@
         update sys_user
         <set>
             <if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
-            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="userName != null and userName != ''">user_name = #{username},</if>
             <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
             <if test="email != null and email != ''">email = #{email},</if>
             <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
@@ -163,11 +162,11 @@
 	</update>
 
     <update id="updateUserAvatar" parameterType="SysUser">
- 		update sys_user set avatar = #{avatar} where user_name = #{userName}
+ 		update sys_user set avatar = #{avatar} where user_name = #{username}
 	</update>
 
     <update id="resetUserPwd" parameterType="SysUser">
- 		update sys_user set password = #{password} where user_name = #{userName}
+ 		update sys_user set password = #{password} where user_name = #{username}
 	</update>
 
     <delete id="deleteUserById" parameterType="Long">

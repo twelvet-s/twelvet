@@ -2,11 +2,10 @@
  * columns参数
  */
 export interface TableListItem {
-    menuName: string
-    icon?: string
-    orderNum: number
-    perms?: string
-    component?: string
-    createTime: Date
+    postCode: string
+    postName?: string
+    postSort: number
+    status?: string
+    createTime?: string
     operation: option
 }

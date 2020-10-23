@@ -75,6 +75,13 @@ export default [
                             name: 'post',
                             path: '/human/post',
                             component: './human/post'
+                        },
+                        {
+                            title: '部门管理',
+                            icon: 'icon-dept',
+                            name: 'dept',
+                            path: '/human/dept',
+                            component: './human/dept'
                         }
                     ]
                 },

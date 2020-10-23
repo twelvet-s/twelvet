@@ -68,6 +68,10 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
          */
         childrenColumnName = 'children',
         /**
+         * 默认不展开
+         */
+        defaultExpandAllRows = false,
+        /**
          * 展开缩进
          */
         indentSize = 50,
@@ -234,8 +238,9 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                 childrenColumnName,
                 // 展开缩进px
                 indentSize,
+                defaultExpandAllRows,
                 // 列表展开时触发
-                onExpand
+                onExpand,
             }}
             // 表头参数
             columns={columns}

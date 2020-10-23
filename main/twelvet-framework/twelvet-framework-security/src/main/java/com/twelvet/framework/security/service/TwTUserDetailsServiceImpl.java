@@ -33,7 +33,12 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private RemoteUserService remoteUserService;
 
-
+    /**
+     * 登录
+     *
+     * @param username String
+     * @return UserDetails
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         R<UserInfo> userResult = remoteUserService.getUserInfo(username);
