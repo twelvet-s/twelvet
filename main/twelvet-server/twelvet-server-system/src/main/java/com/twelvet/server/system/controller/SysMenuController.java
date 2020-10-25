@@ -3,6 +3,7 @@ package com.twelvet.server.system.controller;
 import com.twelvet.api.system.domain.SysMenu;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
+import com.twelvet.framework.core.constant.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author twelvet
@@ -36,7 +39,7 @@ public class SysMenuController extends TWTController {
     @Log(service = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult insert(@Validated @RequestBody SysMenu menu) {
-        if (iSysMenuService.checkMenuNameUnique(menu)) {
+        if (UserConstants.NOT_UNIQUE.equals(iSysMenuService.checkMenuNameUnique(menu))) {
             throw new TWTException("新增菜单【" + menu.getMenuName() + "】失败，菜单名称已存在");
         }
         // 加入当前操作人员ID
@@ -68,7 +71,7 @@ public class SysMenuController extends TWTController {
     @Log(service = "菜单管理", businessType = BusinessType.PUT)
     @PutMapping
     public AjaxResult update(@Validated @RequestBody SysMenu menu) {
-        if (iSysMenuService.checkMenuNameUnique(menu)) {
+        if (UserConstants.NOT_UNIQUE.equals(iSysMenuService.checkMenuNameUnique(menu))) {
             throw new TWTException("新增菜单【" + menu.getMenuName() + "】失败，菜单名称已存在");
         }
         menu.setUpdateBy(SecurityUtils.getUsername());
@@ -97,7 +100,36 @@ public class SysMenuController extends TWTController {
      */
     @GetMapping(value = "/{menuId}")
     public AjaxResult getByMenuId(@PathVariable Long menuId) {
-        return AjaxResult.success(iSysMenuService.selectByMenuId(menuId));
+        return AjaxResult.success(iSysMenuService.selectMenuById(menuId));
+    }
+
+    /**
+     * 加载对应角色菜单列表树
+     */
+    @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
+    public AjaxResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId)
+    {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        Long userId = loginUser.getUserId();
+        List<SysMenu> menus = iSysMenuService.selectMenuList(userId);
+
+        Map<String, Object> res = new HashMap<>(2);
+        res.put("checkedKeys", iSysMenuService.selectMenuListByRoleId(roleId));
+        res.put("menus", iSysMenuService.buildMenuTreeSelect(menus));
+
+        return AjaxResult.success(res);
+    }
+
+    /**
+     * 获取菜单下拉树列表
+     */
+    @GetMapping("/treeSelect")
+    public AjaxResult treeSelect(SysMenu menu)
+    {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        Long userId = loginUser.getUserId();
+        List<SysMenu> menus = iSysMenuService.selectMenuList(menu, userId);
+        return AjaxResult.success(iSysMenuService.buildMenuTreeSelect(menus));
     }
 
 }

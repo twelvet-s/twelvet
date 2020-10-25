@@ -32,6 +32,15 @@ const Menu: React.FC<{}> = () => {
     // 创建远程Icon
     const IconFont = createFromIconfontCN()
 
+    const formItemLayout = {
+        labelCol: {
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            sm: { span: 16 },
+        },
+    }
+
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
@@ -289,6 +298,14 @@ const Menu: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 16 },
+                            },
+                        }}
                         label="上级菜单"
                         name="parentId"
                     >
@@ -300,10 +317,18 @@ const Menu: React.FC<{}> = () => {
                             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                             placeholder="上级菜单"
                             treeData={dataSource}
-                         />
+                        />
                     </Form.Item>
 
                     <Form.Item
+                        {...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 16 },
+                            },
+                        }}
                         label="菜单类型"
                         name="menuType"
                         initialValue="M"
@@ -328,8 +353,9 @@ const Menu: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Row>
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="菜单名称"
                                 name="menuName"
                                 rules={[{ required: true, message: '菜单名称不能为空' }]}
@@ -338,8 +364,9 @@ const Menu: React.FC<{}> = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="显示排序"
                                 name="orderNum"
                                 rules={[{ required: true, message: '菜单排序不能为空' }]}
@@ -352,8 +379,9 @@ const Menu: React.FC<{}> = () => {
                     {
                         menuType != `F` && (
                             <Row>
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="是否外链"
                                         name="isFrame"
                                         initialValue={false}
@@ -365,8 +393,9 @@ const Menu: React.FC<{}> = () => {
                                     </Form.Item>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="路由地址"
                                         name="path"
                                         rules={[{ required: true, message: '路由地址不能为空' }]}
@@ -381,8 +410,9 @@ const Menu: React.FC<{}> = () => {
                     <Row>
                         {
                             menuType === `C` && (
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="组件路径"
                                         name="component"
                                         rules={[{ required: true, message: '组件路径不能为空' }]}
@@ -396,8 +426,9 @@ const Menu: React.FC<{}> = () => {
 
                         {
                             menuType !== `M` && (
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="权限标识"
                                         name="perms"
                                         rules={[{ required: true, message: '权限标识不能为空' }]}
@@ -412,8 +443,9 @@ const Menu: React.FC<{}> = () => {
                     {
                         menuType !== 'F' && (
                             <Row>
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="显示状态"
                                         name="visible"
                                         initialValue={true}
@@ -425,8 +457,9 @@ const Menu: React.FC<{}> = () => {
                                     </Form.Item>
                                 </Col>
 
-                                <Col span={12}>
+                                <Col sm={12} xs={24}>
                                     <Form.Item
+                                        {...formItemLayout}
                                         label="菜单状态"
                                         name="status"
                                         initialValue={true}

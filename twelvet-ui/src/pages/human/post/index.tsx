@@ -26,6 +26,17 @@ const Post: React.FC<{}> = () => {
 
     const { TextArea } = Input
 
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 4 },
+            sm: { span: 4 },
+        },
+        wrapperCol: {
+            xs: { span: 18 },
+            sm: { span: 18 },
+        },
+    }
+
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
@@ -242,6 +253,7 @@ const Post: React.FC<{}> = () => {
                 >
                     <Form.Item
                         hidden
+                        {...formItemLayout}
                         label="岗位ID"
                         name="postId"
                         initialValue={0}
@@ -250,6 +262,7 @@ const Post: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="岗位名称"
                         name="postName"
                         rules={[{ required: true, message: '岗位名称不能为空' }]}
@@ -258,6 +271,7 @@ const Post: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="岗位编码"
                         name="postCode"
                         rules={[{ required: true, message: '岗位编码不能为空' }]}
@@ -266,6 +280,7 @@ const Post: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="岗位顺序"
                         name="postSort"
                         initialValue={0}
@@ -275,6 +290,7 @@ const Post: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="岗位状态"
                         name="status"
                         initialValue="1"
@@ -286,6 +302,7 @@ const Post: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="备注"
                         name="remark"
                     >

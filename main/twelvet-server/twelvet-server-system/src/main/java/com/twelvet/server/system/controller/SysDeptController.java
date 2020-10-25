@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author twelvet
@@ -71,10 +73,11 @@ public class SysDeptController extends TWTController {
     @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
     public AjaxResult roleDeptTreeSelect(@PathVariable("roleId") Long roleId) {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
-        ajax.put("depts", deptService.buildDeptTreeSelect(depts));
-        return ajax;
+
+        Map<String, Object> res = new HashMap<>(2);
+        res.put("checkedKeys", deptService.selectDeptListByRoleId(roleId));
+        res.put("depts", deptService.buildDeptTreeSelect(depts));
+        return AjaxResult.success(res);
     }
 
     /**
@@ -122,4 +125,5 @@ public class SysDeptController extends TWTController {
         }
         return json(deptService.deleteDeptById(deptId));
     }
+
 }

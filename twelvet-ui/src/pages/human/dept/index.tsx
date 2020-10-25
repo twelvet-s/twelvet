@@ -24,10 +24,17 @@ const Dept: React.FC<{}> = () => {
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
-    // 部门类型参数设置的显示
-    const [menuType, setMenuType] = useState<string>(`M`)
     const acForm = useRef<ActionType>()
     const [form] = Form.useForm<FormInstance>()
+
+    const formItemLayout = {
+        labelCol: {
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            sm: { span: 16 },
+        },
+    }
 
     // Form参数
     const columns: ProColumns<TableListItem> = [
@@ -113,9 +120,6 @@ const Dept: React.FC<{}> = () => {
             // 赋值表单数据
             form.setFieldsValue(data)
 
-            // 设置部门类型
-            setMenuType(data.menuType)
-
             // 设置Modal状态
             setModal({ title: "修改", visible: true })
 
@@ -179,8 +183,6 @@ const Dept: React.FC<{}> = () => {
         setModal({ title: "", visible: false })
 
         form.resetFields()
-
-        setMenuType(`M`)
     }
 
     /**
@@ -269,6 +271,14 @@ const Dept: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 16 },
+                            },
+                        }}
                         label="上级部门"
                         name="parentId"
                     >
@@ -284,8 +294,9 @@ const Dept: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Row>
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="部门名称"
                                 name="deptName"
                                 rules={[{ required: true, message: '部门名称不能为空' }]}
@@ -294,8 +305,9 @@ const Dept: React.FC<{}> = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="显示排序"
                                 name="orderNum"
                                 rules={[{ required: true, message: '部门排序不能为空' }]}
@@ -306,8 +318,9 @@ const Dept: React.FC<{}> = () => {
                     </Row>
 
                     <Row>
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="负责人"
                                 name="leader"
                             >
@@ -315,8 +328,9 @@ const Dept: React.FC<{}> = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="联系电话"
                                 name="phone"
                             >
@@ -326,8 +340,9 @@ const Dept: React.FC<{}> = () => {
                     </Row>
 
                     <Row>
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="邮箱"
                                 name="email"
                             >
@@ -335,8 +350,9 @@ const Dept: React.FC<{}> = () => {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col sm={12} xs={24}>
                             <Form.Item
+                                {...formItemLayout}
                                 label="状态"
                                 name="status"
                             >

@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
- * @Description: Treeselect树结构实体类
+ * @Description: TreeSelect树结构实体类
  */
 public class TreeSelect implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     /** 节点ID */
-    private Long id;
+    private Long key;
 
     /** 节点名称 */
-    private String label;
+    private String title;
 
     /** 子节点 */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -34,36 +34,36 @@ public class TreeSelect implements Serializable
 
     public TreeSelect(SysDept dept)
     {
-        this.id = dept.getDeptId();
-        this.label = dept.getDeptName();
+        this.key = dept.getDeptId();
+        this.title = dept.getDeptName();
         this.children = dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
     public TreeSelect(SysMenu menu)
     {
-        this.id = menu.getMenuId();
-        this.label = menu.getMenuName();
+        this.key = menu.getMenuId();
+        this.title = menu.getMenuName();
         this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
-    public Long getId()
+    public Long getKey()
     {
-        return id;
+        return key;
     }
 
-    public void setId(Long id)
+    public void setKey(Long id)
     {
-        this.id = id;
+        this.key = id;
     }
 
-    public String getLabel()
+    public String getTitle()
     {
-        return label;
+        return title;
     }
 
-    public void setLabel(String label)
+    public void setTitle(String title)
     {
-        this.label = label;
+        this.title = title;
     }
 
     public List<TreeSelect> getChildren()

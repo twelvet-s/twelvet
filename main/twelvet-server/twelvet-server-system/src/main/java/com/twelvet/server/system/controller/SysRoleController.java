@@ -4,7 +4,6 @@ import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.constant.UserConstants;
-import com.twelvet.framework.core.web.page.TableDataInfo;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.utils.SecurityUtils;
@@ -29,11 +28,11 @@ public class SysRoleController extends TWTController {
     @Autowired
     private ISysRoleService iSysRoleService;
 
-    @GetMapping("/list")
-    public TableDataInfo list(SysRole role) {
+    @GetMapping
+    public AjaxResult list(SysRole role) {
         startPage();
         List<SysRole> list = iSysRoleService.selectRoleList(role);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(service = "角色管理", businessType = BusinessType.EXPORT)
@@ -73,7 +72,7 @@ public class SysRoleController extends TWTController {
      */
     @Log(service = "角色管理", businessType = BusinessType.PUT)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysRole role) {
+    public AjaxResult update(@Validated @RequestBody SysRole role) {
         iSysRoleService.checkRoleAllowed(role);
         if (UserConstants.NOT_UNIQUE.equals(iSysRoleService.checkRoleNameUnique(role))) {
             return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
