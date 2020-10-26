@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
+import RoleSwitch from './components/Switch'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Tree, TreeSelect, Row, Col } from 'antd'
 import { FormInstance } from 'antd/lib/form'
@@ -14,7 +15,7 @@ import { Key } from 'antd/lib/table/interface'
 /**
  * 角色模块
  */
-const Post: React.FC<{}> = () => {
+const Role: React.FC<{}> = () => {
 
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
@@ -27,7 +28,7 @@ const Post: React.FC<{}> = () => {
     const [form] = Form.useForm<FormInstance>()
 
     const [menuData, setMenuData] = useState<DataNode[]>()
-    const [checkdmenuData, setCheckdMenuData] = useState<Key[]>([])
+    const [checkdMenuData, setCheckdMenuData] = useState<Key[]>([])
 
     const [deptData, setDeptData] = useState<DataNode[]>()
     const [checkdDeptData, setCheckdDeptData] = useState<Key[]>([])
@@ -91,10 +92,9 @@ const Post: React.FC<{}> = () => {
             title: '状态',
             ellipsis: false,
             dataIndex: 'status',
-            valueEnum: {
-                "1": { text: '正常', status: 'success' },
-                "0": { text: '停用', status: 'error' },
-            },
+            render: (_: string, row: { [key: string]: string }) => [
+                <RoleSwitch row={row}/>
+            ]
         },
         {
             title: '创建时间', hideInSearch: true, valueType: "dateTime", dataIndex: 'createTime'
@@ -107,7 +107,7 @@ const Post: React.FC<{}> = () => {
                         修改
                     </Button>,
                     <Popconfirm
-                        onConfirm={() => refRemove(row.postId)}
+                        onConfirm={() => refRemove(row.roleId)}
                         title="确定删除吗"
                     >
                         <Button type="primary" danger>
@@ -125,6 +125,11 @@ const Post: React.FC<{}> = () => {
      * @param row row
      */
     const refPost = async () => {
+        // 获取权限数据
+        getMenuData()
+        getDeptData()
+        // 设置数据权限范围
+        setDataScope("1")
         setModal({ title: "新增", visible: true })
     }
 
@@ -134,8 +139,9 @@ const Post: React.FC<{}> = () => {
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            getMenuData(row.roleId)
-            getDeptData(row.roleId)
+            // 获取权限数据
+            getMenuDataById(row.roleId)
+            getDeptDataById(row.roleId)
             const { code, msg, data } = await getByroleId(row.roleId)
             if (code != 200) {
                 return message.error(msg)
@@ -157,7 +163,7 @@ const Post: React.FC<{}> = () => {
     /**
      * 根据ID获取菜单权限数据
      */
-    const getMenuData = async (roleId: number) => {
+    const getMenuDataById = async (roleId: number) => {
         try {
             const { code, msg, data } = await roleMenuTreeSelectByMenuId(roleId)
             if (code != 200) {
@@ -173,9 +179,25 @@ const Post: React.FC<{}> = () => {
     }
 
     /**
+     * 获取菜单权限数据
+     */
+    const getMenuData = async () => {
+        try {
+            const { code, msg, data } = await roleMenuTreeSelect()
+            if (code != 200) {
+                return message.error(msg)
+            }
+            setMenuData(data)
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
+    /**
      * 根据Id获取部门数据
      */
-    const getDeptData = async (roleId: number) => {
+    const getDeptDataById = async (roleId: number) => {
         try {
             const { code, msg, data } = await roleDeptTreeSelectByDeptId(roleId)
             if (code != 200) {
@@ -191,20 +213,37 @@ const Post: React.FC<{}> = () => {
     }
 
     /**
-     * 移除角色
-     * @param row postIds
+     * 获取部门数据
      */
-    const refRemove = async (postIds: (string | number)[] | string | undefined) => {
+    const getDeptData = async () => {
         try {
-            if (!postIds) {
+            const { code, msg, data } = await roleDeptTreeSelect()
+            if (code != 200) {
+                return message.error(msg)
+            }
+
+            setDeptData(data)
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
+    /**
+     * 移除角色
+     * @param row roleIds
+     */
+    const refRemove = async (roleIds: (string | number)[] | string | undefined) => {
+        try {
+            if (!roleIds) {
                 return true
             }
 
             let params
-            if (isArray(postIds)) {
-                params = postIds.join(",")
+            if (isArray(roleIds)) {
+                params = roleIds.join(",")
             } else {
-                params = postIds
+                params = roleIds
             }
 
             const { code, msg } = await remove(params)
@@ -227,14 +266,16 @@ const Post: React.FC<{}> = () => {
      * 取消Modal的显示
      */
     const handleCancel = () => {
+        setModal({ title: "", visible: false })
+
         setCheckdDeptData([])
         setDeptData([])
 
         setCheckdMenuData([])
         setMenuData([])
 
-        setModal({ title: "", visible: false })
         form.resetFields()
+
     }
 
     /**
@@ -249,9 +290,12 @@ const Post: React.FC<{}> = () => {
                         // 开启加载中
                         setLoadingModal(true)
                         // 设置菜单权限
-                        fields.menuIds = checkdmenuData
+                        fields.menuIds = checkdMenuData
+                        // 设置数据权限
+                        fields.deptIds = checkdDeptData
+
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.postId == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = fields.roleId == 0 ? await insert(fields) : await update(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -278,7 +322,7 @@ const Post: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="postId"
+                rowKey="roleId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -379,11 +423,11 @@ const Post: React.FC<{}> = () => {
                                         sm: { span: 16 },
                                     },
                                 }}
-                                label="角色编码"
+                                label="权限字符"
                                 name="roleKey"
-                                rules={[{ required: true, message: '角色编码不能为空' }]}
+                                rules={[{ required: true, message: '权限字符不能为空' }]}
                             >
-                                <Input placeholder="角色编码" />
+                                <Input placeholder="权限字符" />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -436,13 +480,13 @@ const Post: React.FC<{}> = () => {
                         name="menuIds"
                     >
                         <Tree
-                            key={'key'}
                             showLine
                             checkable
-                            onCheck={(checkedKeys: Key[], halfChecked: (string | number)[]) => {
+                            height={150}
+                            onCheck={(checkedKeys: any) => {
                                 setCheckdMenuData(checkedKeys)
                             }}
-                            defaultCheckedKeys={checkdmenuData}
+                            checkedKeys={checkdMenuData}
                             treeData={menuData}
                         />
                     </Form.Item>
@@ -473,14 +517,13 @@ const Post: React.FC<{}> = () => {
                                 name="deptIds"
                             >
                                 <Tree
-                                    bordered={true}
-                                    treeDefaultExpandAll={true}
                                     showLine
                                     checkable
-                                    onCheck={(checkedKeys: Key[], halfChecked: (string | number)[]) => {
+                                    height={150}
+                                    onCheck={(checkedKeys: any) => {
                                         setCheckdDeptData(checkedKeys)
                                     }}
-                                    defaultCheckedKeys={checkdDeptData}
+                                    checkedKeys={checkdDeptData}
                                     treeData={deptData}
                                 />
                             </Form.Item>
@@ -503,4 +546,4 @@ const Post: React.FC<{}> = () => {
 
 }
 
-export default Post
+export default Role

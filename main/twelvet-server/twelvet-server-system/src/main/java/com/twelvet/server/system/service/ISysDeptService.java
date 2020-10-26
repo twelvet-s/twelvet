@@ -11,6 +11,7 @@ import java.util.List;
  * @Description: 部门管理 服务层
  */
 public interface ISysDeptService {
+
     /**
      * 查询部门管理数据
      *
@@ -106,4 +107,5 @@ public interface ISysDeptService {
      * @return 结果
      */
     int deleteDeptById(Long deptId);
+
 }

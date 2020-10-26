@@ -36,8 +36,8 @@ public class SysRoleController extends TWTController {
     }
 
     @Log(service = "角色管理", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, SysRole role) {
+    @PostMapping("/exportExcel")
+    public void exportExcel(HttpServletResponse response, SysRole role) {
         List<SysRole> list = iSysRoleService.selectRoleList(role);
         ExcelUtils<SysRole> excelUtils = new ExcelUtils<>(SysRole.class);
         excelUtils.exportExcel(response, list, "角色数据");
@@ -64,7 +64,6 @@ public class SysRoleController extends TWTController {
         }
         role.setCreateBy(SecurityUtils.getUsername());
         return json(iSysRoleService.insertRole(role));
-
     }
 
     /**
@@ -81,16 +80,6 @@ public class SysRoleController extends TWTController {
         }
         role.setUpdateBy(SecurityUtils.getUsername());
         return json(iSysRoleService.updateRole(role));
-    }
-
-    /**
-     * 修改保存数据权限
-     */
-    @Log(service = "角色管理", businessType = BusinessType.PUT)
-    @PutMapping("/dataScope")
-    public AjaxResult dataScope(@RequestBody SysRole role) {
-        iSysRoleService.checkRoleAllowed(role);
-        return json(iSysRoleService.authDataScope(role));
     }
 
     /**
@@ -116,8 +105,8 @@ public class SysRoleController extends TWTController {
     /**
      * 获取角色选择框列表
      */
-    @GetMapping("/optionselect")
-    public AjaxResult optionselect() {
+    @GetMapping("/optionSelect")
+    public AjaxResult optionSelect() {
         return AjaxResult.success(iSysRoleService.selectRoleAll());
     }
 }

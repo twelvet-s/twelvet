@@ -41,7 +41,7 @@ public class SysRole extends BaseEntity {
     /**
      * 角色状态（0正常 1停用）
      */
-    private String status;
+    private Integer status;
 
     /**
      * 删除标志（0代表存在 2代表删除）
@@ -120,11 +120,11 @@ public class SysRole extends BaseEntity {
         this.dataScope = dataScope;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

@@ -76,8 +76,8 @@ export async function roleMenuTreeSelectByMenuId(postId: number) {
  * 获取菜单树
  * @param params 搜索参数
  */
-export async function roleMenuTreeSelect(postId: number) {
-    return request(`/system/menu/roleMenuTreeSelect`, {
+export async function roleMenuTreeSelect() {
+    return request(`/system/menu/treeSelect`, {
         method: 'GET'
     });
 }
@@ -97,7 +97,7 @@ export async function roleDeptTreeSelectByDeptId(postId: number) {
  * @param params 搜索参数
  */
 export async function roleDeptTreeSelect() {
-    return request(`/system/dept/roleDeptTreeSelect`, {
+    return request(`/system/dept/treeSelect`, {
         method: 'GET'
     });
 }
@@ -108,4 +108,17 @@ export async function roleDeptTreeSelect() {
  */
 export async function exportExcel(params?: { [key: string]: any }) {
     return download(`${controller}/exportExcel`, params);
+}
+
+/**
+ * 导出Excel
+ * @param params
+ */
+export async function changeStatus(params?: { [key: string]: any }) {
+    return request(`${controller}/changeStatus`, {
+        method: 'PUT',
+        data: {
+            ...params
+        }
+    })
 }
