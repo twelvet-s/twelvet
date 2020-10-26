@@ -7,7 +7,6 @@ import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.constant.UserConstants;
 import com.twelvet.framework.core.domain.R;
-import com.twelvet.framework.core.web.page.TableDataInfo;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.utils.SecurityUtils;
@@ -51,12 +50,13 @@ public class SysUserController extends TWTController {
 
     /**
      * 获取用户列表
+     * @return
      */
-    @GetMapping("/list")
-    public TableDataInfo list(SysUser user) {
+    @GetMapping
+    public AjaxResult pageQuery(SysUser user) {
         startPage();
         List<SysUser> list = iSysUserService.selectUserList(user);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)

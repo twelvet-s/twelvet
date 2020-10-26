@@ -45,6 +45,11 @@ public class SysUser extends BaseEntity {
     private String username;
 
     /**
+     * 用户昵称
+     */
+    private String nickName;
+
+    /**
      * 用户邮箱
      */
     private String email;
@@ -153,6 +158,14 @@ public class SysUser extends BaseEntity {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getUsername() {
