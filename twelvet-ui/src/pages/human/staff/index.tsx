@@ -2,15 +2,15 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Spin } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Spin, Row, Col } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, getByPostId, insert, update } from './service'
+import { pageQuery, remove, exportExcel, getByUserId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 
 /**
- * 岗位模块
+ * 职员模块
  */
 const Staff: React.FC<{}> = () => {
 
@@ -71,7 +71,7 @@ const Staff: React.FC<{}> = () => {
                         修改
                     </Button>,
                     <Popconfirm
-                        onConfirm={() => refRemove(row.postId)}
+                        onConfirm={() => refRemove(row.userId)}
                         title="确定删除吗"
                     >
                         <Button type="primary" danger>
@@ -85,7 +85,7 @@ const Staff: React.FC<{}> = () => {
     ]
 
     /**
-     * 新增岗位
+     * 新增职员
      * @param row row
      */
     const refPost = async () => {
@@ -93,12 +93,12 @@ const Staff: React.FC<{}> = () => {
     }
 
     /**
-     * 获取修改岗位信息
+     * 获取修改职员信息
      * @param row row
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await getByPostId(row.postId)
+            const { code, msg, data } = await getByUserId(row.userId)
             if (code != 200) {
                 return message.error(msg)
             }
@@ -114,20 +114,20 @@ const Staff: React.FC<{}> = () => {
     }
 
     /**
-     * 移除岗位
-     * @param row postIds
+     * 移除职员
+     * @param row userIds
      */
-    const refRemove = async (postIds: (string | number)[] | string | undefined) => {
+    const refRemove = async (userIds: (string | number)[] | string | undefined) => {
         try {
-            if (!postIds) {
+            if (!userIds) {
                 return true
             }
 
             let params
-            if (isArray(postIds)) {
-                params = postIds.join(",")
+            if (isArray(userIds)) {
+                params = userIds.join(",")
             } else {
-                params = postIds
+                params = userIds
             }
 
             const { code, msg } = await remove(params)
@@ -166,7 +166,7 @@ const Staff: React.FC<{}> = () => {
                         // 开启加载中
                         setLoadingModal(true)
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.postId == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = fields.userId == 0 ? await insert(fields) : await update(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -193,7 +193,7 @@ const Staff: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="postId"
+                rowKey="userId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -242,8 +242,9 @@ const Staff: React.FC<{}> = () => {
             />
 
             <Modal
-                title={`${modal.title}岗位`}
+                title={`${modal.title}职员`}
                 visible={modal.visible}
+                width={600}
                 okText={`${modal.title}`}
                 confirmLoading={loadingModal}
                 onOk={onSave}
@@ -257,52 +258,169 @@ const Staff: React.FC<{}> = () => {
                     <Form.Item
                         hidden
                         {...formItemLayout}
-                        label="岗位ID"
-                        name="postId"
+                        label="角色ID"
+                        name="roleId"
                         initialValue={0}
                     >
                         <Input />
                     </Form.Item>
 
-                    <Form.Item
-                        {...formItemLayout}
-                        label="岗位名称"
-                        name="postName"
-                        rules={[{ required: true, message: '岗位名称不能为空' }]}
-                    >
-                        <Input placeholder="岗位名称" />
-                    </Form.Item>
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="用户昵称"
+                                name="roleName"
+                                rules={[{ required: true, message: '用户昵称不能为空' }]}
+                            >
+                                <Input placeholder="用户昵称" />
+                            </Form.Item>
+                        </Col>
 
-                    <Form.Item
-                        {...formItemLayout}
-                        label="岗位编码"
-                        name="postCode"
-                        rules={[{ required: true, message: '岗位编码不能为空' }]}
-                    >
-                        <Input placeholder="岗位编码" />
-                    </Form.Item>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="研发部门"
+                                name="roleKey"
+                                rules={[{ required: true, message: '研发部门不能为空' }]}
+                            >
+                                <Input placeholder="研发部门" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
 
-                    <Form.Item
-                        {...formItemLayout}
-                        label="岗位顺序"
-                        name="postSort"
-                        initialValue={0}
-                        rules={[{ required: true, message: '岗位顺序不能为空' }]}
-                    >
-                        <InputNumber placeholder="岗位顺序" />
-                    </Form.Item>
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="手机号码"
+                                name="roleName"
+                                rules={[{ required: true, message: '手机号码不能为空' }]}
+                            >
+                                <Input placeholder="手机号码" />
+                            </Form.Item>
+                        </Col>
 
-                    <Form.Item
-                        {...formItemLayout}
-                        label="岗位状态"
-                        name="status"
-                        initialValue="1"
-                    >
-                        <Radio.Group>
-                            <Radio value="1">正常</Radio>
-                            <Radio value="0">停用</Radio>
-                        </Radio.Group>
-                    </Form.Item>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="邮箱"
+                                name="roleKey"
+                                rules={[{ required: true, message: '邮箱不能为空' }]}
+                            >
+                                <Input placeholder="邮箱" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="用户性别"
+                                name="roleName"
+                                rules={[{ required: true, message: '用户性别不能为空' }]}
+                            >
+                                <Input placeholder="用户性别" />
+                            </Form.Item>
+                        </Col>
+
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="状态"
+                                name="roleKey"
+                                rules={[{ required: true, message: '状态不能为空' }]}
+                            >
+                                <Input placeholder="状态" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="岗位"
+                                name="roleSort"
+                                initialValue={0}
+                                rules={[{ required: true, message: '岗位不能为空' }]}
+                            >
+                                <InputNumber placeholder="岗位" />
+                            </Form.Item>
+                        </Col>
+
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...{
+                                    labelCol: {
+                                        sm: { span: 8 },
+                                    },
+                                    wrapperCol: {
+                                        sm: { span: 16 },
+                                    },
+                                }}
+                                label="角色"
+                                name="status"
+                                initialValue={1}
+                            >
+                                <Radio.Group>
+                                    <Radio value={1}>正常</Radio>
+                                    <Radio value={0}>停用</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
 
                     <Form.Item
                         {...formItemLayout}

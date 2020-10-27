@@ -50,6 +50,7 @@ public class SysUserController extends TWTController {
 
     /**
      * 获取用户列表
+     *
      * @return
      */
     @GetMapping
@@ -60,8 +61,8 @@ public class SysUserController extends TWTController {
     }
 
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, SysUser user) throws IOException {
+    @PostMapping("/exportExcel")
+    public void exportExcel(HttpServletResponse response, SysUser user) throws IOException {
         List<SysUser> list = iSysUserService.selectUserList(user);
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<SysUser>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
@@ -79,7 +80,7 @@ public class SysUserController extends TWTController {
 
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) throws IOException {
-        ExcelUtils<SysUser> excelUtils = new ExcelUtils<SysUser>(SysUser.class);
+        ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         excelUtils.importTemplateExcel(response, "用户数据");
     }
 
@@ -125,7 +126,7 @@ public class SysUserController extends TWTController {
     /**
      * 根据用户编号获取详细信息
      */
-    @GetMapping(value = {"/", "/{userId}"})
+    @GetMapping({"/", "/{userId}"})
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         AjaxResult ajax = AjaxResult.success();
         List<SysRole> roles = iSysRoleService.selectRoleAll();

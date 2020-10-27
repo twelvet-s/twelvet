@@ -18,10 +18,10 @@ export async function insert(params: { [key: string]: any }) {
 
 /**
  * 删除
- * @param postId 岗位ID 
+ * @param userId 岗位ID 
  */
-export async function remove(postIds: (string | number)[] | string) {
-    return request(`${controller}/${postIds}`, {
+export async function remove(userIds: (string | number)[] | string) {
+    return request(`${controller}/${userIds}`, {
         method: 'DELETE',
     });
 }
@@ -56,8 +56,8 @@ export async function pageQuery(params: { [key: string]: any }) {
  * 获取指定岗位信息
  * @param params 搜索参数
  */
-export async function getByPostId(postId: number) {
-    return request(`${controller}/${postId}`, {
+export async function getByUserId(userId: number) {
+    return request(`${controller}/${userId}`, {
         method: 'GET'
     });
 }
