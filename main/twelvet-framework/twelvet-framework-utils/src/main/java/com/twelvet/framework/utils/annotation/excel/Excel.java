@@ -13,18 +13,25 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Excel {
+
     /**
      * 导出时在excel中排序
+     *
+     * @return Integer.MAX_VALUE
      */
     int sort() default Integer.MAX_VALUE;
 
     /**
      * 导出到Excel中的名字.
+     *
+     * @return 名称
      */
     String name() default "";
 
     /**
      * 日期格式, 如: yyyy-MM-dd
+     *
+     * @return 时间
      */
     String dateFormat() default "";
 
@@ -88,8 +95,23 @@ public @interface Excel {
      */
     Type type() default Type.ALL;
 
+
     enum Type {
-        ALL(0), EXPORT(1), IMPORT(2);
+        /**
+         * 所有
+         */
+        ALL(0),
+
+        /**
+         * 导出
+         */
+        EXPORT(1),
+
+        /**
+         * 导入
+         */
+        IMPORT(2);
+
         private final int value;
 
         Type(int value) {
@@ -102,7 +124,16 @@ public @interface Excel {
     }
 
     enum ColumnType {
-        NUMERIC(0), STRING(1);
+        /**
+         * NUMERIC
+         */
+        NUMERIC(0),
+
+        /**
+         * String
+         */
+        STRING(1);
+
         private final int value;
 
         ColumnType(int value) {

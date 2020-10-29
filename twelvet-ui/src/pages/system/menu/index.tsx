@@ -47,18 +47,18 @@ const Menu: React.FC<{}> = () => {
             title: '菜单名称', ellipsis: true, valueType: "text", dataIndex: 'menuName',
         },
         {
-            title: 'Icon', ellipsis: false, valueType: "text", hideInSearch: true, dataIndex: 'icon', render: (item: string) => {
+            title: 'Icon', ellipsis: false, valueType: "text", search: false, dataIndex: 'icon', render: (item: string) => {
                 return < IconFont type={item} />
             }
         },
         {
-            title: '排序', ellipsis: true, valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
+            title: '排序', ellipsis: true, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
-            title: '权限标识', hideInSearch: true, dataIndex: 'perms'
+            title: '权限标识', search: false, dataIndex: 'perms'
         },
         {
-            title: '组件路径', hideInSearch: true, dataIndex: 'component'
+            title: '组件路径', search: false, dataIndex: 'component'
         },
         {
             title: '状态',
@@ -70,10 +70,10 @@ const Menu: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', valueType: "dateTime", hideInSearch: true, dataIndex: 'createTime'
+            title: '创建时间', valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作', hideInSearch: true, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', search: false, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
                         {

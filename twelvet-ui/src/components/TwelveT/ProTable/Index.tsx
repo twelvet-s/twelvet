@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { message } from 'antd'
-import { ProTableProps, RequestData } from '@ant-design/pro-table/lib/index'
+import { ProTableProps } from '@ant-design/pro-table/lib/index'
 import { ParamsType } from '@ant-design/pro-provider'
 import { useState } from 'react'
 import ProTable from '@ant-design/pro-table'
@@ -193,7 +193,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                 columns[index]['fieldProps'] = { "placeholder": columns[index]['title'] }
             }
             // 处理columns数据的标题渲染(搜索框不显示标题，由placeholder代替)
-            if (item.hideInSearch != true) {
+            if (item.search === undefined || item.search == true) {
                 columns[index]['title'] = (config, type) => { type == 'table' && columns[index]['title'] }
             }
         })

@@ -23,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,7 +64,7 @@ public class SysUserController extends TWTController {
 
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
-    public void exportExcel(HttpServletResponse response, SysUser user) throws IOException {
+    public void exportExcel(HttpServletResponse response, SysUser user) {
         List<SysUser> list = iSysUserService.selectUserList(user);
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<SysUser>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
@@ -128,16 +130,16 @@ public class SysUserController extends TWTController {
      */
     @GetMapping({"/", "/{userId}"})
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId) {
-        AjaxResult ajax = AjaxResult.success();
+        Map<String, Object> res = new HashMap<>(5);
         List<SysRole> roles = iSysRoleService.selectRoleAll();
-        ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
-        ajax.put("posts", iSysPostService.selectPostAll());
+        res.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        res.put("posts", iSysPostService.selectPostAll());
         if (TWTUtils.isNotEmpty(userId)) {
-            ajax.put(AjaxResult.DATA_TAG, iSysUserService.selectUserById(userId));
-            ajax.put("postIds", iSysPostService.selectPostListByUserId(userId));
-            ajax.put("roleIds", iSysRoleService.selectRoleListByUserId(userId));
+            res.put("staff", iSysUserService.selectUserById(userId));
+            res.put("postIds", iSysPostService.selectPostListByUserId(userId));
+            res.put("roleIds", iSysRoleService.selectRoleListByUserId(userId));
         }
-        return ajax;
+        return AjaxResult.success(res);
     }
 
     /**

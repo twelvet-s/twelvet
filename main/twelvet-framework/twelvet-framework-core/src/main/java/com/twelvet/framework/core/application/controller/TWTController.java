@@ -10,7 +10,6 @@ import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.sql.SqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
@@ -63,7 +62,8 @@ public class TWTController {
     protected TableDataInfo getDataTable(List<?> list) {
         TableDataInfo rspData = new TableDataInfo();
         rspData.setRecords(list);
-        rspData.setTotal(new PageInfo(list).getTotal());
+        PageInfo pageInfo = new PageInfo<>(list);
+        rspData.setTotal(pageInfo.getTotal());
         return rspData;
     }
 

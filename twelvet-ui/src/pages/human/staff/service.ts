@@ -4,7 +4,7 @@ import request, { download } from '@/utils/request'
 const controller = "/system/user";
 
 /**
- * 新增岗位
+ * 新增职员
  * @param params 搜索参数
  */
 export async function insert(params: { [key: string]: any }) {
@@ -18,7 +18,7 @@ export async function insert(params: { [key: string]: any }) {
 
 /**
  * 删除
- * @param userId 岗位ID 
+ * @param userId 职员ID 
  */
 export async function remove(userIds: (string | number)[] | string) {
     return request(`${controller}/${userIds}`, {
@@ -53,10 +53,10 @@ export async function pageQuery(params: { [key: string]: any }) {
 }
 
 /**
- * 获取指定岗位信息
+ * 获取指定职员信息
  * @param params 搜索参数
  */
-export async function getByUserId(userId: number) {
+export async function getByStaffId(userId: number) {
     return request(`${controller}/${userId}`, {
         method: 'GET'
     });
@@ -68,4 +68,14 @@ export async function getByUserId(userId: number) {
  */
 export async function exportExcel(params?: { [key: string]: any }) {
     return download(`${controller}/exportExcel`, params);
+}
+
+/**
+ * 获取部门树
+ * @param params 搜索参数
+ */
+export async function treeSelect() {
+    return request(`/system/dept/treeSelect`, {
+        method: 'GET'
+    });
 }

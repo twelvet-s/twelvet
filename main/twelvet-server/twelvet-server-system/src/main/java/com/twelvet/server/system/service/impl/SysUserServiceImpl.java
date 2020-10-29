@@ -281,7 +281,7 @@ public class SysUserServiceImpl implements ISysUserService {
         Long[] roles = user.getRoleIds();
         if (TWTUtils.isNotEmpty(roles)) {
             // 新增用户与角色管理
-            List<SysUserRole> list = new ArrayList<SysUserRole>();
+            List<SysUserRole> list = new ArrayList<>();
             for (Long roleId : roles) {
                 SysUserRole ur = new SysUserRole();
                 ur.setUserId(user.getUserId());

@@ -109,7 +109,7 @@ public class AjaxResult extends LinkedHashMap<String, Object>
     /**
      * 返回错误消息
      *
-     * @return
+     * @return AjaxResult
      */
     public static AjaxResult error()
     {

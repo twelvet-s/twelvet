@@ -42,7 +42,7 @@ const Dept: React.FC<{}> = () => {
             title: '部门名称', ellipsis: true, valueType: "text", dataIndex: 'deptName',
         },
         {
-            title: '排序', ellipsis: false, valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
+            title: '排序', ellipsis: false, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
             title: '状态',
@@ -54,10 +54,10 @@ const Dept: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', valueType: "dateTime", hideInSearch: true, dataIndex: 'createTime'
+            title: '创建时间', valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作', hideInSearch: true, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', search: false, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
                         {

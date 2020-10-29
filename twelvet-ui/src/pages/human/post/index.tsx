@@ -46,7 +46,7 @@ const Post: React.FC<{}> = () => {
             title: '岗位名称', valueType: "text", dataIndex: 'postName'
         },
         {
-            title: '岗位排序', valueType: "text", hideInSearch: true, dataIndex: 'postSort'
+            title: '岗位排序', valueType: "text", search: false, dataIndex: 'postSort'
         },
         {
             title: '状态',
@@ -58,7 +58,7 @@ const Post: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', hideInSearch: true, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {

@@ -28,19 +28,19 @@ const Operation: React.FC<{}> = () => {
             title: '系统模块', ellipsis: true, valueType: "text", dataIndex: 'service',
         },
         {
-            title: '请求方式', hideInSearch: true, valueType: "text", dataIndex: 'requestMethod'
+            title: '请求方式', search: false, valueType: "text", dataIndex: 'requestMethod'
         },
         {
-            title: '操作类型', valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
+            title: '操作类型', valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
             title: '操作人员', valueType: "text", dataIndex: 'operName'
         },
         {
-            title: '操作地点', hideInSearch: true, dataIndex: 'component'
+            title: '操作地点', search: false, dataIndex: 'component'
         },
         {
-            title: '操作状态', hideInSearch: true, dataIndex: 'status', valueEnum: {
+            title: '操作状态', search: false, dataIndex: 'status', valueEnum: {
                 0: { text: '失败', status: 'error' },
                 1: { text: '成功', status: 'success' },
             },
@@ -58,7 +58,7 @@ const Operation: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作时间', valueType: "dateTime", hideInSearch: true, dataIndex: 'operTime'
+            title: '操作时间', valueType: "dateTime", search: false, dataIndex: 'operTime'
         },
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {

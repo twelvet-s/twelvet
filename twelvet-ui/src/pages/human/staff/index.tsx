@@ -2,20 +2,23 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Spin, Row, Col } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, getByUserId, insert, update } from './service'
+import { pageQuery, remove, exportExcel, getByStaffId, insert, update, treeSelect } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
+import moment, { Moment } from 'moment'
 
 /**
  * 职员模块
  */
 const Staff: React.FC<{}> = () => {
 
+    const { RangePicker } = DatePicker
+
     // 显示Modal
-    const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
+    const [modal, setModal] = useState<{ title: string, visible: boolean, modelType: string }>({ title: ``, visible: false, modelType: '' })
 
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
@@ -23,6 +26,15 @@ const Staff: React.FC<{}> = () => {
     const acForm = useRef<ActionType>()
 
     const [form] = Form.useForm<FormInstance>()
+
+    // 部门数据
+    const [DEPTS, setDEPTS] = useState<Array<{ [key: string]: any }>>([])
+
+    // 岗位数据
+    const [POSTS, setPOSTS] = useState<Array<{ [key: string]: any }>>([])
+
+    // 角色数据
+    const [ROLES, setROLES] = useState<Array<{ [key: string]: any }>>([])
 
     const { TextArea } = Input
 
@@ -43,13 +55,13 @@ const Staff: React.FC<{}> = () => {
             title: '用户账号', ellipsis: true, valueType: "text", dataIndex: 'username',
         },
         {
-            title: '用户昵称', valueType: "text", hideInSearch: true, dataIndex: 'nickName'
+            title: '用户昵称', valueType: "text", search: false, dataIndex: 'nickName'
         },
         {
-            title: '部门', valueType: "text", hideInSearch: true, dataIndex: 'postSort'
+            title: '部门', valueType: "text", search: false, dataIndex: 'postSort'
         },
         {
-            title: '手机号码', valueType: "text", hideInSearch: true, dataIndex: 'phonenumber'
+            title: '手机号码', valueType: "text", dataIndex: 'phonenumber'
         },
         {
             title: '状态',
@@ -61,7 +73,19 @@ const Staff: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', hideInSearch: true, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+        },
+        {
+            title: '搜索日期',
+            key: 'between',
+            hideInTable: true,
+            dataIndex: 'between',
+            renderFormItem: () => (
+                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
+                    // 不允许选择大于今天的日期
+                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
+                }} />
+            )
         },
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
@@ -89,7 +113,7 @@ const Staff: React.FC<{}> = () => {
      * @param row row
      */
     const refPost = async () => {
-        setModal({ title: "新增", visible: true })
+        setModal({ title: "新增", visible: true, modelType: 'POST' })
     }
 
     /**
@@ -98,15 +122,70 @@ const Staff: React.FC<{}> = () => {
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await getByUserId(row.userId)
+            const { code, msg, data } = await getByStaffId(row.userId)
             if (code != 200) {
                 return message.error(msg)
             }
+
+            const { staff, posts, postIds, roles, roleIds } = data
+
+            staff.postIds = postIds
+            staff.roleIds = roleIds
+
             // 赋值表单数据
-            form.setFieldsValue(data)
+            form.setFieldsValue(staff)
+
+
+            let POSTS: Array<{ [key: string]: any }> = new Array<{ [key: string]: any }>()
+            // 制作岗位数据
+            posts.filter((item: {
+                postName: string,
+                postId: number,
+            }
+            ) => {
+                POSTS.push({
+                    title: item.postName,
+                    key: item.postId,
+                    value: item.postId
+                })
+            })
+
+            setPOSTS(POSTS)
+
+            let ROLES: Array<{ [key: string]: any }> = new Array<{ [key: string]: any }>()
+            // 制作岗位数据
+            roles.filter((item: {
+                roleName: string,
+                roleId: number,
+            }) => {
+                ROLES.push({
+                    title: item.roleName,
+                    key: item.roleId,
+                    value: item.roleId
+                })
+            })
+
+            setROLES(ROLES)
+
+            // 获得部门数据
+            makeDept()
 
             // 设置Modal状态
-            setModal({ title: "修改", visible: true })
+            setModal({ title: "修改", visible: true, modelType: 'PUT' })
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
+    const makeDept = async () => {
+        try {
+            const { code, msg, data } = await treeSelect()
+            if (code != 200) {
+                return message.error(msg)
+            }
+
+            setDEPTS(data)
 
         } catch (e) {
             system.error(e)
@@ -150,7 +229,7 @@ const Staff: React.FC<{}> = () => {
      * 取消Modal的显示
      */
     const handleCancel = () => {
-        setModal({ title: "", visible: false })
+        setModal({ title: "", visible: false, modelType: '' })
         form.resetFields()
     }
 
@@ -259,7 +338,7 @@ const Staff: React.FC<{}> = () => {
                         hidden
                         {...formItemLayout}
                         label="角色ID"
-                        name="roleId"
+                        name="userId"
                         initialValue={0}
                     >
                         <Input />
@@ -277,7 +356,7 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="用户昵称"
-                                name="roleName"
+                                name="nickName"
                                 rules={[{ required: true, message: '用户昵称不能为空' }]}
                             >
                                 <Input placeholder="用户昵称" />
@@ -294,11 +373,16 @@ const Staff: React.FC<{}> = () => {
                                         sm: { span: 16 },
                                     },
                                 }}
-                                label="研发部门"
-                                name="roleKey"
-                                rules={[{ required: true, message: '研发部门不能为空' }]}
+                                label="归属部门"
+                                name="deptId"
+                                rules={[{ required: true, message: '归属部门不能为空' }]}
                             >
-                                <Input placeholder="研发部门" />
+                                <TreeSelect
+                                    showSearch
+                                    treeLine
+                                    treeNodeFilterProp="title"
+                                    treeData={DEPTS}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -315,7 +399,7 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="手机号码"
-                                name="roleName"
+                                name="phonenumber"
                                 rules={[{ required: true, message: '手机号码不能为空' }]}
                             >
                                 <Input placeholder="手机号码" />
@@ -333,13 +417,55 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="邮箱"
-                                name="roleKey"
+                                name="email"
                                 rules={[{ required: true, message: '邮箱不能为空' }]}
                             >
                                 <Input placeholder="邮箱" />
                             </Form.Item>
                         </Col>
                     </Row>
+
+                    {
+                        modal.modelType === 'POST' && (
+                            <Row>
+                                <Col sm={12} xs={24}>
+                                    <Form.Item
+                                        {...{
+                                            labelCol: {
+                                                sm: { span: 8 },
+                                            },
+                                            wrapperCol: {
+                                                sm: { span: 16 },
+                                            },
+                                        }}
+                                        label="登录账号"
+                                        name="username"
+                                        rules={[{ required: true, message: '登录账号不能为空' }]}
+                                    >
+                                        <Input placeholder="登录账号" />
+                                    </Form.Item>
+                                </Col>
+
+                                <Col sm={12} xs={24}>
+                                    <Form.Item
+                                        {...{
+                                            labelCol: {
+                                                sm: { span: 8 },
+                                            },
+                                            wrapperCol: {
+                                                sm: { span: 16 },
+                                            },
+                                        }}
+                                        label="用户密码"
+                                        name="password"
+                                        rules={[{ required: true, message: '密码不能为空' }]}
+                                    >
+                                        <Input placeholder="密码" />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        )
+                    }
 
                     <Row>
                         <Col sm={12} xs={24}>
@@ -353,10 +479,15 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="用户性别"
-                                name="roleName"
-                                rules={[{ required: true, message: '用户性别不能为空' }]}
+                                name="sex"
+                                initialValue={0}
+                                rules={[{ required: true, message: '请选择用户性别' }]}
                             >
-                                <Input placeholder="用户性别" />
+                                <Select >
+                                    <Select.Option value={0}>男</Select.Option>
+                                    <Select.Option value={1}>女</Select.Option>
+                                    <Select.Option value={2}>保密</Select.Option>
+                                </Select >
                             </Form.Item>
                         </Col>
 
@@ -371,10 +502,13 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="状态"
-                                name="roleKey"
-                                rules={[{ required: true, message: '状态不能为空' }]}
+                                name="status"
+                                initialValue={1}
                             >
-                                <Input placeholder="状态" />
+                                <Radio.Group>
+                                    <Radio value={1}>正常</Radio>
+                                    <Radio value={0}>冻结</Radio>
+                                </Radio.Group>
                             </Form.Item>
                         </Col>
                     </Row>
@@ -391,11 +525,14 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="岗位"
-                                name="roleSort"
-                                initialValue={0}
+                                name="postIds"
                                 rules={[{ required: true, message: '岗位不能为空' }]}
                             >
-                                <InputNumber placeholder="岗位" />
+                                <TreeSelect
+                                    treeNodeFilterProp="title"
+                                    treeCheckable={true}
+                                    treeData={POSTS}
+                                />
                             </Form.Item>
                         </Col>
 
@@ -410,17 +547,16 @@ const Staff: React.FC<{}> = () => {
                                     },
                                 }}
                                 label="角色"
-                                name="status"
-                                initialValue={1}
+                                name="roleIds"
                             >
-                                <Radio.Group>
-                                    <Radio value={1}>正常</Radio>
-                                    <Radio value={0}>停用</Radio>
-                                </Radio.Group>
+                                <TreeSelect
+                                    treeNodeFilterProp="title"
+                                    treeCheckable={true}
+                                    treeData={ROLES}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
-
 
                     <Form.Item
                         {...formItemLayout}

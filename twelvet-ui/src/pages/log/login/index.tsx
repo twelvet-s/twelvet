@@ -7,6 +7,8 @@ import moment, { Moment } from 'moment'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
+import { RequestData } from '@ant-design/pro-table'
+import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
 
 /**
  * 登录日志
@@ -26,13 +28,13 @@ const Login: React.FC<{}> = () => {
             title: 'IP', valueType: "text", dataIndex: 'ipaddr'
         },
         {
-            title: '登录地区', valueType: "text", hideInSearch: true, dataIndex: 'orderNum'
+            title: '登录地区', valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
-            title: '终端', hideInSearch: true, valueType: "text", dataIndex: 'perms'
+            title: '终端', search: false, valueType: "text", dataIndex: 'perms'
         },
         {
-            title: '操作系统', hideInSearch: true, dataIndex: 'component'
+            title: '操作系统', search: false, dataIndex: 'component'
         },
         {
             title: '状态',
@@ -44,7 +46,7 @@ const Login: React.FC<{}> = () => {
             },
         },
         {
-            title: '登录信息', valueType: "text", hideInSearch: true, dataIndex: 'msg'
+            title: '登录信息', valueType: "text", search: false, dataIndex: 'msg'
         },
         {
             title: '搜索日期',
@@ -59,7 +61,7 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '登录时间', valueType: "date", hideInSearch: true, dataIndex: 'accessTime'
+            title: '登录时间', valueType: "date", search: false, dataIndex: 'accessTime'
         },
     ]
 
@@ -67,7 +69,7 @@ const Login: React.FC<{}> = () => {
      * 移除菜单
      * @param row infoIds
      */
-    const refRemove = async (infoIds: (string | number)[] | undefined) => {
+    const refRemove = async (infoIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
         try {
             if (!infoIds) {
                 return true
@@ -79,7 +81,7 @@ const Login: React.FC<{}> = () => {
 
             message.success(msg)
 
-            acForm.current && acForm.current.reload()
+            action.reload()
 
         } catch (e) {
             system.error(e)
@@ -111,7 +113,7 @@ const Login: React.FC<{}> = () => {
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
-                        onConfirm={() => refRemove(selectedRowKeys)}
+                        onConfirm={() => refRemove(selectedRowKeys, action)}
                         title="是否删除选中数据"
                     >
                         <Button
