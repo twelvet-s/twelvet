@@ -64,7 +64,7 @@
         <if test="username != null and username != ''">
             AND u.username like concat('%', #{username}, '%')
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null">
             AND u.status = #{status}
         </if>
         <if test="phonenumber != null and phonenumber != ''">
@@ -116,7 +116,7 @@
         <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
         <if test="sex != null and sex != ''">sex,</if>
         <if test="password != null and password != ''">password,</if>
-        <if test="status != null and status != ''">status,</if>
+        <if test="status != null">status,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         <if test="remark != null and remark != ''">remark,</if>
         create_time
@@ -130,7 +130,7 @@
         <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
         <if test="sex != null and sex != ''">#{sex},</if>
         <if test="password != null and password != ''">#{password},</if>
-        <if test="status != null and status != ''">#{status},</if>
+        <if test="status != null">#{status},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
         sysdate()
@@ -147,7 +147,7 @@
             <if test="sex != null and sex != ''">sex = #{sex},</if>
             <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
             <if test="password != null and password != ''">password = #{password},</if>
-            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="status != null">status = #{status},</if>
             <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
             <if test="loginDate != null">login_date = #{loginDate},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>

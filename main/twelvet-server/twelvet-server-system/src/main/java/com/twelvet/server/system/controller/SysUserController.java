@@ -53,7 +53,7 @@ public class SysUserController extends TWTController {
     /**
      * 获取用户列表
      *
-     * @return
+     * @return AjaxResult
      */
     @GetMapping
     public AjaxResult pageQuery(SysUser user) {

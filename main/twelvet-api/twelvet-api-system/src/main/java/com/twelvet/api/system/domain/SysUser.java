@@ -62,7 +62,7 @@ public class SysUser extends BaseEntity {
     /**
      * 用户性别
      */
-    private int sex;
+    private Integer sex;
 
     /**
      * 用户头像
@@ -82,7 +82,7 @@ public class SysUser extends BaseEntity {
     /**
      * 帐号状态（0正常 1停用）
      */
-    private int status;
+    private Integer status;
 
     /**
      * 删除标志（0代表存在 2代表删除）
@@ -192,11 +192,11 @@ public class SysUser extends BaseEntity {
         this.phonenumber = phonenumber;
     }
 
-    public int getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -224,11 +224,11 @@ public class SysUser extends BaseEntity {
         this.salt = salt;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
