@@ -11,12 +11,10 @@ import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,9 +40,9 @@ public class SysConfigController extends TWTController {
 
     @Log(service = "参数管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysConfig config) throws IOException {
+    public void export(HttpServletResponse response, SysConfig config) {
         List<SysConfig> list = configService.selectConfigList(config);
-        ExcelUtils<SysConfig> excelUtils = new ExcelUtils<SysConfig>(SysConfig.class);
+        ExcelUtils<SysConfig> excelUtils = new ExcelUtils<>(SysConfig.class);
         excelUtils.exportExcel(response, list, "参数数据");
     }
 

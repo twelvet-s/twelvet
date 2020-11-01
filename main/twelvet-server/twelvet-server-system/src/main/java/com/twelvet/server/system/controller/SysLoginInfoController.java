@@ -92,7 +92,7 @@ public class SysLoginInfoController extends TWTController {
     }
 
     /**
-     * 导入Excel
+     * 导出Excel
      *
      * @param response  HttpServletResponse
      * @param loginInfo SysLoginInfo

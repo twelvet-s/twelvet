@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -35,6 +36,9 @@ public class ExcelUtils<T> {
 
     private final static String XLS = "xls";
     private final static String XLSX = "xlsx";
+
+    private final static String XLS_RESPONSE_HEAD = "application/vnd.ms-excel";
+    private final static String XLSX_RESPONSE_HEAD = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     /**
      * Excel sheet最大行数，默认65536
@@ -224,28 +228,32 @@ public class ExcelUtils<T> {
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String filtename) {
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String filename) {
         try {
-            response.setContentType("application/vnd.ms-excel");
+            // 设置数据
+            this.init(list, sheetName, Type.EXPORT);
+
+            response.setContentType(XLSX_RESPONSE_HEAD);
             response.setCharacterEncoding(CharsetKit.UTF_8);
 
             // 文件名称为空将采用工作表名称
-            if (TWTUtils.isEmpty(filtename)) {
-                filtename = sheetName;
+            if (TWTUtils.isEmpty(filename)) {
+                filename = sheetName;
             }
 
-            filtename = URLEncoder.encode(filtename, CharsetKit.UTF_8);
+            filename = URLEncoder.encode(filename, CharsetKit.UTF_8);
 
             // Url编码，前台需自行还原
-            filtename = "attachment; filename=" + filtename + "." + XLSX;
+            filename = "attachment; filename=" + filename + "." + XLSX;
 
             // 设置Excel导出的名称
-            response.setHeader("Content-Disposition", filtename);
+            response.setHeader("Content-Disposition", filename);
 
-            this.init(list, sheetName, Type.EXPORT);
+            // 导出数据
             exportExcel(response.getOutputStream());
         } catch (IOException e) {
-            throw new TWTUtilsException("数据导出出错");
+            e.printStackTrace();
+            throw new TWTUtilsException("数据导出异常");
         }
     }
 
@@ -264,13 +272,12 @@ public class ExcelUtils<T> {
     /**
      * 对list数据源将其里面的数据导入到excel表单
      *
+     * @param response  返回数据
      * @param sheetName 工作表的名称
+     * @return 结果
      */
-    public void importTemplateExcel(HttpServletResponse response, String sheetName) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding(CharsetKit.UTF_8);
-        this.init(null, sheetName, Type.IMPORT);
-        exportExcel(response.getOutputStream());
+    public void exportExcel(HttpServletResponse response, String sheetName) {
+        exportExcel(response, null, sheetName, null);
     }
 
     /**
@@ -729,4 +736,5 @@ public class ExcelUtils<T> {
         }
         return val;
     }
+
 }

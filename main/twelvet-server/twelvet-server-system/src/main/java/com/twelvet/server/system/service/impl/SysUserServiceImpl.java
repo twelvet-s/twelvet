@@ -354,7 +354,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return 结果
      */
     @Override
-    public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName) {
+    public String importUser(List<SysUser> userList, Boolean cover, String operName) {
         if (TWTUtils.isEmpty(userList) || userList.size() == 0) {
             throw new TWTException("导入用户数据不能为空！");
         }
@@ -373,7 +373,7 @@ public class SysUserServiceImpl implements ISysUserService {
                     this.insertUser(user);
                     successNum++;
                     successMsg.append("<br/>").append(successNum).append("、账号 ").append(user.getUsername()).append(" 导入成功");
-                } else if (isUpdateSupport) {
+                } else if (cover) {
                     user.setUpdateBy(operName);
                     this.updateUser(user);
                     successNum++;

@@ -164,7 +164,7 @@ public interface ISysUserService {
      * @param operName        操作用户
      * @return 结果
      */
-    String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+    String importUser(List<SysUser> userList, Boolean cover, String operName);
 
 }
 

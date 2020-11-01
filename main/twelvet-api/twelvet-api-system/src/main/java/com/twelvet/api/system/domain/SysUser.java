@@ -1,9 +1,19 @@
 package com.twelvet.api.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.twelvet.framework.core.application.domain.BaseEntity;
+import com.twelvet.framework.utils.annotation.excel.Excel;
+import com.twelvet.framework.utils.annotation.excel.Excel.ColumnType;
+import com.twelvet.framework.utils.annotation.excel.Excel.Type;
+import com.twelvet.framework.utils.annotation.excel.Excels;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.Arrays;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,52 +27,44 @@ public class SysUser extends BaseEntity {
     /**
      * 用户ID
      */
+    @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
     /**
      * 部门ID
      */
+    @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
 
     /**
-     * 部门父ID
+     * 用户账号
      */
-    private Long parentId;
-
-    /**
-     * 角色ID
-     */
-    private Long roleId;
-
-    /**
-     * 登录名称
-     */
-    private String loginName;
-
-    /**
-     * 用户名称
-     */
+    @Excel(name = "登录名称")
     private String username;
 
     /**
      * 用户昵称
      */
+    @Excel(name = "用户名称")
     private String nickName;
 
     /**
      * 用户邮箱
      */
+    @Excel(name = "用户邮箱")
     private String email;
 
     /**
      * 手机号码
      */
+    @Excel(name = "手机号码")
     private String phonenumber;
 
     /**
      * 用户性别
      */
-    private Integer sex;
+    @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
+    private String sex;
 
     /**
      * 用户头像
@@ -80,24 +82,41 @@ public class SysUser extends BaseEntity {
     private String salt;
 
     /**
-     * 帐号状态（0正常 1停用）
+     * 帐号状态（1正常 0停用）
      */
+    @Excel(name = "帐号状态", readConverterExp = "1=正常,0=停用")
     private Integer status;
 
     /**
-     * 删除标志（0代表存在 2代表删除）
+     * 删除标志（1代表存在 2代表删除）
      */
     private String delFlag;
 
     /**
      * 最后登陆IP
      */
+    @Excel(name = "最后登陆IP", type = Type.EXPORT)
     private String loginIp;
 
     /**
      * 最后登陆时间
      */
+    @Excel(name = "最后登陆时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
+
+    /**
+     * 部门对象
+     */
+    @Excels({
+            @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
+            @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
+    })
+    private SysDept dept;
+
+    /**
+     * 角色对象
+     */
+    private List<SysRole> roles;
 
     /**
      * 角色组
@@ -110,14 +129,11 @@ public class SysUser extends BaseEntity {
     private Long[] postIds;
 
     public SysUser() {
+
     }
 
     public SysUser(Long userId) {
         this.userId = userId;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Long getUserId() {
@@ -128,6 +144,14 @@ public class SysUser extends BaseEntity {
         this.userId = userId;
     }
 
+    public boolean isAdmin() {
+        return isAdmin(this.userId);
+    }
+
+    public static boolean isAdmin(Long userId) {
+        return userId != null && 1L == userId;
+    }
+
     public Long getDeptId() {
         return deptId;
     }
@@ -136,30 +160,7 @@ public class SysUser extends BaseEntity {
         this.deptId = deptId;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
+    @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符")
     public String getNickName() {
         return nickName;
     }
@@ -168,6 +169,8 @@ public class SysUser extends BaseEntity {
         this.nickName = nickName;
     }
 
+    @NotBlank(message = "用户账号不能为空")
+    @Size(min = 0, max = 30, message = "用户账号长度不能超过30个字符")
     public String getUsername() {
         return username;
     }
@@ -176,6 +179,8 @@ public class SysUser extends BaseEntity {
         this.username = username;
     }
 
+    @Email(message = "邮箱格式不正确")
+    @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
     public String getEmail() {
         return email;
     }
@@ -184,6 +189,7 @@ public class SysUser extends BaseEntity {
         this.email = email;
     }
 
+    @Size(min = 0, max = 11, message = "手机号码长度不能超过11个字符")
     public String getPhonenumber() {
         return phonenumber;
     }
@@ -192,11 +198,11 @@ public class SysUser extends BaseEntity {
         this.phonenumber = phonenumber;
     }
 
-    public Integer getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -208,6 +214,7 @@ public class SysUser extends BaseEntity {
         this.avatar = avatar;
     }
 
+    @JsonProperty
     public String getPassword() {
         return password;
     }
@@ -256,6 +263,22 @@ public class SysUser extends BaseEntity {
         this.loginDate = loginDate;
     }
 
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
+
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
+    }
+
     public Long[] getRoleIds() {
         return roleIds;
     }
@@ -272,35 +295,29 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
-    public boolean isAdmin() {
-        return isAdmin(this.userId);
-    }
-
-    public static boolean isAdmin(Long userId) {
-        return userId != null && 1L == userId;
-    }
-
     @Override
     public String toString() {
-        return "SysUser{" +
-                "userId=" + userId +
-                ", deptId=" + deptId +
-                ", parentId=" + parentId +
-                ", roleId=" + roleId +
-                ", loginName='" + loginName + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", phonenumber='" + phonenumber + '\'' +
-                ", sex='" + sex + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", status='" + status + '\'' +
-                ", delFlag='" + delFlag + '\'' +
-                ", loginIp='" + loginIp + '\'' +
-                ", loginDate=" + loginDate +
-                ", roleIds=" + Arrays.toString(roleIds) +
-                ", postIds=" + Arrays.toString(postIds) +
-                '}';
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("userId", getUserId())
+                .append("deptId", getDeptId())
+                .append("username", getUsername())
+                .append("nickName", getNickName())
+                .append("email", getEmail())
+                .append("phonenumber", getPhonenumber())
+                .append("sex", getSex())
+                .append("avatar", getAvatar())
+                .append("password", getPassword())
+                .append("salt", getSalt())
+                .append("status", getStatus())
+                .append("delFlag", getDelFlag())
+                .append("loginIp", getLoginIp())
+                .append("loginDate", getLoginDate())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("remark", getRemark())
+                .append("dept", getDept())
+                .toString();
     }
 }

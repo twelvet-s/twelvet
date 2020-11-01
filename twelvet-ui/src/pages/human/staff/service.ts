@@ -1,4 +1,4 @@
-import request, { download } from '@/utils/request'
+import request, { download, upload } from '@/utils/request'
 
 // 请求的控制器名称
 const controller = "/system/user";
@@ -78,4 +78,20 @@ export async function treeSelect() {
     return request(`/system/dept/treeSelect`, {
         method: 'GET'
     });
+}
+
+/**
+ * 下载模板
+ * @param params
+ */
+export async function exportTemplate(params?: { [key: string]: any }) {
+    return download(`${controller}/exportTemplate`, params);
+}
+
+/**
+ * 上传数据
+ * @param params
+ */
+export async function importData(formData: FormData) {
+    return upload(`${controller}/importData`, formData);
 }

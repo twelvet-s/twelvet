@@ -66,24 +66,32 @@ public class SysUserController extends TWTController {
     @PostMapping("/exportExcel")
     public void exportExcel(HttpServletResponse response, SysUser user) {
         List<SysUser> list = iSysUserService.selectUserList(user);
-        ExcelUtils<SysUser> excelUtils = new ExcelUtils<SysUser>(SysUser.class);
+        ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
     }
 
     @Log(service = "用户管理", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtils<SysUser> excelUtils = new ExcelUtils<SysUser>(SysUser.class);
-        List<SysUser> userList = excelUtils.importExcel(file.getInputStream());
-        String operName = SecurityUtils.getUsername();
-        String message = iSysUserService.importUser(userList, updateSupport, operName);
-        return AjaxResult.success(message);
+    public AjaxResult importData(MultipartFile[] files, boolean cover) throws Exception {
+        ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
+        // 支持多数据源导入
+        for (MultipartFile file : files) {
+            List<SysUser> userList = excelUtils.importExcel(file.getInputStream());
+            String operName = SecurityUtils.getUsername();
+            iSysUserService.importUser(userList, cover, operName);
+        }
+        return AjaxResult.success();
     }
 
-    @PostMapping("/importTemplate")
-    public void importTemplate(HttpServletResponse response) throws IOException {
+    /**
+     * 导出模板
+     *
+     * @param response HttpServletResponse
+     */
+    @PostMapping("/exportTemplate")
+    public void exportTemplate(HttpServletResponse response) {
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
-        excelUtils.importTemplateExcel(response, "用户数据");
+        excelUtils.exportExcel(response, "用户数据");
     }
 
     /**

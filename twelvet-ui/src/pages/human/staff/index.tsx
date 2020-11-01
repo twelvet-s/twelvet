@@ -5,6 +5,8 @@ import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutline
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
+import DpetSearch from './components/dpetSearch'
+import ImportStaff from './components/importStaff'
 import { pageQuery, remove, exportExcel, getByStaffId, insert, update, treeSelect } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -22,6 +24,8 @@ const Staff: React.FC<{}> = () => {
 
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
+
+    const [importStaffVisible, setImportStaffVisible] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
 
@@ -51,6 +55,13 @@ const Staff: React.FC<{}> = () => {
 
     // Form参数
     const columns: ProColumns<TableListItem> = [
+        {
+            title: '部门',
+            key: 'deptId',
+            hideInTable: true,
+            dataIndex: 'deptId',
+            renderFormItem: () => <DpetSearch placeholder="部门" />
+        },
         {
             title: '用户账号', ellipsis: true, valueType: "text", dataIndex: 'username',
         },
@@ -315,7 +326,13 @@ const Staff: React.FC<{}> = () => {
                             <FundProjectionScreenOutlined />
                             导出数据
                         </Button>
-                    </Popconfirm>
+                    </Popconfirm>,
+                    <Button type="primary" onClick={() => {
+                        setImportStaffVisible(true)
+                    }}>
+                        <PlusOutlined />
+                        导入数据
+                    </Button>
                 ]}
 
             />
@@ -569,6 +586,13 @@ const Staff: React.FC<{}> = () => {
                 </Form>
 
             </Modal>
+
+            <ImportStaff
+                visible={importStaffVisible}
+                onCancel={() => {
+                    setImportStaffVisible(false)
+                }}
+            />
         </>
     )
 
