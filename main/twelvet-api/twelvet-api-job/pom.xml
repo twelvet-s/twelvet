@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>twelvet-api-system</artifactId>
+    <artifactId>twelvet-api-job</artifactId>
 
-    <description>系统服务API</description>
 
 </project>

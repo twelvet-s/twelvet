@@ -98,13 +98,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             menuItemRender={(TWTProps, TWTDom) => {
                 return (
                     <span className="ant-pro-menu-item">
-                        <span role="img" className="anticon">
-                            {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
-                        </span>
+                        <Link to={TWTProps.path ? TWTProps.path : '#'}>
+                            <span role="img" className="anticon">
+                                {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
+                            </span>
 
-                        <span>
-                            {TWTProps.name}
-                        </span>
+                            <span>
+                                {TWTProps.name}
+                            </span>
+                        </Link>
                     </span>
                 )
             }}

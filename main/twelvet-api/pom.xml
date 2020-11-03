@@ -16,6 +16,7 @@
 
     <modules>
         <module>twelvet-api-system</module>
+        <module>twelvet-api-job</module>
     </modules>
 
     <dependencies>

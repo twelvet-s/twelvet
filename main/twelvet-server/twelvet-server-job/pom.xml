@@ -32,6 +32,12 @@
             </exclusions>
         </dependency>
 
+        <!--job API-->
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-api-job</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
