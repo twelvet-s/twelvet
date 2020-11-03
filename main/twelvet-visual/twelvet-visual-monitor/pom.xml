@@ -17,11 +17,10 @@
 
     <dependencies>
 
-        <!-- SpringBoot Admin -->
+        <!-- SpringBoot Admin 服务端-->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
-            <version>${spring-boot-admin.version}</version>
         </dependency>
 
         <!-- SpringCloud Ailibaba Nacos -->

@@ -97,9 +97,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             // 重写菜单渲染
             menuItemRender={(TWTProps, TWTDom) => {
                 return (
-                    <Link to={TWTProps.path ? TWTProps.path : '#'}>
-                        {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}{TWTProps.name}
-                    </Link>
+                    <span className="ant-pro-menu-item">
+                        <span role="img" className="anticon">
+                            {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
+                        </span>
+
+                        <span>
+                            {TWTProps.name}
+                        </span>
+                    </span>
                 )
             }}
             // 重写拥有子菜单菜单项的 render 方法
