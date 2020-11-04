@@ -3,6 +3,7 @@ package com.twelvet.server;
 import com.twelvet.framework.core.annotation.EnableTWTFeignClients;
 import com.twelvet.framework.core.annotation.EnableTwelveTConfig;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
 /**
@@ -13,7 +14,7 @@ import org.springframework.cloud.client.SpringCloudApplication;
  */
 @EnableTwelveTConfig
 @EnableTWTFeignClients
-@SpringCloudApplication
+@SpringBootApplication
 public class TWTJobApp {
 
     public static void main(String[] args) {

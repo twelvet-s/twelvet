@@ -21,7 +21,7 @@ import java.util.List;
  * @Description: 调度日志操作处理
  */
 @RestController
-@RequestMapping("/job/log")
+@RequestMapping("/mapper/job/log")
 public class SysJobLogController extends TWTController {
     @Autowired
     private ISysJobLogService jobLogService;

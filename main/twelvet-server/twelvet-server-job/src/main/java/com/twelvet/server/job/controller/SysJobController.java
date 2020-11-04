@@ -26,7 +26,7 @@ import java.util.List;
  * @Description: 调度任务信息操作处理
  */
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/mapper/job")
 public class SysJobController extends TWTController {
     @Autowired
     private ISysJobService jobService;
