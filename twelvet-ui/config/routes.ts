@@ -46,6 +46,13 @@ export default [
                             name: 'menu',
                             path: '/system/menu',
                             component: './system/menu'
+                        },
+                        {
+                            title: '定时任务',
+                            icon: 'icon-job',
+                            name: 'job',
+                            path: '/system/job',
+                            component: './system/job'
                         }
                     ]
                 },

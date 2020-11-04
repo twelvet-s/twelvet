@@ -18,7 +18,7 @@ const proSettings: TwelveT = {
   },
   title: 'TwelveT',
   pwa: false,
-  iconfontUrl: '//at.alicdn.com/t/font_2059726_renp1dzvcxm.js',
+  iconfontUrl: '//at.alicdn.com/t/font_2059726_jt7c9is9joj.js',
 };
 
 export type { TwelveT };

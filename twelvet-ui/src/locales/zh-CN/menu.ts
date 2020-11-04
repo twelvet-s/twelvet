@@ -5,6 +5,7 @@ export default {
     // 系统设置模块
     'menu.systemManagement': '系统管理',
     'menu.systemManagement.menu': '菜单管理',
+    'menu.systemManagement.job': '定时任务',
     
 
     // 人力管理

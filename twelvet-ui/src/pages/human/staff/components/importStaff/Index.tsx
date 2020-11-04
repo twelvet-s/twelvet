@@ -90,7 +90,6 @@ const DeptSearch: React.FC<{
                     // 文件列表
                     fileList={excelFiles}
                     onChange={(info: UploadChangeParam) => {
-                        console.log(info)
                         const fileList:Array<any> = info.fileList
 
                         const excels: RcFile[] = []
