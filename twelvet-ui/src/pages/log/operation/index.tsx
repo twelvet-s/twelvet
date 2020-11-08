@@ -63,7 +63,7 @@ const Operation: React.FC<{}> = () => {
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
-                    <Button type="link" onClick={() => handleView(row)}>
+                    <Button type="default" onClick={() => handleView(row)}>
                         <EyeOutlined />
                         详情
                     </Button>

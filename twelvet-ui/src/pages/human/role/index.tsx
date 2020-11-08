@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import RoleSwitch from './components/Switch'
+import RoleStatusSwitch from './components/Switch'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Tree, TreeSelect, Row, Col } from 'antd'
 import { FormInstance } from 'antd/lib/form'
@@ -93,7 +93,7 @@ const Role: React.FC<{}> = () => {
             ellipsis: false,
             dataIndex: 'status',
             render: (_: string, row: { [key: string]: string }) => [
-                <RoleSwitch row={row}/>
+                <RoleStatusSwitch row={row}/>
             ]
         },
         {

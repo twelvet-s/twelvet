@@ -3,7 +3,6 @@ package com.twelvet.server.job.controller;
 import com.twelvet.api.job.domain.SysJobLog;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
-import com.twelvet.framework.core.web.page.TableDataInfo;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.utils.ExcelUtils;
@@ -21,19 +20,20 @@ import java.util.List;
  * @Description: 调度日志操作处理
  */
 @RestController
-@RequestMapping("/mapper/job/log")
+@RequestMapping("/log")
 public class SysJobLogController extends TWTController {
     @Autowired
     private ISysJobLogService jobLogService;
 
     /**
      * 查询定时任务调度日志列表
+     * @return
      */
-    @GetMapping("/list")
-    public TableDataInfo list(SysJobLog sysJobLog) {
+    @GetMapping
+    public AjaxResult pageQuery(SysJobLog sysJobLog) {
         startPage();
         List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**

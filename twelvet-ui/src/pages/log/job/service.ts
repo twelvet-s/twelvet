@@ -1,7 +1,7 @@
 import request, { download } from '@/utils/request'
 
 // 请求的控制器名称
-const controller = "/job/cron";
+const controller = "/job/log";
 
 /**
  * 获取分页 Data
@@ -13,29 +13,6 @@ export async function pageQuery(params: { [key: string]: any }) {
         data: {
             ...params
         },
-    });
-}
-
-/**
- * 根据ID获取任务信息
- * @param params 搜索参数
- */
-export async function run(params: { [key: string]: any }) {
-    return request(`${controller}/run`, {
-        method: 'PUT',
-        data: {
-            ...params
-        }
-    });
-}
-
-/**
- * 根据ID获取任务信息
- * @param params 搜索参数
- */
-export async function getByJobId(jobId: number) {
-    return request(`${controller}/${jobId}`, {
-        method: 'GET',
     });
 }
 

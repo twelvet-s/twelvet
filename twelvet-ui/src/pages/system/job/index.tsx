@@ -1,72 +1,130 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { DeleteOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker } from 'antd'
-import moment, { Moment } from 'moment'
+import { CaretRightOutlined, DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined, QuestionCircleFilled } from '@ant-design/icons'
+import { Popconfirm, Button, message, DatePicker, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel } from './service'
+import { pageQuery, remove, exportExcel, run } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
+import JobStatus from './components/jobStatusSwitch/Index'
+import Details from './components/details/Index'
+import { FormInstance } from 'antd/lib/form'
 
 /**
- * 登录日志
+ * 定时任务
  */
-const Login: React.FC<{}> = () => {
+const Job: React.FC<{}> = () => {
+
+    const formItemLayout = {
+        labelCol: {
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            sm: { span: 16 },
+        },
+    }
+
+    const [form] = Form.useForm<FormInstance>()
+
+    // 显示Modal
+    const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
+
+    // 是否执行Modal数据操作中
+    const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
 
-    const { RangePicker } = DatePicker
+    const [modelDetails, setModelDetails] = useState<{
+        vimodelDetails: boolean
+        jobId: number
+    }>({
+        vimodelDetails: false,
+        jobId: 0
+    })
+
 
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
-            title: '用户名称', ellipsis: true, valueType: "text", dataIndex: 'userName',
+            title: '任务名称', ellipsis: true, valueType: "text", dataIndex: 'jobName',
         },
         {
-            title: 'IP', valueType: "text", dataIndex: 'ipaddr'
+            title: '任务组名', valueType: "text", dataIndex: 'jobGroup'
         },
         {
-            title: '登录地区', valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '调用目标字符串', valueType: "text", search: false, dataIndex: 'invokeTarget'
         },
         {
-            title: '终端', search: false, valueType: "text", dataIndex: 'perms'
-        },
-        {
-            title: '操作系统', search: false, dataIndex: 'component'
+            title: 'cron执行表达式', search: false, valueType: "text", dataIndex: 'cronExpression'
         },
         {
             title: '状态',
             ellipsis: false,
             dataIndex: 'status',
             valueEnum: {
-                1: { text: '正常', status: 'success' },
-                0: { text: '停用', status: 'error' },
+                0: { text: '失败', status: 'error' },
+                1: { text: '成功', status: 'success' },
             },
+            render: (_: string, row: { [key: string]: string }) => [
+                <JobStatus row={row} />
+            ]
         },
         {
-            title: '登录信息', valueType: "text", search: false, dataIndex: 'msg'
-        },
-        {
-            title: '搜索日期',
-            key: 'between',
-            hideInTable: true,
-            dataIndex: 'between',
-            renderFormItem: () => (
-                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
-                    // 不允许选择大于今天的日期
-                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
-                }} />
-            )
-        },
-        {
-            title: '登录时间', valueType: "date", search: false, dataIndex: 'accessTime'
+            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+                return (
+                    <Space>
+                        <Popconfirm
+                            onConfirm={() => runJob(row)}
+                            title="是否执行任务"
+                        >
+                            <Button type="primary">
+                                <CaretRightOutlined />
+                                执行
+                            </Button >
+                        </Popconfirm>
+
+                        <Button type="default" onClick={() => {
+                            setModelDetails({
+                                vimodelDetails: true,
+                                jobId: row.jobId
+                            })
+                        }}>
+                            <EyeOutlined />
+                            详情
+                        </Button>
+
+                    </Space >
+                )
+            }
         },
     ]
 
     /**
-     * 移除菜单
+     * 执行任务
+     * @param row 
+     */
+    const runJob = async (row: { [key: string]: any }) => {
+        try {
+            // 参数
+            const params = {
+                jobId: row.jobId,
+                jobGroup: row.jobGroup
+            }
+
+            const { code, msg } = await run(params)
+            if (code != 200) {
+                return message.error(msg)
+            }
+            message.success(msg)
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
+    /**
+     * 移除任务
      * @param row infoIds
      */
     const refRemove = async (infoIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
@@ -87,6 +145,57 @@ const Login: React.FC<{}> = () => {
             system.error(e)
         }
 
+    }
+
+    /**
+     * 新增任务
+     * @param row row
+     */
+    const refPost = async () => {
+        setModal({ title: "新增", visible: true })
+    }
+
+    /**
+     * 保存数据
+     */
+    const onSave = () => {
+        form
+            .validateFields()
+            .then(
+                async (fields) => {
+                    try {
+                        // 开启加载中
+                        setLoadingModal(true)
+                        // ID为0则insert，否则将update
+                        const { code, msg } = fields.postId == 0 ? await insert(fields) : await update(fields)
+                        if (code != 200) {
+                            return message.error(msg)
+                        }
+
+                        message.success(msg)
+
+                        if (acForm.current) {
+                            acForm.current.reload()
+                        }
+
+                        // 关闭模态框
+                        handleCancel()
+                    } catch (e) {
+                        system.error(e)
+                    } finally {
+                        setLoadingModal(false)
+                    }
+                }).catch(e => {
+                    system.error(e)
+                })
+    }
+
+    /**
+     * 取消Modal的显示
+     */
+    const handleCancel = () => {
+        setModal({ title: "", visible: false })
+        form.resetFields()
     }
 
     return (
@@ -111,6 +220,10 @@ const Login: React.FC<{}> = () => {
                     return params
                 }}
                 toolBarRender={(action, { selectedRowKeys }) => [
+                    <Button type="default" onClick={refPost}>
+                        <PlusOutlined />
+                        新增
+                    </Button>,
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
                         onConfirm={() => refRemove(selectedRowKeys, action)}
@@ -131,9 +244,184 @@ const Login: React.FC<{}> = () => {
                 ]}
 
             />
+
+            <Modal
+                title={`${modal.title}任务`}
+                width={700}
+                visible={modal.visible}
+                okText={`${modal.title}`}
+                confirmLoading={loadingModal}
+                onOk={onSave}
+                onCancel={handleCancel}
+            >
+
+                <Form
+                    name="Menu"
+                    form={form}
+                >
+
+                    <Form.Item
+                        hidden
+                        {...formItemLayout}
+                        label="任务ID"
+                        name="postId"
+                        initialValue={0}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...formItemLayout}
+                                label="任务名称"
+                                name="postName"
+                                rules={[{ required: true, message: '任务名称不能为空' }]}
+                            >
+                                <Input placeholder="任务名称" />
+                            </Form.Item>
+                        </Col>
+
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...formItemLayout}
+                                label="任务分组"
+                                name="postCode"
+                                rules={[{ required: true, message: '任务分组不能为空' }]}
+                            >
+                                <Input placeholder="任务分组" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item
+                        {
+                        ...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 16 },
+                            },
+                        }
+                        }
+                        label={
+                            <Tooltip title="
+                                Bean调用示例：
+                                twtTask.twtParams('twt')
+
+                                Class类调用示例：
+                                com.ruoyi.quartz.task.twtTask.twtParams('twt')
+                                参数说明：支持字符串，布尔类型，长整型，浮点型，整型
+                            ">
+                                调用方法
+                            </Tooltip>
+                        }
+                        name="postSort"
+                        initialValue={0}
+                        rules={[{ required: true, message: '调用方法不能为空' }]}
+                    >
+                        <Input placeholder="调用方法" />
+                    </Form.Item>
+
+                    <Row>
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...formItemLayout}
+                                label="cron命令"
+                                name="postSort"
+                                initialValue={0}
+                                rules={[{ required: true, message: 'cron命令不能为空' }]}
+                            >
+                                <Input placeholder="cron命令" />
+                            </Form.Item>
+                        </Col>
+
+                        <Col sm={12} xs={24}>
+                            <Form.Item
+                                {...formItemLayout}
+                                label="是否并发"
+                                name="postSort"
+                                initialValue={0}
+                                rules={[{ required: true, message: '是否并发不能为空' }]}
+                            >
+                                <Radio.Group
+                                    optionType="button"
+                                    buttonStyle="solid"
+                                >
+                                    <Radio.Button value={1}>允许</Radio.Button>
+                                    <Radio.Button value={0}>禁止</Radio.Button>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item
+                        {
+                        ...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 21 },
+                            },
+                        }
+                        }
+                        label="错误策略"
+                        name="postSort"
+                        initialValue={0}
+                        rules={[{ required: true, message: '错误策略不能为空' }]}
+                    >
+                        <Radio.Group
+                            optionType="button"
+                            buttonStyle="solid"
+                        >
+                            <Radio.Button value={1}>立即执行</Radio.Button>
+                            <Radio.Button value={2}>执行一次</Radio.Button>
+                            <Radio.Button value={3}>放弃执行</Radio.Button>
+                        </Radio.Group>
+                    </Form.Item>
+
+                    <Form.Item
+                        {
+                        ...{
+                            labelCol: {
+                                sm: { span: 3 },
+                            },
+                            wrapperCol: {
+                                sm: { span: 16 },
+                            },
+                        }
+                        }
+                        label="状态"
+                        name="postSort"
+                        initialValue={0}
+                        rules={[{ required: true, message: '状态不能为空' }]}
+                    >
+                        <Radio.Group
+                            optionType="button"
+                        >
+                            <Radio value={1}>正常</Radio>
+                            <Radio value={0}>暂停</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+
+                </Form>
+
+            </Modal>
+
+            <Details
+                modelDetails={modelDetails}
+                onCancel={() => {
+                    setModelDetails({
+                        vimodelDetails: false,
+                        jobId: 0
+                    })
+                }}
+            />
         </>
     )
 
 }
 
-export default Login
+export default Job

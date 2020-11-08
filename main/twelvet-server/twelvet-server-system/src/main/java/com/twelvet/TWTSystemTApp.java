@@ -12,8 +12,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Description: 启动程序
  * @EnableFeignClients 开启服务扫描
  */
-@EnableTWTFeignClients
 @EnableTwelveTConfig
+@EnableTWTFeignClients
 @SpringBootApplication
 public class TWTSystemTApp {
 

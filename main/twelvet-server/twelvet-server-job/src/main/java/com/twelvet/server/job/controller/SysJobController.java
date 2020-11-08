@@ -3,7 +3,6 @@ package com.twelvet.server.job.controller;
 import com.twelvet.api.job.domain.SysJob;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
-import com.twelvet.framework.core.web.page.TableDataInfo;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.utils.SecurityUtils;
@@ -26,19 +25,20 @@ import java.util.List;
  * @Description: 调度任务信息操作处理
  */
 @RestController
-@RequestMapping("/mapper/job")
+@RequestMapping("/cron")
 public class SysJobController extends TWTController {
     @Autowired
     private ISysJobService jobService;
 
     /**
      * 查询定时任务列表
+     * @return AjaxResult
      */
-    @GetMapping("/list")
-    public TableDataInfo list(SysJob sysJob) {
+    @GetMapping
+    public AjaxResult pageQuery(SysJob sysJob) {
         startPage();
         List<SysJob> list = jobService.selectJobList(sysJob);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**
@@ -56,7 +56,7 @@ public class SysJobController extends TWTController {
      * 获取定时任务详细信息
      */
     @GetMapping(value = "/{jobId}")
-    public AjaxResult getInfo(@PathVariable("jobId") Long jobId) {
+    public AjaxResult getByJobId(@PathVariable("jobId") Long jobId) {
         return AjaxResult.success(jobService.selectJobById(jobId));
     }
 

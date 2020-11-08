@@ -13,7 +13,7 @@ spring:
     nacos:
       discovery:
         # 解决获取IP为内网，一般微服务采用内网安全性、可用性高
-        ip: 127.0.0.1
+        # ip: 127.0.0.1
         # 服务注册地址
         server-addr: http://nacos.twelvet.cn
         namespace: eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e

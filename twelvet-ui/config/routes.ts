@@ -133,6 +133,13 @@ export default [
                             icon: 'icon-log-login',
                             path: '/log/login',
                             component: './log/login'
+                        },
+                        {
+                            title: '定时任务日志',
+                            name: 'job',
+                            icon: 'icon-log-job',
+                            path: '/log/job',
+                            component: './log/job'
                         }
                     ]
                 },

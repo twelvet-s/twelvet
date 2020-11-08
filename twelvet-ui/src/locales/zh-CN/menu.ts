@@ -23,6 +23,7 @@ export default {
     'menu.log': '日志管理',
     'menu.log.operation': '操作日志',
     'menu.log.login': '登录日志',
+    'menu.log.job': '定时任务日志',
 
     // 登录页面
     'menu.tool': '工具箱',

@@ -14,12 +14,6 @@
 
     <dependencies>
 
-        <!-- SpringBoot Web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
         <!-- Quartz -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
