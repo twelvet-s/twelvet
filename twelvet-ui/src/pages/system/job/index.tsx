@@ -4,7 +4,7 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { Popconfirm, Button, message, DatePicker, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, run } from './service'
+import { pageQuery, remove, exportExcel, run, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
@@ -202,7 +202,7 @@ const Job: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="infoId"
+                rowKey="jobId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -275,7 +275,7 @@ const Job: React.FC<{}> = () => {
                             <Form.Item
                                 {...formItemLayout}
                                 label="任务名称"
-                                name="postName"
+                                name="jobName"
                                 rules={[{ required: true, message: '任务名称不能为空' }]}
                             >
                                 <Input placeholder="任务名称" />
@@ -286,7 +286,7 @@ const Job: React.FC<{}> = () => {
                             <Form.Item
                                 {...formItemLayout}
                                 label="任务分组"
-                                name="postCode"
+                                name="jobGroup"
                                 rules={[{ required: true, message: '任务分组不能为空' }]}
                             >
                                 <Input placeholder="任务分组" />
@@ -317,8 +317,7 @@ const Job: React.FC<{}> = () => {
                                 调用方法
                             </Tooltip>
                         }
-                        name="postSort"
-                        initialValue={0}
+                        name="invokeTarget"
                         rules={[{ required: true, message: '调用方法不能为空' }]}
                     >
                         <Input placeholder="调用方法" />
@@ -329,8 +328,7 @@ const Job: React.FC<{}> = () => {
                             <Form.Item
                                 {...formItemLayout}
                                 label="cron命令"
-                                name="postSort"
-                                initialValue={0}
+                                name="cronExpression"
                                 rules={[{ required: true, message: 'cron命令不能为空' }]}
                             >
                                 <Input placeholder="cron命令" />
@@ -341,9 +339,8 @@ const Job: React.FC<{}> = () => {
                             <Form.Item
                                 {...formItemLayout}
                                 label="是否并发"
-                                name="postSort"
+                                name="concurrent"
                                 initialValue={0}
-                                rules={[{ required: true, message: '是否并发不能为空' }]}
                             >
                                 <Radio.Group
                                     optionType="button"
@@ -368,9 +365,8 @@ const Job: React.FC<{}> = () => {
                         }
                         }
                         label="错误策略"
-                        name="postSort"
-                        initialValue={0}
-                        rules={[{ required: true, message: '错误策略不能为空' }]}
+                        name="misfirePolicy"
+                        initialValue={1}
                     >
                         <Radio.Group
                             optionType="button"
@@ -394,9 +390,8 @@ const Job: React.FC<{}> = () => {
                         }
                         }
                         label="状态"
-                        name="postSort"
-                        initialValue={0}
-                        rules={[{ required: true, message: '状态不能为空' }]}
+                        name="status"
+                        initialValue={1}
                     >
                         <Radio.Group
                             optionType="button"

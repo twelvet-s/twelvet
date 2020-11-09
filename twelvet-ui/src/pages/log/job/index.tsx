@@ -8,7 +8,6 @@ import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
-import JobStatus from './components/Switch'
 
 /**
  * 登录日志
@@ -28,42 +27,42 @@ const Login: React.FC<{}> = () => {
             title: '任务组名', valueType: "text", dataIndex: 'jobGroup'
         },
         {
-            title: '调用目标字符串', valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '调用目标方法', valueType: "text", search: false, dataIndex: 'invokeTarget'
         },
         {
-            title: '日志信息', valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '日志信息', valueType: "text", search: false, dataIndex: 'jobMessage'
         },
         {
             title: '执行状态',
             ellipsis: false,
             dataIndex: 'status',
-            render: (_: string, row: { [key: string]: string }) => [
-                <JobStatus row={row} />
-            ]
+            valueEnum: {
+                0: { text: '失败', status: 'error' },
+                1: { text: '成功', status: 'success' },
+            },
         },
         {
-            title: '执行时间', valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '执行时间', valueType: "text", search: false, dataIndex: 'createTime'
+        },
+        {
+            title: '执行时间',
+            key: 'between',
+            hideInTable: true,
+            dataIndex: 'between',
+            renderFormItem: () => (
+                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
+                    // 不允许选择大于今天的日期
+                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
+                }} />
+            )
         },
         {
             title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
-                    <Space>
-                        <Popconfirm
-                            onConfirm={() => refRemove(row)}
-                            title="确定删除吗"
-                        >
-                            <Button type="primary" onClick={() => refPut(row)}>
-                                <EditOutlined />
-                                执行
-                            </Button >
-                        </Popconfirm>
-
-                        <Button type="default">
-                            <EyeOutlined />
-                                详情
-                        </Button>
-
-                    </Space >
+                    <Button type="default">
+                        <EyeOutlined />
+                            详情
+                    </Button>
                 )
             }
         },
@@ -71,14 +70,14 @@ const Login: React.FC<{}> = () => {
 
     /**
      * 移除菜单
-     * @param row infoIds
+     * @param row jobLogIds
      */
-    const refRemove = async (infoIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
+    const refRemove = async (jobLogIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
         try {
-            if (!infoIds) {
+            if (!jobLogIds) {
                 return true
             }
-            const { code, msg } = await remove(infoIds.join(","))
+            const { code, msg } = await remove(jobLogIds.join(","))
             if (code != 200) {
                 return message.error(msg)
             }
@@ -97,7 +96,7 @@ const Login: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="infoId"
+                rowKey="jobLogId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -128,10 +127,26 @@ const Login: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
-                        <FundProjectionScreenOutlined />
-                        导出数据
-                    </Button>
+                    <Popconfirm
+                        onConfirm={() => exportExcel({ s: 1 })}
+                        title="是否导出数据"
+                    >
+                        <Button type="default">
+                            <FundProjectionScreenOutlined />
+                            导出数据
+                        </Button>
+                    </Popconfirm>,
+                    <Popconfirm
+                        onConfirm={() => refRemove(selectedRowKeys, action)}
+                        title="是否清空"
+                    >
+                        <Button
+                            type="primary" danger
+                        >
+                            <DeleteOutlined />
+                            清空
+                        </Button>
+                    </Popconfirm>
                 ]}
 
             />

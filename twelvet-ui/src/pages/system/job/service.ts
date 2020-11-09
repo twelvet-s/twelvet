@@ -69,3 +69,29 @@ export async function changeStatus(params?: { [key: string]: any }) {
         }
     })
 }
+
+/**
+ * 更改状态
+ * @param params
+ */
+export async function insert(params?: { [key: string]: any }) {
+    return request(`${controller}`, {
+        method: 'POST',
+        data: {
+            ...params
+        }
+    })
+}
+
+/**
+ * 更改状态
+ * @param params
+ */
+export async function update(params?: { [key: string]: any }) {
+    return request(`${controller}`, {
+        method: 'PUT',
+        data: {
+            ...params
+        }
+    })
+}
