@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { CaretRightOutlined, DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined, QuestionCircleFilled } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
+import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, run, insert, update } from './service'
 import { system } from '@/utils/twelvet'
@@ -75,11 +75,17 @@ const Job: React.FC<{}> = () => {
             title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
+
+                        <Button type="primary">
+                            <EditOutlined />
+                                修改
+                        </Button >
+
                         <Popconfirm
                             onConfirm={() => runJob(row)}
                             title="是否执行任务"
                         >
-                            <Button type="primary">
+                            <Button type="default">
                                 <CaretRightOutlined />
                                 执行
                             </Button >
