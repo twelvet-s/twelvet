@@ -56,19 +56,19 @@ public class SysJob extends BaseEntity {
      * cron计划策略
      */
     @Excel(name = "计划策略 ", readConverterExp = "0=默认,1=立即触发执行,2=触发一次执行,3=不触发立即执行")
-    private String misfirePolicy = ScheduleConstants.MISFIRE_DEFAULT;
+    private int misfirePolicy = ScheduleConstants.MISFIRE_DEFAULT;
 
     /**
      * 是否并发执行（0允许 1禁止）
      */
     @Excel(name = "并发执行", readConverterExp = "1=允许,0=禁止")
-    private String concurrent;
+    private int concurrent;
 
     /**
      * 任务状态（0正常 1暂停）
      */
     @Excel(name = "任务状态", readConverterExp = "1=正常,0=暂停")
-    private String status;
+    private int status;
 
     public Long getJobId() {
         return jobId;
@@ -124,27 +124,27 @@ public class SysJob extends BaseEntity {
         return null;
     }
 
-    public String getMisfirePolicy() {
+    public int getMisfirePolicy() {
         return misfirePolicy;
     }
 
-    public void setMisfirePolicy(String misfirePolicy) {
+    public void setMisfirePolicy(int misfirePolicy) {
         this.misfirePolicy = misfirePolicy;
     }
 
-    public String getConcurrent() {
+    public int getConcurrent() {
         return concurrent;
     }
 
-    public void setConcurrent(String concurrent) {
+    public void setConcurrent(int concurrent) {
         this.concurrent = concurrent;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

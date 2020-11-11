@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="jobGroup != null and jobGroup != ''">job_group = #{jobGroup},</if>
  			<if test="invokeTarget != null and invokeTarget != ''">invoke_target = #{invokeTarget},</if>
  			<if test="cronExpression != null and cronExpression != ''">cron_expression = #{cronExpression},</if>
- 			<if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy = #{misfirePolicy},</if>
+ 			<if test="misfirePolicy != null">misfire_policy = #{misfirePolicy},</if>
  			<if test="concurrent != null and concurrent != ''">concurrent = #{concurrent},</if>
  			<if test="status !=null">status = #{status},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="jobGroup != null and jobGroup != ''">job_group,</if>
  			<if test="invokeTarget != null and invokeTarget != ''">invoke_target,</if>
  			<if test="cronExpression != null and cronExpression != ''">cron_expression,</if>
- 			<if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy,</if>
+ 			<if test="misfirePolicy != null">misfire_policy,</if>
  			<if test="concurrent != null and concurrent != ''">concurrent,</if>
  			<if test="status != null and status != ''">status,</if>
  			<if test="remark != null and remark != ''">remark,</if>
@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="jobGroup != null and jobGroup != ''">#{jobGroup},</if>
  			<if test="invokeTarget != null and invokeTarget != ''">#{invokeTarget},</if>
  			<if test="cronExpression != null and cronExpression != ''">#{cronExpression},</if>
- 			<if test="misfirePolicy != null and misfirePolicy != ''">#{misfirePolicy},</if>
+ 			<if test="misfirePolicy != null">#{misfirePolicy},</if>
  			<if test="concurrent != null and concurrent != ''">#{concurrent},</if>
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>

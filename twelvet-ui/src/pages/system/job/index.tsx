@@ -4,13 +4,14 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, run, insert, update } from './service'
+import { pageQuery, remove, exportExcel, run, insert, update, getByJobId } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
 import JobStatus from './components/jobStatusSwitch/Index'
 import Details from './components/details/Index'
 import { FormInstance } from 'antd/lib/form'
+import { isArray } from 'lodash'
 
 /**
  * 定时任务
@@ -72,11 +73,15 @@ const Job: React.FC<{}> = () => {
             ]
         },
         {
-            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (
+                _: string,
+                row: { [key: string]: string },
+                action: UseFetchDataAction<RequestData<string>>
+            ) => {
                 return (
                     <Space>
 
-                        <Button type="primary">
+                        <Button type="primary" onClick={() => refPut(row)}>
                             <EditOutlined />
                                 修改
                         </Button >
@@ -101,11 +106,44 @@ const Job: React.FC<{}> = () => {
                             详情
                         </Button>
 
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.jobId, action)}
+                            title="是否删除"
+                        >
+                            <Button
+                                type="primary" danger
+                            >
+                                <DeleteOutlined />
+                                删除
+                        </Button>
+                        </Popconfirm>
+
                     </Space >
                 )
             }
         },
     ]
+
+    /**
+     * 获取修改菜单信息
+     * @param row row
+     */
+    const refPut = async (row: { [key: string]: any }) => {
+        try {
+            const { code, msg, data } = await getByJobId(row.jobId)
+            if (code != 200) {
+                return message.error(msg)
+            }
+            // 赋值表单数据
+            form.setFieldsValue(data)
+
+            // 设置Modal状态
+            setModal({ title: "修改", visible: true })
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
 
     /**
      * 执行任务
@@ -131,14 +169,23 @@ const Job: React.FC<{}> = () => {
 
     /**
      * 移除任务
-     * @param row infoIds
+     * @param row jobIds
      */
-    const refRemove = async (infoIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
+    const refRemove = async (jobIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
         try {
-            if (!infoIds) {
+            if (!jobIds) {
                 return true
             }
-            const { code, msg } = await remove(infoIds.join(","))
+
+
+            let params: string;
+            if(isArray(jobIds)){
+                params = jobIds.join(",")
+            }else{
+               params = jobIds
+            }
+
+            const { code, msg } = await remove(params)
             if (code != 200) {
                 return message.error(msg)
             }
@@ -173,7 +220,7 @@ const Job: React.FC<{}> = () => {
                         // 开启加载中
                         setLoadingModal(true)
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.postId == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = fields.jobId == 0 ? await insert(fields) : await update(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -270,7 +317,7 @@ const Job: React.FC<{}> = () => {
                         hidden
                         {...formItemLayout}
                         label="任务ID"
-                        name="postId"
+                        name="jobId"
                         initialValue={0}
                     >
                         <Input />

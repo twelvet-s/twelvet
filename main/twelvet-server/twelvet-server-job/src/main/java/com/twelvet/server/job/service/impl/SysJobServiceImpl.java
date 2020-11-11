@@ -141,10 +141,10 @@ public class SysJobServiceImpl implements ISysJobService {
     @Transactional
     public int changeStatus(SysJob job) throws SchedulerException {
         int rows = 0;
-        String status = job.getStatus();
-        if (ScheduleConstants.Status.NORMAL.getValue().equals(status)) {
+        int status = job.getStatus();
+        if (ScheduleConstants.Status.NORMAL.getValue() == status) {
             rows = resumeJob(job);
-        } else if (ScheduleConstants.Status.PAUSE.getValue().equals(status)) {
+        } else if (ScheduleConstants.Status.PAUSE.getValue() == status) {
             rows = pauseJob(job);
         }
         return rows;
