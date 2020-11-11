@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
+import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip, TreeSelect, Tree, Select } from 'antd'
 import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, run, insert, update, getByJobId } from './service'
 import { system } from '@/utils/twelvet'
@@ -90,7 +90,7 @@ const Job: React.FC<{}> = () => {
                             onConfirm={() => runJob(row)}
                             title="是否执行任务"
                         >
-                            <Button type="default">
+                            <Button type="primary">
                                 <CaretRightOutlined />
                                 执行
                             </Button >
@@ -179,10 +179,10 @@ const Job: React.FC<{}> = () => {
 
 
             let params: string;
-            if(isArray(jobIds)){
+            if (isArray(jobIds)) {
                 params = jobIds.join(",")
-            }else{
-               params = jobIds
+            } else {
+                params = jobIds
             }
 
             const { code, msg } = await remove(params)
@@ -342,7 +342,14 @@ const Job: React.FC<{}> = () => {
                                 name="jobGroup"
                                 rules={[{ required: true, message: '任务分组不能为空' }]}
                             >
-                                <Input placeholder="任务分组" />
+                                <Select
+                                    showSearch
+                                >
+
+                                    <Select.Option value={0}>男</Select.Option>
+                                    <Select.Option value={1}>女</Select.Option>
+
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>
