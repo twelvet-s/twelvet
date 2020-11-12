@@ -39,7 +39,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
     }
     settings: Settings
     dispatch: Dispatch
-    currentUser?: CurrentUser
+    menus:MenuDataItem[]
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     breadcrumbNameMap: {
@@ -64,7 +64,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
-    const [menuData, setMenuData] = useState<MenuDataItem[]>()
+    const [menuData, setMenuData] = useState<MenuDataItem[]>([])
 
     const {
         dispatch,
@@ -73,14 +73,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         location = {
             pathname: '/',
         },
-        currentUser = {
-            menus: []
-        }
+        menus
     } = props
 
     useEffect(() => {
-        setMenuData(currentUser.menus)
-
+        setMenuData(menus)
+        
+        console.log(menuData)
     }, [props])
 
 
@@ -176,7 +175,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 }
 
 export default connect(({ user, global, settings }: ConnectState) => ({
-    currentUser: user.currentUser,
+    menus: user.currentUser.menus,
     collapsed: global.collapsed,
     settings,
 }))(BasicLayout)

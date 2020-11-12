@@ -29,7 +29,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
         if (dispatch) {
             // 获取用户信息
             dispatch({
-                type: 'user/currentUser',
+                type: 'user/getCurrentUser',
             })
         }
     }

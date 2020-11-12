@@ -11,7 +11,7 @@ export interface CurrentUser {
         phonenumber?: number
         sex?: number
     }
-    menus?: MenuDataItem[]
+    menus: MenuDataItem[]
     role?: Array<{ [key: string]: string }>
     permissions?: Array<{ [key: string]: string }>
 
@@ -27,7 +27,7 @@ export interface UserModelType {
     effects: {
         fetch: Effect
         fetchCurrent: Effect
-        currentUser: Effect
+        getCurrentUser: Effect
     }
     reducers: {
         setCurrentUser: Reducer<UserModelState>
@@ -40,7 +40,9 @@ const UserModel: UserModelType = {
     namespace: 'user',
 
     state: {
-        currentUser: {},
+        currentUser: {
+            menus: []
+        },
     },
 
     effects: {
@@ -49,7 +51,7 @@ const UserModel: UserModelType = {
          * @param _ 获取当前登录用户的信息
          * @param param1 
          */
-        *currentUser(_, { call, put }) {
+        *getCurrentUser(_, { call, put }) {
             const { user, menus, role, permissions } = yield call(currentUser)
             yield put({
                 type: 'setCurrentUser',
@@ -93,14 +95,13 @@ const UserModel: UserModelType = {
                     sysUser: {
                         ...action.payload.sysUser || {}
                     },
-                    menus: {
-                        ...action.payload.menus || [{}]
-                    },
+                    menus: action.payload.menus || []
+                    ,
                     role: {
-                        ...action.payload.role || [{}]
+                        ...action.payload.role || []
                     },
                     permissions: {
-                        ...action.payload.permissions || [{}]
+                        ...action.payload.permissions || []
                     },
                 }
 
