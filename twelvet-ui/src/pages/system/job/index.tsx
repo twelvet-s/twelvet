@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
@@ -123,6 +123,13 @@ const Job: React.FC<{}> = () => {
             }
         },
     ]
+
+    /**
+     * 初始化数据
+     */
+    useEffect(() => {
+        
+    }, [])
 
     /**
      * 获取修改菜单信息

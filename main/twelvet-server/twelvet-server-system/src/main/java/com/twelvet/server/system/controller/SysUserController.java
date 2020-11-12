@@ -1,5 +1,6 @@
 package com.twelvet.server.system.controller;
 
+import com.twelvet.api.system.domain.SysMenu;
 import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
@@ -12,17 +13,13 @@ import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.framework.utils.TWTUtils;
-import com.twelvet.server.system.service.ISysPermissionService;
-import com.twelvet.server.system.service.ISysPostService;
-import com.twelvet.server.system.service.ISysRoleService;
-import com.twelvet.server.system.service.ISysUserService;
+import com.twelvet.server.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +46,9 @@ public class SysUserController extends TWTController {
 
     @Autowired
     private ISysPermissionService iSysPermissionService;
+
+    @Autowired
+    private ISysMenuService iSysMenuService;
 
     /**
      * 获取用户列表
@@ -126,10 +126,14 @@ public class SysUserController extends TWTController {
         Set<String> roles = iSysPermissionService.getRolePermission(userId);
         // 权限集合
         Set<String> permissions = iSysPermissionService.getMenuPermission(userId);
+        // 路由菜单
+        List<SysMenu> menus = iSysMenuService.selectMenuTreeByUserId(userId);
+
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", iSysUserService.selectUserById(userId));
         ajax.put("roles", roles);
         ajax.put("permissions", permissions);
+        ajax.put("menus", iSysMenuService.buildMenus(menus));
         return ajax;
     }
 

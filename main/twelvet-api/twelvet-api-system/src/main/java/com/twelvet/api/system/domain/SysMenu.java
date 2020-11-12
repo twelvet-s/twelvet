@@ -81,7 +81,7 @@ public class SysMenu extends BaseEntity {
     /**
      * 子菜单
      */
-    private List<SysMenu> children = new ArrayList<>();
+    private List<SysMenu> routes = new ArrayList<>();
 
     public Long getMenuId() {
         return menuId;
@@ -187,12 +187,12 @@ public class SysMenu extends BaseEntity {
         this.icon = icon;
     }
 
-    public List<SysMenu> getChildren() {
-        return children;
+    public List<SysMenu> getRoutes() {
+        return routes;
     }
 
-    public void setChildren(List<SysMenu> children) {
-        this.children = children;
+    public void setRoutes(List<SysMenu> routes) {
+        this.routes = routes;
     }
 
     @Override
@@ -211,7 +211,7 @@ public class SysMenu extends BaseEntity {
                 ", status='" + status + '\'' +
                 ", perms='" + perms + '\'' +
                 ", icon='" + icon + '\'' +
-                ", children=" + children +
+                ", routes=" + routes +
                 '}';
     }
 }

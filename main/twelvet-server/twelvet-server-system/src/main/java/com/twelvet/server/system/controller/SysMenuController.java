@@ -107,8 +107,7 @@ public class SysMenuController extends TWTController {
      * 加载对应角色菜单列表树
      */
     @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
-    public AjaxResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId)
-    {
+    public AjaxResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();
         List<SysMenu> menus = iSysMenuService.selectMenuList(userId);
@@ -124,8 +123,7 @@ public class SysMenuController extends TWTController {
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeSelect")
-    public AjaxResult treeSelect(SysMenu menu)
-    {
+    public AjaxResult treeSelect(SysMenu menu) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();
         List<SysMenu> menus = iSysMenuService.selectMenuList(menu, userId);

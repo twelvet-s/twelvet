@@ -37,7 +37,7 @@ public class RouterVo
     private String component;
 
     /**
-     * 当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
+     * 当你一个路由下面的 routes 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
      */
     private Boolean alwaysShow;
 
@@ -49,7 +49,7 @@ public class RouterVo
     /**
      * 子路由
      */
-    private List<RouterVo> children;
+    private List<RouterVo> routes;
 
     public String getName()
     {
@@ -121,13 +121,13 @@ public class RouterVo
         this.meta = meta;
     }
 
-    public List<RouterVo> getChildren()
+    public List<RouterVo> getRoutes()
     {
-        return children;
+        return routes;
     }
 
-    public void setChildren(List<RouterVo> children)
+    public void setRoutes(List<RouterVo> routes)
     {
-        this.children = children;
+        this.routes = routes;
     }
 }

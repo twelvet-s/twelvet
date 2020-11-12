@@ -3,10 +3,10 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { MenuDataItem, BasicLayoutProps as ProLayoutProps, Settings } from '@ant-design/pro-layout'
+import ProLayout, { BasicLayoutProps as ProLayoutProps, Settings, MenuDataItem } from '@ant-design/pro-layout'
 import { createFromIconfontCN } from '@ant-design/icons'
-import React, { useEffect } from 'react'
-import { Link, useIntl, connect, Dispatch, history } from 'umi'
+import React, { useEffect, useState } from 'react'
+import { Link, useIntl, connect, Dispatch, history, CurrentUser } from 'umi'
 import { Result, Button } from 'antd'
 import Authorized from '@/utils/Authorized'
 import RightContent from '@/components/GlobalHeader/RightContent'
@@ -39,6 +39,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
     }
     settings: Settings
     dispatch: Dispatch
+    currentUser?: CurrentUser
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     breadcrumbNameMap: {
@@ -48,17 +49,22 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
+    return (
+        menuList.map((item) => {
+            const localItem = {
+                ...item,
+                children: item.children ? menuDataRender(item.children) : undefined,
+            }
+            return Authorized.check(item.authority, localItem, null) as MenuDataItem
+        })
+    )
+}
 
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-    menuList.map((item) => {
-        const localItem = {
-            ...item,
-            children: item.children ? menuDataRender(item.children) : undefined,
-        }
-        return Authorized.check(item.authority, localItem, null) as MenuDataItem
-    })
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+
+    const [menuData, setMenuData] = useState<MenuDataItem[]>()
 
     const {
         dispatch,
@@ -67,7 +73,16 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         location = {
             pathname: '/',
         },
+        currentUser = {
+            menus: []
+        }
     } = props
+
+    useEffect(() => {
+        setMenuData(currentUser.menus)
+
+    }, [props])
+
 
     /**
      * init variables
@@ -143,7 +158,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     )
             }}
             footerRender={() => <Footer />}
-            menuDataRender={menuDataRender}
+            // 渲染菜单数据
+            menuDataRender={() => menuData}
             rightContentRender={() => <RightContent />}
             {...props}
             {...settings}
@@ -159,7 +175,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     )
 }
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ user, global, settings }: ConnectState) => ({
+    currentUser: user.currentUser,
     collapsed: global.collapsed,
     settings,
 }))(BasicLayout)

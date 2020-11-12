@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi'
 
 import { queryCurrent, query as queryUsers, currentUser } from '@/services/user'
+import { MenuDataItem } from '@ant-design/pro-layout'
 
 export interface CurrentUser {
     sysUser?: {
@@ -10,8 +11,10 @@ export interface CurrentUser {
         phonenumber?: number
         sex?: number
     }
-    role?: string
-    permissions?: string
+    menus?: MenuDataItem[]
+    role?: Array<{ [key: string]: string }>
+    permissions?: Array<{ [key: string]: string }>
+
 }
 
 export interface UserModelState {
@@ -47,10 +50,15 @@ const UserModel: UserModelType = {
          * @param param1 
          */
         *currentUser(_, { call, put }) {
-            const { data } = yield call(currentUser)
+            const { user, menus, role, permissions } = yield call(currentUser)
             yield put({
                 type: 'setCurrentUser',
-                payload: data,
+                payload: {
+                    user,
+                    menus,
+                    role,
+                    permissions
+                },
             })
         },
 
@@ -84,9 +92,18 @@ const UserModel: UserModelType = {
                 currentUser: {
                     sysUser: {
                         ...action.payload.sysUser || {}
-                    }
-
+                    },
+                    menus: {
+                        ...action.payload.menus || [{}]
+                    },
+                    role: {
+                        ...action.payload.role || [{}]
+                    },
+                    permissions: {
+                        ...action.payload.permissions || [{}]
+                    },
                 }
+
             }
         },
 
