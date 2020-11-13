@@ -33,16 +33,16 @@ type TwelveT = {
     /**
      * @name menu 相关的一些配置
      */
-    menu?: {
-        locale?: boolean;
-        defaultOpenAll?: boolean;
-        loading?: boolean;
-    };
+    // menu?: {
+    //     locale?: boolean;
+    //     defaultOpenAll?: boolean;
+    //     loading?: boolean;
+    // };
     /**
      * @name Layout 的 title，也会显示在浏览器标签上
      * @description 设置为 false，在 layout 中只展示 pageName，而不是 pageName - title
      */
-    title: string | false;
+    title?: string | false;
     /**
      * Your custom iconfont Symbol script Url
      * eg：//at.alicdn.com/t/font_1039637_btcrd5co4w.js
@@ -75,7 +75,10 @@ const proSettings: TwelveT = {
     fixedHeader: false,
     fixSiderbar: true,
     colorWeak: false,
-    title: 'TwelveT',
+    //title: 'TwelveT',
+    // menu: {
+    //     locale: false,
+    // },
     pwa: false,
     iconfontUrl: '//at.alicdn.com/t/font_2059726_lmlo0aw2i3b.js',
 };

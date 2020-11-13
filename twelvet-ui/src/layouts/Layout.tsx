@@ -6,7 +6,7 @@
 import ProLayout, { BasicLayoutProps as ProLayoutProps, Settings, MenuDataItem } from '@ant-design/pro-layout'
 import { createFromIconfontCN } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
-import { Link, useIntl, connect, Dispatch, history, CurrentUser } from 'umi'
+import { Link, useIntl, connect, Dispatch, history } from 'umi'
 import { Result, Button } from 'antd'
 import Authorized from '@/utils/Authorized'
 import RightContent from '@/components/GlobalHeader/RightContent'
@@ -39,7 +39,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
     }
     settings: Settings
     dispatch: Dispatch
-    menus:MenuDataItem[]
+    currentUser: currentUser
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     breadcrumbNameMap: {
@@ -66,6 +66,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     const [menuData, setMenuData] = useState<MenuDataItem[]>([])
 
+    // 菜单加载状态控制
+    const [loading, setLoading] = useState(true);
+
+    const [title, setTitle] = useState<string>('undefined')
+
     const {
         dispatch,
         children,
@@ -73,15 +78,27 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         location = {
             pathname: '/',
         },
-        menus
+        currentUser = {}
     } = props
 
+    /**
+     * 当获取到最新菜单时执行
+     */
     useEffect(() => {
+        const { menus = [] } = currentUser;
         setMenuData(menus)
-        
-        console.log(menuData)
-    }, [props])
+        // 设置标题
+        setTitle('TwelveT')
+    }, [currentUser])
 
+    /**
+     * 当数据发生改变时执行
+     */
+    useEffect(() => {
+        if(menuData.length > 0){
+            setLoading(false)
+        }
+    }, [menuData])
 
     /**
      * init variables
@@ -104,6 +121,16 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     return (
         <ProLayout
             logo={logo}
+            menu={{
+                defaultOpenAll: false,
+                locale: false,
+                // 控制菜单渲染
+                loading,
+            }}
+            // 渲染菜单数据
+            menuDataRender={() => menuData}
+            // 标题
+            title={title}
             formatMessage={formatMessage}
             onCollapse={handleMenuCollapse}
             // 点击头部Logo
@@ -157,11 +184,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     )
             }}
             footerRender={() => <Footer />}
-            // 渲染菜单数据
-            menuDataRender={() => menuData}
             rightContentRender={() => <RightContent />}
             {...props}
             {...settings}
+
         >
             <Authorized authority={authorized!.authority} noMatch={noMatch}>
                 {/* 页面位置信息 */}
@@ -175,7 +201,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 }
 
 export default connect(({ user, global, settings }: ConnectState) => ({
-    menus: user.currentUser.menus,
+    currentUser: user.currentUser,
     collapsed: global.collapsed,
     settings,
 }))(BasicLayout)

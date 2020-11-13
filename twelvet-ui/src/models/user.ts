@@ -95,14 +95,9 @@ const UserModel: UserModelType = {
                     sysUser: {
                         ...action.payload.sysUser || {}
                     },
-                    menus: action.payload.menus || []
-                    ,
-                    role: {
-                        ...action.payload.role || []
-                    },
-                    permissions: {
-                        ...action.payload.permissions || []
-                    },
+                    menus: action.payload.menus || [],
+                    role: action.payload.role || [],
+                    permissions: action.payload.permissions || [],
                 }
 
             }
