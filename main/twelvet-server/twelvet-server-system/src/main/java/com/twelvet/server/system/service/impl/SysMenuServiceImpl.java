@@ -118,13 +118,14 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public List<RouterVo> buildMenus(List<SysMenu> menus) {
-        List<RouterVo> routers = new LinkedList<RouterVo>();
+        List<RouterVo> routers = new LinkedList<>();
         for (SysMenu menu : menus) {
             RouterVo router = new RouterVo();
             router.setHidden("1".equals(menu.getVisible()));
-            router.setName(getRouteName(menu));
+            router.setName(menu.getMenuName());
             router.setPath(getRouterPath(menu));
             router.setComponent(getComponent(menu));
+            router.setIcon(menu.getIcon());
             router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
             List<SysMenu> cMenus = menu.getRoutes();
             if (!cMenus.isEmpty() && UserConstants.TYPE_DIR.equals(menu.getMenuType())) {
@@ -200,7 +201,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public boolean hasChildByMenuId(Long menuId) {
         int result = menuMapper.hasChildByMenuId(menuId);
-        return result > 0 ? true : false;
+        return result > 0;
     }
 
     /**
@@ -212,7 +213,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public boolean checkMenuExistRole(Long menuId) {
         int result = roleMenuMapper.checkMenuExistRole(menuId);
-        return result > 0 ? true : false;
+        return result > 0;
     }
 
     /**
@@ -256,9 +257,9 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public String checkMenuNameUnique(SysMenu menu) {
-        Long menuId = TWTUtils.isEmpty(menu.getMenuId()) ? -1L : menu.getMenuId();
+        long menuId = TWTUtils.isEmpty(menu.getMenuId()) ? -1L : menu.getMenuId();
         SysMenu info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
-        if (TWTUtils.isNotEmpty(info) && info.getMenuId().longValue() != menuId.longValue()) {
+        if (TWTUtils.isNotEmpty(info) && info.getMenuId() != menuId) {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
@@ -271,7 +272,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @return 路由名称
      */
     private String getRouteName(SysMenu menu) {
-        String routerName = StringUtils.capitalize(menu.getPath());
+        String routerName = menu.getPath();
         // 非外链并且是一级目录（类型为目录）
         if (isMeunFrame(menu)) {
             routerName = StringUtils.EMPTY;
@@ -332,7 +333,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @return String
      */
     private List<SysMenu> getChildPerms(List<SysMenu> list, int parentId) {
-        List<SysMenu> returnList = new ArrayList<SysMenu>();
+        List<SysMenu> returnList = new ArrayList<>();
         for (SysMenu t : list) {
             // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
             if (t.getParentId() == parentId) {

@@ -42,6 +42,11 @@ public class RouterVo
     private Boolean alwaysShow;
 
     /**
+     * icon
+     */
+    private String icon;
+
+    /**
      * 其他元素
      */
     private MetaVo meta;
@@ -109,6 +114,16 @@ public class RouterVo
     public void setAlwaysShow(Boolean alwaysShow)
     {
         this.alwaysShow = alwaysShow;
+    }
+
+    public String getIcon()
+    {
+        return icon;
+    }
+
+    public void setIcon(String icon)
+    {
+        this.icon = icon;
     }
 
     public MetaVo getMeta()

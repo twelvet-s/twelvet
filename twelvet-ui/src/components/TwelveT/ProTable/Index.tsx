@@ -208,7 +208,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                 try {
                     const res: any = await request(params, sort, filter)
 
-                    const { code, msg, data } = res
+                    const { code, msg, data = {} } = res
 
                     const { total, records } = data
 

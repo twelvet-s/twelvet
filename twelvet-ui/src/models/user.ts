@@ -11,7 +11,10 @@ export interface CurrentUser {
         phonenumber?: number
         sex?: number
     }
-    menus: MenuDataItem[]
+    menuData: {
+        data: MenuDataItem[]
+        loading: boolean
+    }
     role?: Array<{ [key: string]: string }>
     permissions?: Array<{ [key: string]: string }>
 
@@ -41,7 +44,10 @@ const UserModel: UserModelType = {
 
     state: {
         currentUser: {
-            menus: []
+            menuData: {
+                data: [],
+                loading: true
+            }
         },
     },
 
@@ -95,7 +101,12 @@ const UserModel: UserModelType = {
                     sysUser: {
                         ...action.payload.sysUser || {}
                     },
-                    menus: action.payload.menus || [],
+                    menuData: {
+                        data: [
+                            ...action.payload.menus || [],
+                        ],
+                        loading: false
+                    },
                     role: action.payload.role || [],
                     permissions: action.payload.permissions || [],
                 }

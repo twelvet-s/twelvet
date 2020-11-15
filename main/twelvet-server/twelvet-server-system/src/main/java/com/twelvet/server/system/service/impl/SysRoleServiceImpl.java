@@ -124,9 +124,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public String checkRoleKeyUnique(SysRole role) {
-        Long roleId = TWTUtils.isEmpty(role.getRoleId()) ? -1L : role.getRoleId();
+        long roleId = TWTUtils.isEmpty(role.getRoleId()) ? -1L : role.getRoleId();
         SysRole info = sysRoleMapper.checkRoleKeyUnique(role.getRoleKey());
-        if (TWTUtils.isNotEmpty(info) && info.getRoleId().longValue() != roleId.longValue()) {
+        if (TWTUtils.isNotEmpty(info) && info.getRoleId() != roleId) {
             return UserConstants.NOT_UNIQUE;
         }
         return UserConstants.UNIQUE;
@@ -139,9 +139,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void checkRoleAllowed(SysRole role) {
-        if (TWTUtils.isNotEmpty(role.getRoleId()) && role.isAdmin()) {
+        /*if (TWTUtils.isNotEmpty(role.getRoleId()) && role.isAdmin()) {
             throw new TWTException("不允许操作超级管理员角色");
-        }
+        }*/
     }
 
     /**

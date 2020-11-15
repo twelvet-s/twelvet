@@ -53,7 +53,7 @@ public class TWTExceptionHandler {
     public AjaxResult handleException(Exception e)
     {
         log.error(e.getMessage(), e);
-        return AjaxResult.error("系统内部出错！！！");
+        return AjaxResult.error("无法完成此请求，请检查您的操作！！！");
     }
 
 }

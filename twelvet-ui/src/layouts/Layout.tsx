@@ -64,12 +64,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
-    const [menuData, setMenuData] = useState<MenuDataItem[]>([])
-
-    // 菜单加载状态控制
-    const [loading, setLoading] = useState(true);
-
-    const [title, setTitle] = useState<string>('undefined')
+    const [title, setTitle] = useState<string>('TwelveT')
 
     const {
         dispatch,
@@ -78,27 +73,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         location = {
             pathname: '/',
         },
-        currentUser = {}
-    } = props
-
-    /**
-     * 当获取到最新菜单时执行
-     */
-    useEffect(() => {
-        const { menus = [] } = currentUser;
-        setMenuData(menus)
-        // 设置标题
-        setTitle('TwelveT')
-    }, [currentUser])
-
-    /**
-     * 当数据发生改变时执行
-     */
-    useEffect(() => {
-        if(menuData.length > 0){
-            setLoading(false)
+        currentUser = {
+            menuData: {
+                data: [],
+                loading: true
+            }
         }
-    }, [menuData])
+    } = props
 
     /**
      * init variables
@@ -120,15 +101,24 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     return (
         <ProLayout
-            logo={logo}
+            navTheme='dark'
+            // 拂晓蓝
+            primaryColor='#1890ff'
+            layout='side'
+            contentWidth='Fluid'
+            fixedHeader={false}
+            fixSiderbar={true}
+            colorWeak={false}
+            iconfontUrl='//at.alicdn.com/t/font_2059726_do160kxqhh.js'
             menu={{
                 defaultOpenAll: false,
-                locale: false,
+                locale: true,
                 // 控制菜单渲染
-                loading,
+                loading: currentUser.menuData.loading,
             }}
+            logo={logo}
             // 渲染菜单数据
-            menuDataRender={() => menuData}
+            menuDataRender={() => currentUser.menuData.data}
             // 标题
             title={title}
             formatMessage={formatMessage}
@@ -186,7 +176,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             footerRender={() => <Footer />}
             rightContentRender={() => <RightContent />}
             {...props}
-            {...settings}
 
         >
             <Authorized authority={authorized!.authority} noMatch={noMatch}>

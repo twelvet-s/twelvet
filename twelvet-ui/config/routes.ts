@@ -53,6 +53,13 @@ export default [
                             name: 'job',
                             path: '/system/job',
                             component: './system/job'
+                        },
+                        {
+                            title: '字典管理',
+                            icon: 'icon-dictionaries',
+                            name: 'dictionaries',
+                            path: '/system/dictionaries',
+                            component: './system/dictionaries'
                         }
                     ]
                 },

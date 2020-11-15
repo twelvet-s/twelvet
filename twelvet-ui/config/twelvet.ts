@@ -63,7 +63,6 @@ type TwelveT = {
      * @description 只在 mix 模式下生效
      */
     splitMenus?: boolean;
-    pwa: boolean,
 };
 
 const proSettings: TwelveT = {
@@ -79,8 +78,7 @@ const proSettings: TwelveT = {
     // menu: {
     //     locale: false,
     // },
-    pwa: false,
-    iconfontUrl: '//at.alicdn.com/t/font_2059726_lmlo0aw2i3b.js',
+    iconfontUrl: '//at.alicdn.com/t/font_2059726_do160kxqhh.js',
 };
 
 export type { TwelveT };
