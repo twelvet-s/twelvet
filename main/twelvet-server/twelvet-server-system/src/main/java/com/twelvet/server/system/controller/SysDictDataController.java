@@ -43,7 +43,7 @@ public class SysDictDataController extends TWTController
     @PostMapping("/exportExcel")
     public void export(HttpServletResponse response, SysDictData sysDictData) {
         List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
-        ExcelUtils<SysDictData> excelUtils = new ExcelUtils<SysDictData>(SysDictData.class);
+        ExcelUtils<SysDictData> excelUtils = new ExcelUtils<>(SysDictData.class);
         excelUtils.exportExcel(response, list, "字典数据");
     }
 

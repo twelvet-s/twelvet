@@ -18,12 +18,12 @@ const Role: React.FC<{}> = () => {
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
-    const [drawerInfo] = useState<{
+    const [drawerInfo, setDrawerInfo] = useState<{
         drawerInfoKey: string
         visible: boolean
     }>({
-        drawerInfoKey: 's',
-        visible: true
+        drawerInfoKey: '',
+        visible: false
     })
 
     // 是否执行Modal数据操作中
@@ -76,7 +76,12 @@ const Role: React.FC<{}> = () => {
                         <EditOutlined />
                         修改
                     </Button>,
-                    <Button type="primary" onClick={() => refPut(row)}>
+                    <Button type="primary" onClick={() => {
+                        setDrawerInfo({
+                            drawerInfoKey: row.dictType,
+                            visible: true
+                        })
+                    }}>
                         <SettingOutlined />
                         数据管理
                     </Button>,
@@ -320,6 +325,12 @@ const Role: React.FC<{}> = () => {
             </Modal>
 
             <DrawerInfo
+                onClose={() => {
+                    setDrawerInfo({
+                        drawerInfoKey: '',
+                        visible: false
+                    })
+                }}
                 info={drawerInfo}
             />
         </>

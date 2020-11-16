@@ -5,9 +5,9 @@
  */
 import ProLayout, { BasicLayoutProps as ProLayoutProps, Settings, MenuDataItem } from '@ant-design/pro-layout'
 import { createFromIconfontCN } from '@ant-design/icons'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useIntl, connect, Dispatch, history } from 'umi'
-import { Result, Button } from 'antd'
+import { Result, Button, Input } from 'antd'
 import Authorized from '@/utils/Authorized'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import { ConnectState } from '@/models/connect'
@@ -64,12 +64,9 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
-    const [title, setTitle] = useState<string>('TwelveT')
-
     const {
         dispatch,
         children,
-        settings,
         location = {
             pathname: '/',
         },
@@ -80,6 +77,31 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             }
         }
     } = props
+
+    const [title] = useState<string>('TwelveT')
+
+    const [keyWord, setKeyWord] = useState('')
+
+    /**
+     * 关键字搜索菜单
+     * @param data 
+     * @param keyWord 
+     */
+    const filterByMenuDate = (data: MenuDataItem[], keyWord: string): MenuDataItem[] => {
+        return data
+            .map((item) => {
+                if ((item.name && item.name.includes(keyWord)) ||
+                    filterByMenuDate(item.children || [], keyWord).length > 0) {
+                    return {
+                        ...item,
+                        children: filterByMenuDate(item.children || [], keyWord),
+                    }
+                }
+                return undefined
+            })
+            .filter((item) => item) as MenuDataItem[]
+    }
+
 
     /**
      * init variables
@@ -112,13 +134,29 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             iconfontUrl='//at.alicdn.com/t/font_2059726_do160kxqhh.js'
             menu={{
                 defaultOpenAll: false,
-                locale: true,
+                locale: false,
                 // 控制菜单渲染
                 loading: currentUser.menuData.loading,
             }}
             logo={logo}
             // 渲染菜单数据
             menuDataRender={() => currentUser.menuData.data}
+            // 额外主体渲染
+            menuExtraRender={({ collapsed }) =>
+                // 菜单搜索框
+                !collapsed && (
+                    <Input.Search
+                        allowClear
+                        enterButton
+                        placeholder='搜索菜单'
+                        size='small'
+                        onSearch={(e) => {
+                            setKeyWord(e);
+                        }}
+                    />
+                )
+            }
+            postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
             // 标题
             title={title}
             formatMessage={formatMessage}
@@ -126,7 +164,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             // 点击头部Logo
             onMenuHeaderClick={() => history.push('/')}
             // 重写菜单渲染
-            menuItemRender={(TWTProps, TWTDom) => {
+            menuItemRender={(TWTProps) => {
                 return (
                     <span className="ant-pro-menu-item">
                         <Link to={TWTProps.path ? TWTProps.path : '#'}>

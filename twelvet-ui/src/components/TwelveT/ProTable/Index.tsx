@@ -179,6 +179,8 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
          * 是否手动触发请求
          */
         manualRequest,
+        // 发送请求前的参数处理
+		beforeRequest = () => { },
     } = props
 
 
@@ -206,6 +208,9 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
             // 请求数据地址
             request={async (params, sort, filter) => {
                 try {
+                    // 所有请求前执行的函数
+                    beforeRequest(params)
+
                     const res: any = await request(params, sort, filter)
 
                     const { code, msg, data = {} } = res

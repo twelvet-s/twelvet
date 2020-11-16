@@ -5,7 +5,7 @@ import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutline
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Drawer, InputNumber } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, getBydictId, insert, update } from './service'
+import { pageQuery, remove, exportExcel, getBydictCode, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 
@@ -17,6 +17,7 @@ const DrawerInfo: React.FC<{
         drawerInfoKey: string
         visible: boolean
     }
+    onClose: () => void
 }> = (props) => {
 
     // 显示Modal
@@ -25,14 +26,13 @@ const DrawerInfo: React.FC<{
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
-    const [drawerVisible, setDrawerVisible] = useState<boolean>(true)
-
     const acForm = useRef<ActionType>()
 
     const [form] = Form.useForm<FormInstance>()
 
-
     const { TextArea } = Input
+
+    const { info, onClose } = props
 
     const formItemLayout = {
         labelCol: {
@@ -51,10 +51,10 @@ const DrawerInfo: React.FC<{
             title: '字典标签', ellipsis: true, valueType: "text", dataIndex: 'dictLabel',
         },
         {
-            title: '字典键值', valueType: "text", dataIndex: 'dictValue'
+            title: '字典键值', search: false, valueType: "text", dataIndex: 'dictValue'
         },
         {
-            title: '字典排序', valueType: "text", dataIndex: 'dictSort'
+            title: '字典排序', search: false, valueType: "text", dataIndex: 'dictSort'
         },
         {
             title: '状态',
@@ -79,7 +79,7 @@ const DrawerInfo: React.FC<{
                         修改
                     </Button>,
                     <Popconfirm
-                        onConfirm={() => refRemove(row.dictId)}
+                        onConfirm={() => refRemove(row.dictCode)}
                         title="确定删除吗"
                     >
                         <Button type="primary" danger>
@@ -97,6 +97,9 @@ const DrawerInfo: React.FC<{
      * @param row row
      */
     const refPost = async () => {
+        form.setFieldsValue({
+            dictType: props.info.drawerInfoKey
+        })
         setModal({ title: "新增", visible: true })
     }
 
@@ -106,7 +109,7 @@ const DrawerInfo: React.FC<{
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await getBydictId(row.dictId)
+            const { code, msg, data } = await getBydictCode(row.dictCode)
             if (code != 200) {
                 return message.error(msg)
             }
@@ -123,19 +126,19 @@ const DrawerInfo: React.FC<{
 
     /**
      * 移除字典
-     * @param row dictIds
+     * @param row dictCodes
      */
-    const refRemove = async (dictIds: (string | number)[] | string | undefined) => {
+    const refRemove = async (dictCodes: (string | number)[] | string | undefined) => {
         try {
-            if (!dictIds) {
+            if (!dictCodes) {
                 return true
             }
 
             let params
-            if (isArray(dictIds)) {
-                params = dictIds.join(",")
+            if (isArray(dictCodes)) {
+                params = dictCodes.join(",")
             } else {
-                params = dictIds
+                params = dictCodes
             }
 
             const { code, msg } = await remove(params)
@@ -177,7 +180,7 @@ const DrawerInfo: React.FC<{
                         setLoadingModal(true)
 
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.dictId == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = fields.dictCode == 0 ? await insert(fields) : await update(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -208,29 +211,20 @@ const DrawerInfo: React.FC<{
             placement="right"
             closable={false}
             onClose={() => {
-                setDrawerVisible(false)
+                onClose()
             }}
-            visible={props.info.visible}
+            visible={info.visible}
         >
             <TWTProTable
                 headerTitle='数据管理'
                 actionRef={acForm}
-                rowKey="dictId"
+                rowKey="dictCode"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
-                beforeSearchSubmit={(params) => {
-                    // 分隔搜索参数
-                    if (params.between) {
-                        const { between } = params
-                        // 移除参数
-                        delete params.between
-
-                        // 适配参数
-                        params.beginTime = between[0]
-                        params.endTime = between[1]
-                    }
-                    return params
+                beforeRequest={(params) => {
+                    // 加入类型
+                    params.dictType = props.info.drawerInfoKey
                 }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Button type="default" onClick={refPost}>
@@ -276,11 +270,12 @@ const DrawerInfo: React.FC<{
                     name="Menu"
                     form={form}
                 >
+
                     <Form.Item
                         hidden
                         {...formItemLayout}
-                        label="字典ID"
-                        name="dictId"
+                        label="字典Code"
+                        name="dictCode"
                         initialValue={0}
                     >
                         <Input />
@@ -289,15 +284,15 @@ const DrawerInfo: React.FC<{
                     <Form.Item
                         {...formItemLayout}
                         label="字典类型"
-                        name="dictName"
+                        name="dictType"
                     >
-                        <Input placeholder="字典名称" />
+                        <Input disabled placeholder="字典类型" />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
                         label="数据标签"
-                        name="dictType"
+                        name="dictLabel"
                         rules={[{ required: true, message: '数据标签不能为空' }]}
                     >
                         <Input placeholder="数据标签" />
@@ -306,7 +301,7 @@ const DrawerInfo: React.FC<{
                     <Form.Item
                         {...formItemLayout}
                         label="数据键值"
-                        name="status"
+                        name="dictValue"
                         rules={[{ required: true, message: '数据键值不能为空' }]}
                     >
                         <Input placeholder="数据键值" />
@@ -315,7 +310,7 @@ const DrawerInfo: React.FC<{
                     <Form.Item
                         {...formItemLayout}
                         label="显示排序"
-                        name="status"
+                        name="dictSort"
                         initialValue={0}
                         rules={[{ required: true, message: '显示排序不能为空' }]}
                     >

@@ -56,7 +56,7 @@ export async function pageQuery(params: { [key: string]: any }) {
  * 获取指定字典信息
  * @param params 搜索参数
  */
-export async function getBydictId(postId: number) {
+export async function getBydictCode(postId: number) {
     return request(`${controller}/${postId}`, {
         method: 'GET'
     });
