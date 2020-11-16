@@ -97,9 +97,11 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 获取字典选择框列表
+     *
+     * @return AjaxResult
      */
-    @GetMapping("/optionselect")
-    public AjaxResult optionselect() {
+    @GetMapping("/optionSelect")
+    public AjaxResult optionSelect() {
         List<SysDictType> dictTypes = dictTypeService.selectDictTypeAll();
         return AjaxResult.success(dictTypes);
     }
