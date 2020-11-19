@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { message, Select } from 'antd'
-import { optionSelect } from './service'
+import { getDictionariesType } from './service'
 import { system } from '@/utils/twelvet'
 
 /**
  * 字典模块数据管理类型选择器
  */
-const DrawerInfo: React.FC<{}> = (props) => {
+const DictionariesSelect: React.FC<{
+    type: string
+}> = (props) => {
 
     const { Option } = Select
 
     const [treeData, setTreeData] = useState<Array<React.ReactNode>>([])
+
+    const { type } = props
 
     useEffect(() => {
         makeTree()
@@ -18,7 +22,7 @@ const DrawerInfo: React.FC<{}> = (props) => {
 
     const makeTree = async () => {
         try {
-            const { code, msg, data } = await optionSelect()
+            const { code, msg, data } = await getDictionariesType(type)
             if (code != 200) {
                 return message.error(msg)
             }
@@ -26,12 +30,12 @@ const DrawerInfo: React.FC<{}> = (props) => {
             // 制作数据
             let tree: Array<React.ReactNode> = []
             data.map((item: {
-                dictId: number
-                dictType: string
-                dictName: string
+                dictCode: number
+                dictValue: string
+                dictLabel: string
             }) => {
                 tree.push(
-                    <Option key={item.dictId} value={item.dictType}>{item.dictName}</Option>
+                    <Option key={item.dictCode} value={item.dictValue}>{item.dictLabel}</Option>
                 )
             })
 
@@ -45,7 +49,7 @@ const DrawerInfo: React.FC<{}> = (props) => {
     return (
         <Select
             {...props}
-            placeholder='字典名称'
+            placeholder='请选择'
             showSearch
             allowClear
         >
@@ -55,4 +59,4 @@ const DrawerInfo: React.FC<{}> = (props) => {
 
 }
 
-export default DrawerInfo
+export default DictionariesSelect

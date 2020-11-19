@@ -63,6 +63,16 @@ export async function getBydictId(postId: number) {
 }
 
 /**
+ * 获取指定字典信息
+ * @param params 搜索参数
+ */
+export async function clearCache() {
+    return request(`${controller}/clearCache`, {
+        method: 'DELETE'
+    });
+}
+
+/**
  * 导出Excel
  * @param params
  */

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
+import SelectType from './components/selectType/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Drawer, InputNumber } from 'antd'
 import { FormInstance } from 'antd/lib/form'
@@ -8,6 +9,7 @@ import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, getBydictCode, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
+import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
 
 /**
  * 字典模块数据管理
@@ -47,6 +49,14 @@ const DrawerInfo: React.FC<{
 
     // Form参数
     const columns: ProColumns<TableListItem> = [
+        {
+            title: '字典名称',
+            key: 'dictType',
+            hideInTable: true,
+            initialValue: props.info.drawerInfoKey,
+            dataIndex: 'dictType',
+            renderFormItem: () => <SelectType {...props}/>
+        },
         {
             title: '字典标签', ellipsis: true, valueType: "text", dataIndex: 'dictLabel',
         },
@@ -222,10 +232,10 @@ const DrawerInfo: React.FC<{
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
-                beforeRequest={(params) => {
-                    // 加入类型
-                    params.dictType = props.info.drawerInfoKey
-                }}
+                // beforeRequest={(params) => {
+                //     // 加入类型
+                //     params.dictType = props.info.drawerInfoKey
+                // }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Button type="default" onClick={refPost}>
                         <PlusOutlined />

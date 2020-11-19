@@ -1,71 +1,14 @@
-import request, { download } from '@/utils/request'
+import request from '@/utils/request'
 
 // 请求的控制器名称
-const controller = "/system/dictionaries/data";
-
-/**
- * 新增字典
- * @param params 搜索参数
- */
-export async function insert(params: { [key: string]: any }) {
-    return request(`${controller}`, {
-        method: 'POST',
-        data: {
-            ...params
-        },
-    });
-}
-
-/**
- * 删除
- * @param postId 字典ID 
- */
-export async function remove(postIds: (string | number)[] | string) {
-    return request(`${controller}/${postIds}`, {
-        method: 'DELETE',
-    });
-}
-
-/**
- * 修改菜单
- * @param params 搜索参数
- */
-export async function update(params: { [key: string]: any }) {
-    return request(`${controller}`, {
-        method: 'PUT',
-        data: {
-            ...params
-        },
-    });
-}
-
-/**
- * 获取分页 Data
- * @param params 搜索参数
- */
-export async function pageQuery(params: { [key: string]: any }) {
-    return request(`${controller}`, {
-        method: 'GET',
-        data: {
-            ...params
-        },
-    });
-}
+const controller = "/system/dictionaries/type";
 
 /**
  * 获取指定字典信息
  * @param params 搜索参数
  */
-export async function getBydictCode(postId: number) {
-    return request(`${controller}/${postId}`, {
+export async function optionSelect() {
+    return request(`${controller}/optionSelect`, {
         method: 'GET'
     });
-}
-
-/**
- * 导出Excel
- * @param params
- */
-export async function exportExcel(params?: { [key: string]: any }) {
-    return download(`${controller}/exportExcel`, params);
 }

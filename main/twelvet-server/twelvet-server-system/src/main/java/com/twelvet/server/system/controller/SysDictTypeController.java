@@ -10,6 +10,7 @@ import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,7 +88,10 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 清空缓存
+     *
+     * @return AjaxResult
      */
+    @PreAuthorize("@role.hasPermi('system:dict:remove')")
     @Log(service = "字典类型", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clearCache")
     public AjaxResult clearCache() {

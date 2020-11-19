@@ -23,17 +23,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/dictionaries/data")
-public class SysDictDataController extends TWTController
-{
+public class SysDictDataController extends TWTController {
     @Autowired
     private ISysDictDataService dictDataService;
-    
+
     @Autowired
     private ISysDictTypeService dictTypeService;
 
     @GetMapping
-    public AjaxResult pageQuery(SysDictData sysDictData)
-    {
+    public AjaxResult pageQuery(SysDictData sysDictData) {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
         return AjaxResult.success(getDataTable(list));
@@ -51,17 +49,18 @@ public class SysDictDataController extends TWTController
      * 查询字典数据详细
      */
     @GetMapping(value = "/{dictCode}")
-    public AjaxResult getInfo(@PathVariable Long dictCode)
-    {
+    public AjaxResult getInfo(@PathVariable Long dictCode) {
         return AjaxResult.success(dictDataService.selectDictDataById(dictCode));
     }
 
     /**
      * 根据字典类型查询字典数据信息
+     *
+     * @param dictType 字典类型
+     * @return AjaxResult
      */
     @GetMapping(value = "/type/{dictType}")
-    public AjaxResult dictType(@PathVariable String dictType)
-    {
+    public AjaxResult dictType(@PathVariable String dictType) {
         return AjaxResult.success(dictTypeService.selectDictDataByType(dictType));
     }
 
@@ -70,8 +69,7 @@ public class SysDictDataController extends TWTController
      */
     @Log(service = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysDictData sysDictData)
-    {
+    public AjaxResult add(@Validated @RequestBody SysDictData sysDictData) {
         sysDictData.setCreateBy(SecurityUtils.getUsername());
         return json(dictDataService.insertDictData(sysDictData));
     }
@@ -81,8 +79,7 @@ public class SysDictDataController extends TWTController
      */
     @Log(service = "字典数据", businessType = BusinessType.PUT)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysDictData sysDictData)
-    {
+    public AjaxResult edit(@Validated @RequestBody SysDictData sysDictData) {
         sysDictData.setUpdateBy(SecurityUtils.getUsername());
         return json(dictDataService.updateDictData(sysDictData));
     }
@@ -92,8 +89,7 @@ public class SysDictDataController extends TWTController
      */
     @Log(service = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
-    public AjaxResult remove(@PathVariable Long[] dictCodes)
-    {
+    public AjaxResult remove(@PathVariable Long[] dictCodes) {
         return json(dictDataService.deleteDictDataByIds(dictCodes));
     }
 }

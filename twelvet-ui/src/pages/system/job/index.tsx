@@ -12,6 +12,7 @@ import JobStatus from './components/jobStatusSwitch/Index'
 import Details from './components/details/Index'
 import { FormInstance } from 'antd/lib/form'
 import { isArray } from 'lodash'
+import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
 
 /**
  * 定时任务
@@ -107,7 +108,7 @@ const Job: React.FC<{}> = () => {
                         </Button>
 
                         <Popconfirm
-                            onConfirm={() => refRemove(row.jobId, action)}
+                            onConfirm={() => refRemove(row.jobId)}
                             title="是否删除"
                         >
                             <Button
@@ -178,7 +179,7 @@ const Job: React.FC<{}> = () => {
      * 移除任务
      * @param row jobIds
      */
-    const refRemove = async (jobIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
+    const refRemove = async (jobIds: (string | number)[] | undefined) => {
         try {
             if (!jobIds) {
                 return true
@@ -199,7 +200,7 @@ const Job: React.FC<{}> = () => {
 
             message.success(msg)
 
-            action.reload()
+            acForm.current && acForm.current.reload()
 
         } catch (e) {
             system.error(e)
@@ -286,7 +287,7 @@ const Job: React.FC<{}> = () => {
                     </Button>,
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
-                        onConfirm={() => refRemove(selectedRowKeys, action)}
+                        onConfirm={() => refRemove(selectedRowKeys)}
                         title="是否删除选中数据"
                     >
                         <Button
@@ -349,14 +350,7 @@ const Job: React.FC<{}> = () => {
                                 name="jobGroup"
                                 rules={[{ required: true, message: '任务分组不能为空' }]}
                             >
-                                <Select
-                                    showSearch
-                                >
-
-                                    <Select.Option value={0}>男</Select.Option>
-                                    <Select.Option value={1}>女</Select.Option>
-
-                                </Select>
+                                <DictionariesSelect type='sys_job_group' />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -378,7 +372,7 @@ const Job: React.FC<{}> = () => {
                                 twtTask.twtParams('twt')
 
                                 Class类调用示例：
-                                com.ruoyi.quartz.task.twtTask.twtParams('twt')
+                                com.twelvet.server.job.task.TWTTask.twtParams('twt')
                                 参数说明：支持字符串，布尔类型，长整型，浮点型，整型
                             ">
                                 调用方法

@@ -5,7 +5,7 @@ import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutline
 import { Popconfirm, Button, message, Modal, Form, Input, Radio } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, getBydictId, insert, update } from './service'
+import { pageQuery, remove, exportExcel, getBydictId, insert, update, clearCache } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 import DrawerInfo from './components/drawerInfo/Index'
@@ -207,6 +207,21 @@ const Dictionaries: React.FC<{}> = () => {
                 })
     }
 
+    /**
+     * 清空字典緩存
+     */
+    const clear = async () => {
+        try {
+            const { code, msg } = await clearCache()
+            if (code != 200) {
+                return message.error(msg)
+            }
+            message.success(msg)
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
     return (
         <>
             <TWTProTable
@@ -254,6 +269,15 @@ const Dictionaries: React.FC<{}> = () => {
                             <FundProjectionScreenOutlined />
                             导出数据
                         </Button>
+                    </Popconfirm>,
+                    <Popconfirm
+                        title="是否清空缓存"
+                        onConfirm={() => clear()}
+                    >
+                        <Button type="primary" danger>
+                            <FundProjectionScreenOutlined />
+                            清空缓存
+                    </Button>
                     </Popconfirm>
                 ]}
 
