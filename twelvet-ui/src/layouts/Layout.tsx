@@ -12,7 +12,7 @@ import Authorized from '@/utils/Authorized'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import { ConnectState } from '@/models/connect'
 import { getAuthorityFromRouter } from '@/utils/utils'
-import logo from '../assets/logo.jpg'
+import logo from '@/assets/logo.jpg'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import Footer from '@/components/TwelveT/Footer'
 
@@ -84,6 +84,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     /**
      * 关键字搜索菜单
+     * 
      * @param data 
      * @param keyWord 
      */
