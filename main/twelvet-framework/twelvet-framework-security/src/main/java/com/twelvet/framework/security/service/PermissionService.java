@@ -140,8 +140,8 @@ public class PermissionService {
     /**
      * 判断是否包含权限
      *
-     * @param authorities 权限列表
-     * @param permission  权限字符串
+     * @param authorities 用户拥有的权限列表
+     * @param permission  需验证的权限权限字符串
      * @return 用户是否具备某权限
      */
     private boolean hasPermissions(Collection<? extends GrantedAuthority> authorities, String permission) {

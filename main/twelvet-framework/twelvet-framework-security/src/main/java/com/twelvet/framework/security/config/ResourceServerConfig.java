@@ -7,6 +7,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -20,14 +21,29 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-
 /**
- * @author twelvet
- * @WebSite www.twelvet.cn
- * @Description: 资源服务器配置
+ *
+ * @author L
+ * 资源服务器配置
+ * 开启方法级别安全权限注解
+ *
+ * @EnableGlobalMethodSecurity(securedEnabled=true)
+ * 开启@Secured 注解过滤权限
+ *
+ * @EnableGlobalMethodSecurity(jsr250Enabled=true)
+ * 开启@RolesAllowed 注解过滤权限
+ *
+ * @EnableGlobalMethodSecurity(prePostEnabled=true)
+ * 使用表达式时间方法级别的安全性 4个注解可用
+ * -@PreAuthorize 在方法调用之前,基于表达式的计算结果来限制对方法的访问
+ * -@PostAuthorize 允许方法调用,但是如果表达式计算结果为false,将抛出一个安全性异常
+ * -@PostFilter 允许方法调用,但必须按照表达式来过滤方法的结果
+ * -@PreFilter 允许方法调用,但必须在进入方法之前过滤输入值
+ *
  */
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
