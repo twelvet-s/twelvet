@@ -20,7 +20,7 @@ public enum BusinessType {
     /**
      * 修改
      */
-    PUT,
+    UPDATE,
 
     /**
      * 删除

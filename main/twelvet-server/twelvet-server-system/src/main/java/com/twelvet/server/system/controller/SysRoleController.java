@@ -10,6 +10,7 @@ import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class SysRoleController extends TWTController {
     private ISysRoleService iSysRoleService;
 
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult list(SysRole role) {
         startPage();
         List<SysRole> list = iSysRoleService.selectRoleList(role);
@@ -37,6 +39,7 @@ public class SysRoleController extends TWTController {
 
     @Log(service = "角色管理", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public void exportExcel(HttpServletResponse response, SysRole role) {
         List<SysRole> list = iSysRoleService.selectRoleList(role);
         ExcelUtils<SysRole> excelUtils = new ExcelUtils<>(SysRole.class);
@@ -47,6 +50,7 @@ public class SysRoleController extends TWTController {
      * 根据角色编号获取详细信息
      */
     @GetMapping(value = "/{roleId}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult getInfo(@PathVariable Long roleId) {
         return AjaxResult.success(iSysRoleService.selectRoleById(roleId));
     }
@@ -56,6 +60,7 @@ public class SysRoleController extends TWTController {
      */
     @Log(service = "角色管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult add(@Validated @RequestBody SysRole role) {
         if (UserConstants.NOT_UNIQUE.equals(iSysRoleService.checkRoleNameUnique(role))) {
             return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
@@ -69,8 +74,9 @@ public class SysRoleController extends TWTController {
     /**
      * 修改保存角色
      */
-    @Log(service = "角色管理", businessType = BusinessType.PUT)
+    @Log(service = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult update(@Validated @RequestBody SysRole role) {
         iSysRoleService.checkRoleAllowed(role);
         if (UserConstants.NOT_UNIQUE.equals(iSysRoleService.checkRoleNameUnique(role))) {
@@ -85,8 +91,9 @@ public class SysRoleController extends TWTController {
     /**
      * 状态修改
      */
-    @Log(service = "角色管理", businessType = BusinessType.PUT)
+    @Log(service = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult changeStatus(@RequestBody SysRole role) {
         iSysRoleService.checkRoleAllowed(role);
         role.setUpdateBy(SecurityUtils.getUsername());
@@ -98,6 +105,7 @@ public class SysRoleController extends TWTController {
      */
     @Log(service = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleIds}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult remove(@PathVariable Long[] roleIds) {
         return json(iSysRoleService.deleteRoleByIds(roleIds));
     }
@@ -106,6 +114,7 @@ public class SysRoleController extends TWTController {
      * 获取角色选择框列表
      */
     @GetMapping("/optionSelect")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult optionSelect() {
         return AjaxResult.success(iSysRoleService.selectRoleAll());
     }

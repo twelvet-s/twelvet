@@ -10,6 +10,7 @@ import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysDictDataService;
 import com.twelvet.server.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class SysDictDataController extends TWTController {
     private ISysDictTypeService dictTypeService;
 
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:dict:query')")
     public AjaxResult pageQuery(SysDictData sysDictData) {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
@@ -39,6 +41,7 @@ public class SysDictDataController extends TWTController {
 
     @Log(service = "字典数据", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
+    @PreAuthorize("@role.hasPermi('system:dict:export')")
     public void export(HttpServletResponse response, SysDictData sysDictData) {
         List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
         ExcelUtils<SysDictData> excelUtils = new ExcelUtils<>(SysDictData.class);
@@ -49,6 +52,7 @@ public class SysDictDataController extends TWTController {
      * 查询字典数据详细
      */
     @GetMapping(value = "/{dictCode}")
+    @PreAuthorize("@role.hasPermi('system:dict:query')")
     public AjaxResult getInfo(@PathVariable Long dictCode) {
         return AjaxResult.success(dictDataService.selectDictDataById(dictCode));
     }
@@ -69,6 +73,7 @@ public class SysDictDataController extends TWTController {
      */
     @Log(service = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:dict:add')")
     public AjaxResult add(@Validated @RequestBody SysDictData sysDictData) {
         sysDictData.setCreateBy(SecurityUtils.getUsername());
         return json(dictDataService.insertDictData(sysDictData));
@@ -77,8 +82,9 @@ public class SysDictDataController extends TWTController {
     /**
      * 修改保存字典类型
      */
-    @Log(service = "字典数据", businessType = BusinessType.PUT)
+    @Log(service = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
+    @PreAuthorize("@role.hasPermi('system:dict:edit')")
     public AjaxResult edit(@Validated @RequestBody SysDictData sysDictData) {
         sysDictData.setUpdateBy(SecurityUtils.getUsername());
         return json(dictDataService.updateDictData(sysDictData));
@@ -89,6 +95,7 @@ public class SysDictDataController extends TWTController {
      */
     @Log(service = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
+    @PreAuthorize("@role.hasPermi('system:dict:remove')")
     public AjaxResult remove(@PathVariable Long[] dictCodes) {
         return json(dictDataService.deleteDictDataByIds(dictCodes));
     }

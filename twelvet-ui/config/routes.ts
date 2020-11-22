@@ -27,7 +27,6 @@ export default [
                     redirect: '/index',
                 },
                 {
-                    authority: ['admin', 'user'],
                     title: '首页',
                     name: 'home',
                     path: '/index',
@@ -60,6 +59,13 @@ export default [
                             name: 'dictionaries',
                             path: '/system/dictionaries',
                             component: './system/dictionaries'
+                        },
+                        {
+                            title: 'OAuth2终端',
+                            icon: 'icon-client',
+                            name: 'client',
+                            path: '/system/client',
+                            component: './system/client'
                         }
                     ]
                 },

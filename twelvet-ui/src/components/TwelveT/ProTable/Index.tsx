@@ -180,12 +180,15 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
          */
         manualRequest,
         // 发送请求前的参数处理
-		beforeRequest = () => { },
+        beforeRequest = () => { },
     } = props
 
 
     useEffect(() => {
         columns && columns.map((item, index) => {
+            if (columns[index]['valueType'] == 'option') {
+                columns[index]['width'] = 320
+            }
             // 默认不允许数据自动换行
             if (columns[index]['ellipsis'] == undefined) {
                 columns[index]['ellipsis'] = true
@@ -204,7 +207,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
     return (
         <ProTable
             // 支持横向超出自适应
-            scroll={{ x: 'max-content' }}
+            scroll={{ x: 'x-content' }}
             // 请求数据地址
             request={async (params, sort, filter) => {
                 try {

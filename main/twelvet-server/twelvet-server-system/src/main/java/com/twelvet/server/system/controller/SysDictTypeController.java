@@ -29,6 +29,7 @@ public class SysDictTypeController extends TWTController {
     private ISysDictTypeService dictTypeService;
 
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:dict:query')")
     public AjaxResult pageQuery(SysDictType dictType) {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
@@ -37,6 +38,7 @@ public class SysDictTypeController extends TWTController {
 
     @Log(service = "字典类型", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
+    @PreAuthorize("@role.hasPermi('system:dict:export')")
     public void export(HttpServletResponse response, SysDictType dictType) {
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtils<SysDictType> excelUtils = new ExcelUtils<>(SysDictType.class);
@@ -47,6 +49,7 @@ public class SysDictTypeController extends TWTController {
      * 查询字典类型详细
      */
     @GetMapping(value = "/{dictId}")
+    @PreAuthorize("@role.hasPermi('system:dict:query')")
     public AjaxResult getInfo(@PathVariable Long dictId) {
         return AjaxResult.success(dictTypeService.selectDictTypeById(dictId));
     }
@@ -56,6 +59,7 @@ public class SysDictTypeController extends TWTController {
      */
     @Log(service = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:dict:add')")
     public AjaxResult add(@Validated @RequestBody SysDictType dict) {
         if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
             return AjaxResult.error("新增字典'" + dict.getDictName() + "'失败，字典类型已存在");
@@ -67,8 +71,9 @@ public class SysDictTypeController extends TWTController {
     /**
      * 修改字典类型
      */
-    @Log(service = "字典类型", businessType = BusinessType.PUT)
+    @Log(service = "字典类型", businessType = BusinessType.UPDATE)
     @PutMapping
+    @PreAuthorize("@role.hasPermi('system:dict:edit')")
     public AjaxResult edit(@Validated @RequestBody SysDictType dict) {
         if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
             return AjaxResult.error("修改字典'" + dict.getDictName() + "'失败，字典类型已存在");
@@ -82,6 +87,7 @@ public class SysDictTypeController extends TWTController {
      */
     @Log(service = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")
+    @PreAuthorize("@role.hasPermi('system:dict:remove')")
     public AjaxResult remove(@PathVariable Long[] dictIds) {
         return json(dictTypeService.deleteDictTypeByIds(dictIds));
     }
@@ -91,9 +97,9 @@ public class SysDictTypeController extends TWTController {
      *
      * @return AjaxResult
      */
-    @PreAuthorize("@role.hasPermi('system:dict:remove')")
     @Log(service = "字典类型", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clearCache")
+    @PreAuthorize("@role.hasPermi('system:dict:remove')")
     public AjaxResult clearCache() {
         dictTypeService.clearCache();
         return AjaxResult.success();

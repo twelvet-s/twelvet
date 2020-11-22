@@ -78,7 +78,7 @@ public class SysConfigController extends TWTController {
     /**
      * 修改参数配置
      */
-    @Log(service = "参数管理", businessType = BusinessType.PUT)
+    @Log(service = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {

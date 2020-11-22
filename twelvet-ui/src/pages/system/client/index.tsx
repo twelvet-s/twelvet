@@ -1,25 +1,18 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import SelectType from './components/selectType/Index'
-import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, Radio, Drawer, InputNumber } from 'antd'
+import { DeleteOutlined, PlusOutlined, EditOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Tooltip } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { TableListItem } from './data'
-import { pageQuery, remove, exportExcel, getBydictCode, insert, update } from './service'
+import { pageQuery, remove, getByClientId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 
 /**
- * 字典模块数据管理
+ * 终端模块
  */
-const DrawerInfo: React.FC<{
-    info: {
-        drawerInfoKey: string
-        visible: boolean
-    }
-    onClose: () => void
-}> = (props) => {
+const Post: React.FC<{}> = () => {
 
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
@@ -31,54 +24,34 @@ const DrawerInfo: React.FC<{
 
     const [form] = Form.useForm<FormInstance>()
 
-    const { TextArea } = Input
-
-    const { info, onClose } = props
 
     const formItemLayout = {
         labelCol: {
-            xs: { span: 4 },
-            sm: { span: 4 },
+            xs: { span: 5 },
+            sm: { span: 5 },
         },
         wrapperCol: {
-            xs: { span: 18 },
-            sm: { span: 18 },
+            xs: { span: 16 },
+            sm: { span: 16 },
         },
     }
 
     // Form参数
     const columns: ProColumns<TableListItem> = [
         {
-            title: '字典名称',
-            key: 'dictType',
-            hideInTable: true,
-            initialValue: props.info.drawerInfoKey,
-            dataIndex: 'dictType',
-            renderFormItem: () => <SelectType {...props}/>
+            title: '编号', valueType: "text", dataIndex: 'clientId',
         },
         {
-            title: '字典标签', ellipsis: true, valueType: "text", dataIndex: 'dictLabel',
+            title: '授权范围', valueType: "text", search: false, dataIndex: 'scope'
         },
         {
-            title: '字典键值', search: false, valueType: "text", dataIndex: 'dictValue'
+            title: '授权类型', valueType: "text", search: false, dataIndex: 'authorizedGrantTypes'
         },
         {
-            title: '字典排序', search: false, valueType: "text", dataIndex: 'dictSort'
+            title: '令牌有效期', valueType: "text", search: false, dataIndex: 'accessTokenValidity'
         },
         {
-            title: '状态',
-            ellipsis: false,
-            dataIndex: 'status',
-            valueEnum: {
-                1: { text: '正常', status: 'success' },
-                0: { text: '停用', status: 'error' },
-            },
-        },
-        {
-            title: '备注', search: false, valueType: "text", dataIndex: 'remark'
-        },
-        {
-            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+            title: '刷新令牌有效期', valueType: "text", search: false, dataIndex: 'refreshTokenValidity'
         },
         {
             title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
@@ -88,7 +61,7 @@ const DrawerInfo: React.FC<{
                         修改
                     </Button>,
                     <Popconfirm
-                        onConfirm={() => refRemove(row.dictCode)}
+                        onConfirm={() => refRemove(row.clientId)}
                         title="确定删除吗"
                     >
                         <Button type="primary" danger>
@@ -102,23 +75,20 @@ const DrawerInfo: React.FC<{
     ]
 
     /**
-     * 新增字典
+     * 新增终端
      * @param row row
      */
     const refPost = async () => {
-        form.setFieldsValue({
-            dictType: props.info.drawerInfoKey
-        })
         setModal({ title: "新增", visible: true })
     }
 
     /**
-     * 获取修改字典信息
+     * 获取修改终端信息
      * @param row row
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await getBydictCode(row.dictCode)
+            const { code, msg, data } = await getByClientId(row.clientId)
             if (code != 200) {
                 return message.error(msg)
             }
@@ -134,20 +104,20 @@ const DrawerInfo: React.FC<{
     }
 
     /**
-     * 移除字典
-     * @param row dictCodes
+     * 移除终端
+     * @param row clientIds
      */
-    const refRemove = async (dictCodes: (string | number)[] | string | undefined) => {
+    const refRemove = async (clientIds: (string | number)[] | string | undefined) => {
         try {
-            if (!dictCodes) {
+            if (!clientIds) {
                 return true
             }
 
             let params
-            if (isArray(dictCodes)) {
-                params = dictCodes.join(",")
+            if (isArray(clientIds)) {
+                params = clientIds.join(",")
             } else {
-                params = dictCodes
+                params = clientIds
             }
 
             const { code, msg } = await remove(params)
@@ -171,9 +141,7 @@ const DrawerInfo: React.FC<{
      */
     const handleCancel = () => {
         setModal({ title: "", visible: false })
-
         form.resetFields()
-
     }
 
     /**
@@ -187,9 +155,8 @@ const DrawerInfo: React.FC<{
                     try {
                         // 开启加载中
                         setLoadingModal(true)
-
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.dictCode == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = modal.title == '新增' ? await insert(fields) : await update(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -213,28 +180,26 @@ const DrawerInfo: React.FC<{
     }
 
     return (
-        <Drawer
-            // 关闭时销毁子元素
-            destroyOnClose={true}
-            width="80%"
-            placement="right"
-            closable={false}
-            onClose={() => {
-                onClose()
-            }}
-            visible={info.visible}
-        >
+        <>
             <TWTProTable
-                headerTitle='数据管理'
                 actionRef={acForm}
-                rowKey="dictCode"
+                rowKey="clientId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
-                // beforeRequest={(params) => {
-                //     // 加入类型
-                //     params.dictType = props.info.drawerInfoKey
-                // }}
+                beforeSearchSubmit={(params) => {
+                    // 分隔搜索参数
+                    if (params.between) {
+                        const { between } = params
+                        // 移除参数
+                        delete params.between
+
+                        // 适配参数
+                        params.beginTime = between[0]
+                        params.endTime = between[1]
+                    }
+                    return params
+                }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Button type="default" onClick={refPost}>
                         <PlusOutlined />
@@ -252,25 +217,17 @@ const DrawerInfo: React.FC<{
                             <DeleteOutlined />
                             批量删除
                         </Button>
-                    </Popconfirm>,
-                    <Popconfirm
-                        title="是否导出数据"
-                        onConfirm={() => exportExcel({ s: 1 })}
-                    >
-                        <Button type="default">
-                            <FundProjectionScreenOutlined />
-                            导出数据
-                        </Button>
                     </Popconfirm>
                 ]}
 
             />
 
             <Modal
-                title={`${modal.title}字典`}
+                title={`${modal.title}终端`}
                 visible={modal.visible}
                 okText={`${modal.title}`}
                 confirmLoading={loadingModal}
+                width={700}
                 onOk={onSave}
                 onCancel={handleCancel}
             >
@@ -281,77 +238,82 @@ const DrawerInfo: React.FC<{
                 >
 
                     <Form.Item
-                        hidden
                         {...formItemLayout}
-                        label="字典Code"
-                        name="dictCode"
-                        initialValue={0}
+                        label="编号"
+                        name="clientId"
                     >
-                        <Input />
+                        <Input placeholder="编号" disabled={modal.title == '修改' ? true : false} />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
-                        label="字典类型"
-                        name="dictType"
+                        label={
+                            <Tooltip title="
+                                不填写默认不更改
+                            ">
+                                安全码 <QuestionCircleOutlined />
+                            </Tooltip>
+                        }
+                        name="clientSecret"
                     >
-                        <Input disabled placeholder="字典类型" />
+                        <Input placeholder="安全码" />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
-                        label="数据标签"
-                        name="dictLabel"
-                        rules={[{ required: true, message: '数据标签不能为空' }]}
+                        label="授权范围"
+                        name="scope"
+                        rules={[{ required: true, message: '授权范围不能为空' }]}
                     >
-                        <Input placeholder="数据标签" />
+                        <Input placeholder="授权范围" />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
-                        label="数据键值"
-                        name="dictValue"
-                        rules={[{ required: true, message: '数据键值不能为空' }]}
+                        label={
+                            <Tooltip title={() => [
+                                <p>注意：多个请使用英文,分割</p>,
+                                <p>授权码模式：authorization_code</p>,
+                                <p>密码模式： password</p>,
+                                <p>客户端模式： client_credentials</p>,
+                                <p>简化模式：implicit</p>,
+                                <p>支持token续时：refresh_token</p>
+                            ]}>
+                                授权类型 <QuestionCircleOutlined />
+                            </Tooltip>
+                        }
+                        name="authorizedGrantTypes"
+                        rules={[{ required: true, message: '授权范围不能为空' }]}
                     >
-                        <Input placeholder="数据键值" />
+                        <Input placeholder='授权范围' />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
-                        label="显示排序"
-                        name="dictSort"
-                        initialValue={0}
-                        rules={[{ required: true, message: '显示排序不能为空' }]}
+                        label="令牌时效（ms）"
+                        name="accessTokenValidity"
+                        initialValue={3600}
+                        rules={[{ required: true, message: '令牌时效不能为空' }]}
                     >
-                        <InputNumber />
+                        <InputNumber placeholder="令牌时效" />
                     </Form.Item>
 
                     <Form.Item
                         {...formItemLayout}
-                        label="状态"
-                        name="status"
-                        initialValue={1}
+                        label="刷新时效（ms）"
+                        name="refreshTokenValidity"
+                        initialValue={7200}
+                        rules={[{ required: true, message: '刷新时效不能为空' }]}
                     >
-                        <Radio.Group>
-                            <Radio value={1}>正常</Radio>
-                            <Radio value={0}>停用</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-
-                    <Form.Item
-                        {...formItemLayout}
-                        label="备注"
-                        name="remark"
-                    >
-                        <TextArea placeholder="请输入内容" />
+                        <InputNumber placeholder="刷新时效" />
                     </Form.Item>
 
                 </Form>
 
             </Modal>
-        </Drawer>
+        </>
     )
 
 }
 
-export default DrawerInfo
+export default Post

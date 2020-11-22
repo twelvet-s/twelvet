@@ -8,6 +8,7 @@ import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysOperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,7 @@ public class SysOperationLogController extends TWTController {
      * @return AjaxResult
      */
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult insert(@RequestBody SysOperationLog operationLog) {
         return json(iSysOperationLogService.insertOperationLog(operationLog));
     }
@@ -43,6 +45,7 @@ public class SysOperationLogController extends TWTController {
      */
     @Log(service = "操作日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{operationLogIds}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult remove(@PathVariable Long[] operationLogIds) {
         return json(iSysOperationLogService.deleteOperationLogByIds(operationLogIds));
     }
@@ -54,6 +57,7 @@ public class SysOperationLogController extends TWTController {
      */
     @Log(service = "操作日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult clean() {
         iSysOperationLogService.cleanOperationLog();
         return AjaxResult.success();
@@ -66,6 +70,7 @@ public class SysOperationLogController extends TWTController {
      * @return AjaxResult
      */
     @GetMapping()
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult pageQuery(SysOperationLog operationLog) {
         startPage();
         List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
@@ -80,6 +85,7 @@ public class SysOperationLogController extends TWTController {
      */
     @Log(service = "操作日志", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public void exportExcel(HttpServletResponse response, SysOperationLog operationLog) {
         List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
         ExcelUtils<SysOperationLog> exportExcel = new ExcelUtils<>(SysOperationLog.class);

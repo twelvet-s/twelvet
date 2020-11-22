@@ -15,6 +15,7 @@ import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,22 +57,39 @@ public class SysUserController extends TWTController {
      * @return AjaxResult
      */
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:user:query')")
     public AjaxResult pageQuery(SysUser user) {
         startPage();
         List<SysUser> list = iSysUserService.selectUserList(user);
         return AjaxResult.success(getDataTable(list));
     }
 
-    @Log(service = "用户管理", businessType = BusinessType.EXPORT)
+    /**
+     * 用户倒入出
+     *
+     * @param response HttpServletResponse
+     * @param user     SysUser
+     */
     @PostMapping("/exportExcel")
+    @Log(service = "用户管理", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@role.hasPermi('system:user:export')")
     public void exportExcel(HttpServletResponse response, SysUser user) {
         List<SysUser> list = iSysUserService.selectUserList(user);
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
     }
 
-    @Log(service = "用户管理", businessType = BusinessType.IMPORT)
+    /**
+     * 用户数据导入
+     *
+     * @param files MultipartFile[]
+     * @param cover 是否允许覆盖
+     * @return AjaxResult
+     * @throws Exception Exception
+     */
     @PostMapping("/importData")
+    @Log(service = "用户管理", businessType = BusinessType.IMPORT)
+    @PreAuthorize("@role.hasPermi('system:user:import')")
     public AjaxResult importData(MultipartFile[] files, boolean cover) throws Exception {
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         // 支持多数据源导入
@@ -95,7 +113,10 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 获取当前用户信息
+     * 获取当前用户信息(认证中心服务专用)
+     *
+     * @param username String
+     * @return R<UserInfo>
      */
     @GetMapping("/info/{username}")
     public R<UserInfo> info(@PathVariable("username") String username) {
@@ -115,7 +136,7 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 获取用户信息
+     * 获取当前用户信息
      *
      * @return 用户信息
      */
@@ -139,8 +160,12 @@ public class SysUserController extends TWTController {
 
     /**
      * 根据用户编号获取详细信息
+     *
+     * @param userId Long
+     * @return AjaxResult
      */
     @GetMapping({"/", "/{userId}"})
+    @PreAuthorize("@role.hasPermi('system:user:query')")
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         Map<String, Object> res = new HashMap<>(5);
         List<SysRole> roles = iSysRoleService.selectRoleAll();
@@ -156,9 +181,13 @@ public class SysUserController extends TWTController {
 
     /**
      * 新增用户
+     *
+     * @param user SysUser
+     * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @Log(service = "用户管理", businessType = BusinessType.INSERT)
+    @PreAuthorize("@role.hasPermi('system:user:add')")
     public AjaxResult add(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkUserNameUnique(user.getUsername()))) {
             return AjaxResult.error("新增用户'" + user.getUsername() + "'失败，登录账号已存在");
@@ -174,9 +203,13 @@ public class SysUserController extends TWTController {
 
     /**
      * 修改用户
+     *
+     * @param user SysUser
+     * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.PUT)
     @PutMapping
+    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:user:edit')")
     public AjaxResult edit(@Validated @RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkPhoneUnique(user))) {
@@ -190,7 +223,11 @@ public class SysUserController extends TWTController {
 
     /**
      * 删除用户
+     *
+     * @param userIds Long[]
+     * @return AjaxResult
      */
+    @PreAuthorize("@role.hasPermi('system:user:remove')")
     @Log(service = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable Long[] userIds) {
@@ -199,9 +236,13 @@ public class SysUserController extends TWTController {
 
     /**
      * 重置密码
+     *
+     * @param user SysUser
+     * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.PUT)
     @PutMapping("/resetPwd")
+    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:user:resetPwd')")
     public AjaxResult resetPwd(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
@@ -210,10 +251,14 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 状态修改
+     * 用户状态修改
+     *
+     * @param user SysUser
+     * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.PUT)
     @PutMapping("/changeStatus")
+    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:user:edit')")
     public AjaxResult changeStatus(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setUpdateBy(SecurityUtils.getUsername());

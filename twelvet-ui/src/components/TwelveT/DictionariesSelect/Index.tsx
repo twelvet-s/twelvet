@@ -49,6 +49,7 @@ const DictionariesSelect: React.FC<{
     return (
         <Select
             {...props}
+            mode="multiple"
             placeholder='请选择'
             showSearch
             allowClear

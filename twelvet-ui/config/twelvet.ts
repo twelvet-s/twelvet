@@ -78,7 +78,7 @@ const proSettings: TwelveT = {
     // menu: {
     //     locale: false,
     // },
-    iconfontUrl: '//at.alicdn.com/t/font_2059726_do160kxqhh.js',
+    iconfontUrl: '',
 };
 
 export type { TwelveT };

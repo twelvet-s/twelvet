@@ -132,7 +132,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             fixedHeader={false}
             fixSiderbar={true}
             colorWeak={false}
-            iconfontUrl='//at.alicdn.com/t/font_2059726_do160kxqhh.js'
+            iconfontUrl='//at.alicdn.com/t/font_2059726_z4j2yg1qpxg.js'
             menu={{
                 defaultOpenAll: false,
                 locale: false,

@@ -11,6 +11,7 @@ import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.server.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class SysMenuController extends TWTController {
      */
     @Log(service = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult insert(@Validated @RequestBody SysMenu menu) {
         if (UserConstants.NOT_UNIQUE.equals(iSysMenuService.checkMenuNameUnique(menu))) {
             throw new TWTException("新增菜单【" + menu.getMenuName() + "】失败，菜单名称已存在");
@@ -55,6 +57,7 @@ public class SysMenuController extends TWTController {
      */
     @Log(service = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult remove(@PathVariable("menuId") Long menuId) {
         if (iSysMenuService.hasChildByMenuId(menuId)) {
             return AjaxResult.error("存在子菜单,不允许删除");
@@ -68,8 +71,9 @@ public class SysMenuController extends TWTController {
     /**
      * 修改菜单
      */
-    @Log(service = "菜单管理", businessType = BusinessType.PUT)
+    @Log(service = "菜单管理", businessType = BusinessType.UPDATE)
     @PutMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult update(@Validated @RequestBody SysMenu menu) {
         if (UserConstants.NOT_UNIQUE.equals(iSysMenuService.checkMenuNameUnique(menu))) {
             throw new TWTException("新增菜单【" + menu.getMenuName() + "】失败，菜单名称已存在");
@@ -85,6 +89,7 @@ public class SysMenuController extends TWTController {
      * @return 菜单数据
      */
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult list(SysMenu sysMenu) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();
@@ -99,6 +104,7 @@ public class SysMenuController extends TWTController {
      * @return 操心信息
      */
     @GetMapping(value = "/{menuId}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult getByMenuId(@PathVariable Long menuId) {
         return AjaxResult.success(iSysMenuService.selectMenuById(menuId));
     }
@@ -107,6 +113,7 @@ public class SysMenuController extends TWTController {
      * 加载对应角色菜单列表树
      */
     @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();
@@ -123,6 +130,7 @@ public class SysMenuController extends TWTController {
      * 获取菜单下拉树列表
      */
     @GetMapping("/treeSelect")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult treeSelect(SysMenu menu) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         Long userId = loginUser.getUserId();

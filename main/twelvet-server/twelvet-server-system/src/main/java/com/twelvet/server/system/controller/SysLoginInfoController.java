@@ -35,6 +35,7 @@ public class SysLoginInfoController extends TWTController {
      * @return 查询数据
      */
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:logininfor:query')")
     public AjaxResult pageQuery(SysLoginInfo loginInfo) {
         startPage();
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
@@ -48,6 +49,7 @@ public class SysLoginInfoController extends TWTController {
      * @return 操作结果
      */
     @DeleteMapping("/{infoIds}")
+    @PreAuthorize("@role.hasPermi('system:logininfor:remove')")
     public AjaxResult remove(@PathVariable Long[] infoIds) {
         return json(iSysLoginInfoService.deleteLoginInfoByIds(infoIds));
     }
@@ -59,6 +61,7 @@ public class SysLoginInfoController extends TWTController {
      */
     @Log(service = "登陆日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
+    @PreAuthorize("@role.hasPermi('system:logininfor:remove')")
     public AjaxResult clean() {
         iSysLoginInfoService.cleanLoginInfo();
         return AjaxResult.success();
@@ -99,6 +102,7 @@ public class SysLoginInfoController extends TWTController {
      */
     @Log(service = "登陆日志", businessType = BusinessType.EXPORT)
     @PostMapping("/exportExcel")
+    @PreAuthorize("@role.hasPermi('system:logininfor:remove')")
     public void exportExcel(HttpServletResponse response, SysLoginInfo loginInfo) {
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
         ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<>(SysLoginInfo.class);

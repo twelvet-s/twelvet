@@ -11,6 +11,7 @@ import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.server.system.service.ISysDeptService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class SysDeptController extends TWTController {
      * 获取部门列表
      */
     @GetMapping
+    @PreAuthorize("@role.hasPermi('system:dept:query')")
     public AjaxResult list(SysDept dept) {
         // TODO 修改字段orderNum排序
         List<SysDept> depts = deptService.selectDeptList(dept);
@@ -43,6 +45,7 @@ public class SysDeptController extends TWTController {
      * 查询部门列表（排除节点）
      */
     @GetMapping("/list/exclude/{deptId}")
+    @PreAuthorize("@role.hasPermi('system:dept:query')")
     public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) Long deptId) {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
         depts.removeIf(d -> d.getDeptId().intValue() == deptId
@@ -54,6 +57,7 @@ public class SysDeptController extends TWTController {
      * 根据部门编号获取详细信息
      */
     @GetMapping(value = "/{deptId}")
+    @PreAuthorize("@role.hasPermi('system:dept:query')")
     public AjaxResult getInfo(@PathVariable Long deptId) {
         return AjaxResult.success(deptService.selectDeptById(deptId));
     }
@@ -85,6 +89,7 @@ public class SysDeptController extends TWTController {
      */
     @Log(service = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
+    @PreAuthorize("@role.hasPermi('system:dept:add')")
     public AjaxResult add(@Validated @RequestBody SysDept dept) {
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
             return AjaxResult.error("新增部门'" + dept.getDeptName() + "'失败，部门名称已存在");
@@ -96,8 +101,9 @@ public class SysDeptController extends TWTController {
     /**
      * 修改部门
      */
-    @Log(service = "部门管理", businessType = BusinessType.PUT)
+    @Log(service = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
+    @PreAuthorize("@role.hasPermi('system:dept:edit')")
     public AjaxResult edit(@Validated @RequestBody SysDept dept) {
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
             return AjaxResult.error("修改部门'" + dept.getDeptName() + "'失败，部门名称已存在");
@@ -116,6 +122,7 @@ public class SysDeptController extends TWTController {
      */
     @Log(service = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")
+    @PreAuthorize("@role.hasPermi('system:dept:remove')")
     public AjaxResult remove(@PathVariable Long deptId) {
         if (deptService.hasChildByDeptId(deptId)) {
             return AjaxResult.error("存在下级部门,不允许删除");
