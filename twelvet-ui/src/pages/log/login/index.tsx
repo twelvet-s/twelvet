@@ -61,7 +61,7 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '登录时间', valueType: "date", search: false, dataIndex: 'accessTime'
+            title: '登录时间', valueType: "Date", search: false, dataIndex: 'accessTime'
         },
     ]
 
