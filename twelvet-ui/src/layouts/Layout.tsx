@@ -132,7 +132,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             fixedHeader={false}
             fixSiderbar={true}
             colorWeak={false}
-            iconfontUrl='//at.alicdn.com/t/font_2059726_z4j2yg1qpxg.js'
+            iconfontUrl='//at.alicdn.com/t/font_2059726_aw0jk1jnlus.js'
             menu={{
                 defaultOpenAll: false,
                 locale: false,
@@ -166,17 +166,29 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             onMenuHeaderClick={() => history.push('/')}
             // 重写菜单渲染
             menuItemRender={(TWTProps) => {
+                const DOM = (
+                    <>
+                        <span role="img" className="anticon">
+                            {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
+                        </span>
+                        <span>
+                            {TWTProps.name}
+                        </span>
+                    </>
+                )
                 return (
                     <span className="ant-pro-menu-item">
-                        <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
-                            <span role="img" className="anticon">
-                                {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
-                            </span>
+                        {TWTProps.isUrl ? (
+                            <a target='_blank' href={TWTProps.path ? TWTProps.path : '#'}>
+                                {DOM}
+                            </a>
+                        ) : (
+                                <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
+                                    {DOM}
+                                </Link>
+                            )
 
-                            <span>
-                                {TWTProps.name}
-                            </span>
-                        </Link>
+                        }
                     </span>
                 )
             }}

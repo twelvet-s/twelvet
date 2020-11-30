@@ -71,7 +71,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                 </Menu.Item>
             </Menu>
         );
-
+                    console.log(currentUser)
 
         return currentUser && sysUser?.username ? (
             <HeaderDropdown overlay={menuHeaderDropdown}>

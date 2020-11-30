@@ -99,7 +99,7 @@ const UserModel: UserModelType = {
                 ...state,
                 currentUser: {
                     sysUser: {
-                        ...action.payload.sysUser || {}
+                        ...action.payload.user || {}
                     },
                     menuData: {
                         data: [
