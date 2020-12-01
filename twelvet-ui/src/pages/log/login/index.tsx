@@ -4,11 +4,11 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, DatePicker } from 'antd'
 import moment, { Moment } from 'moment'
-import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
+import { FormInstance } from 'antd/lib/form'
 
 /**
  * 登录日志
@@ -16,6 +16,8 @@ import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
 const Login: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
 
     const { RangePicker } = DatePicker
 
@@ -96,6 +98,7 @@ const Login: React.FC<{}> = () => {
                 rowKey="infoId"
                 columns={columns}
                 request={pageQuery}
+                formRef={formRef}
                 rowSelection={{}}
                 beforeSearchSubmit={(params) => {
                     // 分隔搜索参数
@@ -124,10 +127,19 @@ const Login: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
-                        <FundProjectionScreenOutlined />
+                    <Popconfirm
+                        title="是否导出数据"
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
+                    >
+                        <Button type="default">
+                            <FundProjectionScreenOutlined />
                         导出数据
                     </Button>
+                    </Popconfirm>
                 ]}
 
             />

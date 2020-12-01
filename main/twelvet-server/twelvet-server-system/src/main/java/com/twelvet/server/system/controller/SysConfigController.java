@@ -52,7 +52,7 @@ public class SysConfigController extends TWTController {
     @Log(service = "参数管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@role.hasPermi('system:config:export')")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysConfig config) {
+    public void export(HttpServletResponse response, @RequestBody SysConfig config) {
         List<SysConfig> list = configService.selectConfigList(config);
         ExcelUtils<SysConfig> excelUtils = new ExcelUtils<>(SysConfig.class);
         excelUtils.exportExcel(response, list, "参数数据");
@@ -90,8 +90,14 @@ public class SysConfigController extends TWTController {
     @PreAuthorize("@role.hasPermi('system:config:insert')")
     @PostMapping
     public AjaxResult insert(@Validated @RequestBody SysConfig config) {
-        if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
-            return AjaxResult.error("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(
+                        configService.checkConfigKeyUnique(config)
+                )
+        ) {
+            return AjaxResult.error(
+                    "新增参数'" + config.getConfigName() + "'失败，参数键名已存在"
+            );
         }
         config.setCreateBy(SecurityUtils.getUsername());
         return json(configService.insertConfig(config));
@@ -107,8 +113,14 @@ public class SysConfigController extends TWTController {
     @PreAuthorize("@role.hasPermi('system:config:update')")
     @PutMapping
     public AjaxResult update(@Validated @RequestBody SysConfig config) {
-        if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
-            return AjaxResult.error("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(
+                        configService.checkConfigKeyUnique(config)
+                )
+        ) {
+            return AjaxResult.error(
+                    "修改参数'" + config.getConfigName() + "'失败，参数键名已存在"
+            );
         }
         config.setUpdateBy(SecurityUtils.getUsername());
         return json(configService.updateConfig(config));

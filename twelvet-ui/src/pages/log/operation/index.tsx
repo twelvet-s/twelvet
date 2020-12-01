@@ -4,7 +4,6 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, DatePicker, Descriptions } from 'antd'
 import moment, { Moment } from 'moment'
-import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
 
@@ -19,6 +18,8 @@ const Operation: React.FC<{}> = () => {
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
     const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
 
     const { RangePicker } = DatePicker
 
@@ -118,6 +119,7 @@ const Operation: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="operId"
                 columns={columns}
                 request={pageQuery}
@@ -149,10 +151,19 @@ const Operation: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
-                        <FundProjectionScreenOutlined />
-                        导出数据
-                    </Button>
+                    <Popconfirm
+                        title="是否导出数据"
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
+                    >
+                        <Button type="default">
+                            <FundProjectionScreenOutlined />
+                            导出数据
+                        </Button>
+                    </Popconfirm>
                 ]}
 
             />

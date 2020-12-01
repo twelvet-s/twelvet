@@ -74,7 +74,7 @@ public class SysUserController extends TWTController {
     @PostMapping("/export")
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@role.hasPermi('system:user:export')")
-    public void export(HttpServletResponse response, SysUser user) {
+    public void export(HttpServletResponse response, @RequestBody SysUser user) {
         List<SysUser> list = iSysUserService.selectUserList(user);
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
@@ -186,9 +186,9 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
+    @PostMapping
     @Log(service = "用户管理", businessType = BusinessType.INSERT)
     @PreAuthorize("@role.hasPermi('system:user:insert')")
-    @PostMapping
     public AjaxResult insert(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkUserNameUnique(user.getUsername()))) {
             return AjaxResult.error("新增用户'" + user.getUsername() + "'失败，登录账号已存在");
@@ -208,10 +208,10 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
-    @PreAuthorize("@role.hasPermi('system:user:update')")
     @PutMapping
-    public AjaxResult update(@Validated @RequestBody SysUser user) {
+    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:user:edit')")
+    public AjaxResult edit(@Validated @RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkPhoneUnique(user))) {
             return AjaxResult.error("修改用户'" + user.getUsername() + "'失败，手机号码已存在");
@@ -228,8 +228,8 @@ public class SysUserController extends TWTController {
      * @param userIds Long[]
      * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.DELETE)
     @PreAuthorize("@role.hasPermi('system:user:remove')")
+    @Log(service = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable Long[] userIds) {
         return json(iSysUserService.deleteUserByIds(userIds));
@@ -241,9 +241,9 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
+    @PutMapping("/resetPwd")
     @Log(service = "用户管理", businessType = BusinessType.UPDATE)
     @PreAuthorize("@role.hasPermi('system:user:resetPwd')")
-    @PutMapping("/resetPwd")
     public AjaxResult resetPwd(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
@@ -257,9 +257,9 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
-    @PreAuthorize("@role.hasPermi('system:user:edit')")
     @PutMapping("/changeStatus")
+    @Log(service = "用户管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:user:update')")
     public AjaxResult changeStatus(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setUpdateBy(SecurityUtils.getUsername());

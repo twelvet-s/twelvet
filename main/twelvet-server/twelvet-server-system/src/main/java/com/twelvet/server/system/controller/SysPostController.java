@@ -39,10 +39,22 @@ public class SysPostController extends TWTController {
     @PostMapping
     @PreAuthorize("@role.hasPermi('system:post:insert')")
     public AjaxResult insert(@Validated @RequestBody SysPost sysPost) {
-        if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostNameUnique(sysPost))) {
-            return AjaxResult.error("新增岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在");
-        } else if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostCodeUnique(sysPost))) {
-            return AjaxResult.error("新增岗位'" + sysPost.getPostName() + "'失败，岗位编码已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(
+                        iSysPostService.checkPostNameUnique(sysPost)
+                )
+        ) {
+            return AjaxResult.error(
+                    "新增岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在"
+            );
+        } else if (
+                UserConstants.NOT_UNIQUE.equals(
+                        iSysPostService.checkPostCodeUnique(sysPost)
+                )
+        ) {
+            return AjaxResult.error(
+                    "新增岗位'" + sysPost.getPostName() + "'失败，岗位编码已存在"
+            );
         }
         sysPost.setCreateBy(SecurityUtils.getUsername());
         return json(iSysPostService.insertPost(sysPost));
@@ -71,10 +83,22 @@ public class SysPostController extends TWTController {
     @PutMapping
     @PreAuthorize("@role.hasPermi('system:post:update')")
     public AjaxResult update(@Validated @RequestBody SysPost sysPost) {
-        if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostNameUnique(sysPost))) {
-            return AjaxResult.error("修改岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在");
-        } else if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostCodeUnique(sysPost))) {
-            return AjaxResult.error("修改岗位'" + sysPost.getPostName() + "'失败，岗位编码已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(
+                        iSysPostService.checkPostNameUnique(sysPost)
+                )
+        ) {
+            return AjaxResult.error(
+                    "修改岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在"
+            );
+        } else if (
+                UserConstants.NOT_UNIQUE.equals(
+                        iSysPostService.checkPostCodeUnique(sysPost)
+                )
+        ) {
+            return AjaxResult.error(
+                    "修改岗位'" + sysPost.getPostName() + "'失败，岗位编码已存在"
+            );
         }
         sysPost.setUpdateBy(SecurityUtils.getUsername());
         return json(iSysPostService.updatePost(sysPost));
@@ -126,7 +150,7 @@ public class SysPostController extends TWTController {
     @Log(service = "岗位管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:post:export')")
-    public void export(HttpServletResponse response, SysPost sysPost) {
+    public void export(HttpServletResponse response, @RequestBody SysPost sysPost) {
         List<SysPost> list = iSysPostService.selectPostList(sysPost);
         ExcelUtils<SysPost> excelUtils = new ExcelUtils<>(SysPost.class);
         excelUtils.exportExcel(response, list, "岗位数据");

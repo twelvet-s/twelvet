@@ -55,7 +55,7 @@ public class SysDictDataController extends TWTController {
     @Log(service = "字典数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:dict:export')")
-    public void exportExcel(HttpServletResponse response, SysDictData sysDictData) {
+    public void exportExcel(HttpServletResponse response, @RequestBody SysDictData sysDictData) {
         List<SysDictData> list = dictDataService.selectDictDataList(sysDictData);
         ExcelUtils<SysDictData> excelUtils = new ExcelUtils<>(SysDictData.class);
         excelUtils.exportExcel(response, list, "字典数据");

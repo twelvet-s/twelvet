@@ -35,6 +35,8 @@ const Job: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
 
+    const formRef = useRef<FormInstance>()
+
     const [modelDetails, setModelDetails] = useState<{
         vimodelDetails: boolean
         jobId: number
@@ -73,7 +75,7 @@ const Job: React.FC<{}> = () => {
         {
             title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (
                 _: string,
-                row: { [key: string]: string }            ) => {
+                row: { [key: string]: string }) => {
                 return (
                     <Space>
 
@@ -124,7 +126,7 @@ const Job: React.FC<{}> = () => {
      * 初始化数据
      */
     useEffect(() => {
-        
+
     }, [])
 
     /**
@@ -258,6 +260,7 @@ const Job: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="jobId"
                 columns={columns}
                 request={pageQuery}
@@ -293,10 +296,19 @@ const Job: React.FC<{}> = () => {
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Button type="default" onClick={() => exportExcel({ s: 1 })}>
-                        <FundProjectionScreenOutlined />
+                    <Popconfirm
+                        title="是否导出数据"
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
+                    >
+                        <Button type="default">
+                            <FundProjectionScreenOutlined />
                         导出数据
-                    </Button>
+                        </Button>
+                    </Popconfirm>
                 ]}
 
             />

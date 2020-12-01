@@ -48,7 +48,9 @@ public class SysOperationLogController extends TWTController {
     @DeleteMapping("/{operationLogIds}")
     @PreAuthorize("@role.hasPermi('system:operlog:remove')")
     public AjaxResult remove(@PathVariable Long[] operationLogIds) {
-        return json(iSysOperationLogService.deleteOperationLogByIds(operationLogIds));
+        return json(
+                iSysOperationLogService.deleteOperationLogByIds(operationLogIds)
+        );
     }
 
     /**
@@ -74,7 +76,9 @@ public class SysOperationLogController extends TWTController {
     @PreAuthorize("@role.hasPermi('system:operlog:list')")
     public AjaxResult pageQuery(SysOperationLog operationLog) {
         startPage();
-        List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
+        List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(
+                operationLog
+        );
         return AjaxResult.success(getDataTable(list));
     }
 
@@ -87,10 +91,13 @@ public class SysOperationLogController extends TWTController {
     @Log(service = "操作日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:operlog:export')")
-    public void export(HttpServletResponse response, SysOperationLog operationLog) {
-        List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
-        ExcelUtils<SysOperationLog> exportExcel = new ExcelUtils<>(SysOperationLog.class);
+    public void export(HttpServletResponse response, @RequestBody SysOperationLog operationLog) {
+        List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(
+                operationLog
+        );
+        ExcelUtils<SysOperationLog> exportExcel = new ExcelUtils<>(
+                SysOperationLog.class
+        );
         exportExcel.exportExcel(response, list, "操作日志");
     }
-
 }

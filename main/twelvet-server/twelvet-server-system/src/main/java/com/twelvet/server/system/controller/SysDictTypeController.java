@@ -52,7 +52,7 @@ public class SysDictTypeController extends TWTController {
     @Log(service = "字典类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:dict:export')")
-    public void export(HttpServletResponse response, SysDictType dictType) {
+    public void export(HttpServletResponse response, @RequestBody SysDictType dictType) {
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
         ExcelUtils<SysDictType> excelUtils = new ExcelUtils<>(SysDictType.class);
         excelUtils.exportExcel(response, list, "字典类型");
@@ -80,8 +80,12 @@ public class SysDictTypeController extends TWTController {
     @PostMapping
     @PreAuthorize("@role.hasPermi('system:dict:insert')")
     public AjaxResult insert(@Validated @RequestBody SysDictType dict) {
-        if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
-            return AjaxResult.error("新增字典'" + dict.getDictName() + "'失败，字典类型已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))
+        ) {
+            return AjaxResult.error(
+                    "新增字典'" + dict.getDictName() + "'失败，字典类型已存在"
+            );
         }
         dict.setCreateBy(SecurityUtils.getUsername());
         return json(dictTypeService.insertDictType(dict));
@@ -97,8 +101,12 @@ public class SysDictTypeController extends TWTController {
     @PutMapping
     @PreAuthorize("@role.hasPermi('system:dict:update')")
     public AjaxResult update(@Validated @RequestBody SysDictType dict) {
-        if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
-            return AjaxResult.error("修改字典'" + dict.getDictName() + "'失败，字典类型已存在");
+        if (
+                UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))
+        ) {
+            return AjaxResult.error(
+                    "修改字典'" + dict.getDictName() + "'失败，字典类型已存在"
+            );
         }
         dict.setUpdateBy(SecurityUtils.getUsername());
         return json(dictTypeService.updateDictType(dict));

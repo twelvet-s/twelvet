@@ -4,7 +4,6 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { TableListItem } from './data'
 import DpetSearch from './components/dpetSearch'
 import ImportStaff from './components/importStaff'
 import { pageQuery, remove, exportExcel, getByStaffId, insert, update, treeSelect } from './service'
@@ -28,6 +27,8 @@ const Staff: React.FC<{}> = () => {
     const [importStaffVisible, setImportStaffVisible] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
 
     const [form] = Form.useForm<FormInstance>()
 
@@ -283,6 +284,7 @@ const Staff: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="userId"
                 columns={columns}
                 request={pageQuery}
@@ -320,7 +322,11 @@ const Staff: React.FC<{}> = () => {
                     </Popconfirm>,
                     <Popconfirm
                         title="是否导出数据"
-                        onConfirm={() => exportExcel({ s: 1 })}
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
                     >
                         <Button type="default">
                             <FundProjectionScreenOutlined />

@@ -38,9 +38,6 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
             value: 'TwelveT',
           },
         ]}
-        // onSearch={value => {
-        //   //console.log('input', value);
-        // }}
       />
       <Tooltip title="使用帮助">
         <a

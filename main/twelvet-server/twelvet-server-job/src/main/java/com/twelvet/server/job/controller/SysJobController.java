@@ -54,9 +54,9 @@ public class SysJobController extends TWTController {
     @Log(service = "定时任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:job:export')")
-    public void export(HttpServletResponse response, SysJob sysJob) {
+    public void export(HttpServletResponse response, @RequestBody SysJob sysJob) {
         List<SysJob> list = jobService.selectJobList(sysJob);
-        ExcelUtils<SysJob> excelUtils = new ExcelUtils<SysJob>(SysJob.class);
+        ExcelUtils<SysJob> excelUtils = new ExcelUtils<>(SysJob.class);
         excelUtils.exportExcel(response, list, "定时任务");
     }
 

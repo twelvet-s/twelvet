@@ -102,7 +102,7 @@ public class SysLoginInfoController extends TWTController {
     @Log(service = "登陆日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:logininfor:export')")
-    public void export(HttpServletResponse response, SysLoginInfo loginInfo) {
+    public void export(HttpServletResponse response, @RequestBody SysLoginInfo loginInfo) {
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
         ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<>(SysLoginInfo.class);
         excelUtils.exportExcel(response, list, "登陆日志");

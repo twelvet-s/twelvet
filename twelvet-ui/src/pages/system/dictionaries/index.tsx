@@ -30,6 +30,8 @@ const Dictionaries: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
 
+    const formRef = useRef<FormInstance>()
+
     const [form] = Form.useForm<FormInstance>()
 
     const { TextArea } = Input
@@ -225,6 +227,7 @@ const Dictionaries: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="dictId"
                 columns={columns}
                 request={pageQuery}
@@ -262,7 +265,11 @@ const Dictionaries: React.FC<{}> = () => {
                     </Popconfirm>,
                     <Popconfirm
                         title="是否导出数据"
-                        onConfirm={() => exportExcel({ s: 1 })}
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
                     >
                         <Button type="default">
                             <FundProjectionScreenOutlined />

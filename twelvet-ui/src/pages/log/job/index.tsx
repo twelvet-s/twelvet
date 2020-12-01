@@ -1,9 +1,8 @@
 import React, { useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker, Space } from 'antd'
-import { TableListItem } from './data'
+import { DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, DatePicker } from 'antd'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
@@ -16,6 +15,8 @@ import moment, { Moment } from 'moment'
 const Login: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
 
     const { RangePicker } = DatePicker
 
@@ -58,7 +59,7 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
                 return (
                     <Button type="default">
                         <EyeOutlined />
@@ -97,6 +98,7 @@ const Login: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="jobLogId"
                 columns={columns}
                 request={pageQuery}
@@ -129,7 +131,11 @@ const Login: React.FC<{}> = () => {
                         </Button>
                     </Popconfirm>,
                     <Popconfirm
-                        onConfirm={() => exportExcel({ s: 1 })}
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
                         title="是否导出数据"
                     >
                         <Button type="default">

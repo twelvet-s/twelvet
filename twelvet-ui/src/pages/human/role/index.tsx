@@ -5,7 +5,6 @@ import RoleStatusSwitch from './components/Switch'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Tree, TreeSelect, Row, Col } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, getByroleId, insert, update, roleMenuTreeSelectByMenuId, roleMenuTreeSelect, roleDeptTreeSelectByDeptId, roleDeptTreeSelect } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -24,6 +23,8 @@ const Role: React.FC<{}> = () => {
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
 
     const [form] = Form.useForm<FormInstance>()
 
@@ -322,6 +323,7 @@ const Role: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="roleId"
                 columns={columns}
                 request={pageQuery}
@@ -359,7 +361,11 @@ const Role: React.FC<{}> = () => {
                     </Popconfirm>,
                     <Popconfirm
                         title="是否导出数据"
-                        onConfirm={() => exportExcel({ s: 1 })}
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
                     >
                         <Button type="default">
                             <FundProjectionScreenOutlined />

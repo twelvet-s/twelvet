@@ -2,9 +2,8 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Spin } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, getByPostId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -21,6 +20,8 @@ const Post: React.FC<{}> = () => {
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
+    
+    const formRef = useRef<FormInstance>()
 
     const [form] = Form.useForm<FormInstance>()
 
@@ -190,6 +191,7 @@ const Post: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
+                formRef={formRef}
                 rowKey="postId"
                 columns={columns}
                 request={pageQuery}
@@ -227,7 +229,11 @@ const Post: React.FC<{}> = () => {
                     </Popconfirm>,
                     <Popconfirm
                         title="是否导出数据"
-                        onConfirm={() => exportExcel({ s: 1 })}
+                        onConfirm={() => {
+                            exportExcel({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
                     >
                         <Button type="default">
                             <FundProjectionScreenOutlined />
