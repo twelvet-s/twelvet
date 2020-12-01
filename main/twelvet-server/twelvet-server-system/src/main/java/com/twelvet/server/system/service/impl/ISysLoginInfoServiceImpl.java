@@ -19,10 +19,11 @@ public class ISysLoginInfoServiceImpl implements ISysLoginInfoService {
     @Autowired
     private SysLoginInfoMapper SysLoginInfoMapper;
 
-    /**2
+    /**
      * 查询系统登录日志集合
-     * <p>
-     * loginInfo     * @return 登录记录集合
+     *
+     * @param loginInfo 访问日志对象
+     * @return List<SysLoginInfo>
      */
     @Override
     public List<SysLoginInfo> selectLoginInfoList(SysLoginInfo loginInfo) {
@@ -44,8 +45,7 @@ public class ISysLoginInfoServiceImpl implements ISysLoginInfoService {
      * 清空系统登录日志
      */
     @Override
-    public void cleanLoginInfo()
-    {
+    public void cleanLoginInfo() {
         SysLoginInfoMapper.cleanLoginInfo();
     }
 

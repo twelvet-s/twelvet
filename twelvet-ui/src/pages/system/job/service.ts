@@ -8,7 +8,7 @@ const controller = "/job/cron";
  * @param params 搜索参数
  */
 export async function pageQuery(params: { [key: string]: any }) {
-    return request(`${controller}`, {
+    return request(`${controller}/pageQuery`, {
         method: 'GET',
         data: {
             ...params
@@ -54,7 +54,7 @@ export async function remove(infoIds: string) {
  * @param params
  */
 export async function exportExcel(params?: { [key: string]: any }) {
-    return download(`${controller}/exportExcel`, params);
+    return download(`${controller}/export`, params);
 }
 
 /**

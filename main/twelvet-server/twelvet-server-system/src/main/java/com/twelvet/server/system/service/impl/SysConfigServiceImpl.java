@@ -23,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class SysConfigServiceImpl implements ISysConfigService {
+
     @Autowired
     private SysConfigMapper configMapper;
 

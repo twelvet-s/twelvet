@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -34,8 +33,8 @@ public class SysLoginInfoController extends TWTController {
      * @param loginInfo SysLoginInfo
      * @return 查询数据
      */
-    @GetMapping
-    @PreAuthorize("@role.hasPermi('system:logininfor:query')")
+    @GetMapping("/pageQuery")
+    @PreAuthorize("@role.hasPermi('system:logininfor:list')")
     public AjaxResult pageQuery(SysLoginInfo loginInfo) {
         startPage();
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
@@ -101,9 +100,9 @@ public class SysLoginInfoController extends TWTController {
      * @param loginInfo SysLoginInfo
      */
     @Log(service = "登陆日志", businessType = BusinessType.EXPORT)
-    @PostMapping("/exportExcel")
-    @PreAuthorize("@role.hasPermi('system:logininfor:remove')")
-    public void exportExcel(HttpServletResponse response, SysLoginInfo loginInfo) {
+    @PostMapping("/export")
+    @PreAuthorize("@role.hasPermi('system:logininfor:export')")
+    public void export(HttpServletResponse response, SysLoginInfo loginInfo) {
         List<SysLoginInfo> list = iSysLoginInfoService.selectLoginInfoList(loginInfo);
         ExcelUtils<SysLoginInfo> excelUtils = new ExcelUtils<>(SysLoginInfo.class);
         excelUtils.exportExcel(response, list, "登陆日志");

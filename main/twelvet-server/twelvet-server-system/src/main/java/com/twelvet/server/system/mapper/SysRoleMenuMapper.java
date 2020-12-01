@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 岗位信息操作处理
  */
 public interface SysRoleMenuMapper {
+
     /**
      * 查询菜单使用数量
      *

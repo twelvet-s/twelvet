@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,14 +22,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/log")
 public class SysJobLogController extends TWTController {
+
     @Autowired
     private ISysJobLogService jobLogService;
 
     /**
      * 查询定时任务调度日志列表
-     * @return
+     *
+     * @param sysJobLog SysJobLog
+     * @return AjaxResult
      */
-    @GetMapping
+    @GetMapping("/pageQuery")
     @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult pageQuery(SysJobLog sysJobLog) {
         startPage();
@@ -40,11 +42,14 @@ public class SysJobLogController extends TWTController {
 
     /**
      * 导出定时任务调度日志列表
+     *
+     * @param response  HttpServletResponse
+     * @param sysJobLog SysJobLog
      */
     @Log(service = "任务调度日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public void export(HttpServletResponse response, SysJobLog sysJobLog) throws IOException {
+    @PreAuthorize("@role.hasPermi('system:job:export')")
+    public void export(HttpServletResponse response, SysJobLog sysJobLog) {
         List<SysJobLog> list = jobLogService.selectJobLogList(sysJobLog);
         ExcelUtils<SysJobLog> excelUtils = new ExcelUtils<SysJobLog>(SysJobLog.class);
         excelUtils.exportExcel(response, list, "调度日志");
@@ -52,29 +57,37 @@ public class SysJobLogController extends TWTController {
 
     /**
      * 根据调度编号获取详细信息
+     *
+     * @param jobLogId id
+     * @return AjaxResult
      */
-    @GetMapping(value = "/{configId}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @GetMapping("/{configId}")
+    @PreAuthorize("@role.hasPermi('system:job:query')")
     public AjaxResult getInfo(@PathVariable Long jobLogId) {
         return AjaxResult.success(jobLogService.selectJobLogById(jobLogId));
     }
 
     /**
      * 删除定时任务调度日志
+     *
+     * @param jobLogIds 数组id
+     * @return AjaxResult
      */
     @Log(service = "定时任务调度日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{jobLogIds}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:job:remove')")
     public AjaxResult remove(@PathVariable Long[] jobLogIds) {
         return json(jobLogService.deleteJobLogByIds(jobLogIds));
     }
 
     /**
      * 清空定时任务调度日志
+     *
+     * @return AjaxResult
      */
     @Log(service = "调度日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:job:remove')")
     public AjaxResult clean() {
         jobLogService.cleanJobLog();
         return AjaxResult.success();

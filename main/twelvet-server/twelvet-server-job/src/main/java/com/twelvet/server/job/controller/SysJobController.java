@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -28,15 +27,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/cron")
 public class SysJobController extends TWTController {
+
     @Autowired
     private ISysJobService jobService;
 
     /**
      * 查询定时任务列表
+     *
+     * @param sysJob SysJob
      * @return AjaxResult
      */
-    @GetMapping
-    @PreAuthorize("@ss.hasPermi('system:job:list')")
+    @GetMapping("/pageQuery")
+    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult pageQuery(SysJob sysJob) {
         startPage();
         List<SysJob> list = jobService.selectJobList(sysJob);
@@ -45,11 +47,14 @@ public class SysJobController extends TWTController {
 
     /**
      * 导出定时任务列表
+     *
+     * @param response HttpServletResponse
+     * @param sysJob   SysJob
      */
     @Log(service = "定时任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public void export(HttpServletResponse response, SysJob sysJob) throws IOException {
+    @PreAuthorize("@role.hasPermi('system:job:export')")
+    public void export(HttpServletResponse response, SysJob sysJob) {
         List<SysJob> list = jobService.selectJobList(sysJob);
         ExcelUtils<SysJob> excelUtils = new ExcelUtils<SysJob>(SysJob.class);
         excelUtils.exportExcel(response, list, "定时任务");
@@ -57,20 +62,28 @@ public class SysJobController extends TWTController {
 
     /**
      * 获取定时任务详细信息
+     *
+     * @param jobId 定时任务ID
+     * @return AjaxResult
      */
     @GetMapping(value = "/{jobId}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:job:query')")
     public AjaxResult getByJobId(@PathVariable("jobId") Long jobId) {
         return AjaxResult.success(jobService.selectJobById(jobId));
     }
 
     /**
      * 新增定时任务
+     *
+     * @param sysJob SysJob
+     * @return AjaxResult
+     * @throws SchedulerException 表达式异常
+     * @throws TaskException      任务异常
      */
     @Log(service = "定时任务", businessType = BusinessType.INSERT)
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public AjaxResult add(@RequestBody SysJob sysJob) throws SchedulerException, TaskException {
+    @PreAuthorize("@role.hasPermi('system:job:insert')")
+    public AjaxResult insert(@RequestBody SysJob sysJob) throws SchedulerException, TaskException {
         if (!CronUtils.isValid(sysJob.getCronExpression())) {
             return AjaxResult.error("cron表达式不正确");
         }
@@ -80,11 +93,16 @@ public class SysJobController extends TWTController {
 
     /**
      * 修改定时任务
+     *
+     * @param sysJob SysJob
+     * @return AjaxResult
+     * @throws SchedulerException 表达式异常
+     * @throws TaskException      任务异常
      */
     @Log(service = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public AjaxResult edit(@RequestBody SysJob sysJob) throws SchedulerException, TaskException {
+    @PreAuthorize("@role.hasPermi('system:job:update')")
+    public AjaxResult update(@RequestBody SysJob sysJob) throws SchedulerException, TaskException {
         if (!CronUtils.isValid(sysJob.getCronExpression())) {
             return AjaxResult.error("cron表达式不正确");
         }
@@ -94,10 +112,14 @@ public class SysJobController extends TWTController {
 
     /**
      * 定时任务状态修改
+     *
+     * @param job SysJob
+     * @return AjaxResult
+     * @throws SchedulerException 表达式异常
      */
     @Log(service = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:job:update')")
     public AjaxResult changeStatus(@RequestBody SysJob job) throws SchedulerException {
         SysJob newJob = jobService.selectJobById(job.getJobId());
         newJob.setStatus(job.getStatus());
@@ -106,10 +128,13 @@ public class SysJobController extends TWTController {
 
     /**
      * 定时任务立即执行一次
+     *
+     * @param job SysJob
+     * @return AjaxResult
+     * @throws SchedulerException 表达式异常
      */
     @Log(service = "定时任务", businessType = BusinessType.UPDATE)
     @PutMapping("/run")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult run(@RequestBody SysJob job) throws SchedulerException {
         jobService.run(job);
         return AjaxResult.success();
@@ -117,11 +142,15 @@ public class SysJobController extends TWTController {
 
     /**
      * 删除定时任务
+     *
+     * @param jobIds 定时任务id数组
+     * @return AjaxResult
+     * @throws SchedulerException 表达式异常
      */
     @Log(service = "定时任务", businessType = BusinessType.DELETE)
     @DeleteMapping("/{jobIds}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException, TaskException {
+    @PreAuthorize("@role.hasPermi('system:job:remove')")
+    public AjaxResult remove(@PathVariable Long[] jobIds) throws SchedulerException {
         jobService.deleteJobByIds(jobIds);
         return AjaxResult.success();
     }

@@ -25,6 +25,7 @@ import java.util.List;
  */
 @Service
 public class SysJobServiceImpl implements ISysJobService {
+
     @Autowired
     private Scheduler scheduler;
 

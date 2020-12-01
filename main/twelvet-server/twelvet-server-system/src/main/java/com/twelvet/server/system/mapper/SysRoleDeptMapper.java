@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 角色与部门关联表 数据层
  */
 public interface SysRoleDeptMapper {
+
     /**
      * 通过角色ID删除角色和部门关联
      *

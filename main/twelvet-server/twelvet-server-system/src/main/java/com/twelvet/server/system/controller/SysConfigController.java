@@ -4,13 +4,13 @@ import com.twelvet.api.system.domain.SysConfig;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.constant.UserConstants;
-import com.twelvet.framework.core.web.page.TableDataInfo;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.ExcelUtils;
 import com.twelvet.server.system.service.ISysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,20 +25,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/config")
 public class SysConfigController extends TWTController {
+
     @Autowired
     private ISysConfigService configService;
 
     /**
      * 获取参数配置列表
+     *
+     * @param config SysConfig
+     * @return AjaxResult
      */
-    @GetMapping("/list")
-    public TableDataInfo list(SysConfig config) {
+    @PreAuthorize("@role.hasPermi('system:config:list')")
+    @GetMapping("/pageQuery")
+    public AjaxResult pageQuery(SysConfig config) {
         startPage();
         List<SysConfig> list = configService.selectConfigList(config);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
+    /**
+     * 导出数据
+     *
+     * @param response HttpServletResponse
+     * @param config   SysConfig
+     */
     @Log(service = "参数管理", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@role.hasPermi('system:config:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysConfig config) {
         List<SysConfig> list = configService.selectConfigList(config);
@@ -48,14 +60,20 @@ public class SysConfigController extends TWTController {
 
     /**
      * 根据参数编号获取详细信息
+     *
+     * @param configId 配置Id
+     * @return AjaxResult
      */
     @GetMapping(value = "/{configId}")
-    public AjaxResult getInfo(@PathVariable Long configId) {
+    public AjaxResult getConfigById(@PathVariable Long configId) {
         return AjaxResult.success(configService.selectConfigById(configId));
     }
 
     /**
      * 根据参数键名查询参数值
+     *
+     * @param configKey 键值名称
+     * @return AjaxResult
      */
     @GetMapping(value = "/configKey/{configKey}")
     public AjaxResult getConfigKey(@PathVariable String configKey) {
@@ -64,10 +82,14 @@ public class SysConfigController extends TWTController {
 
     /**
      * 新增参数配置
+     *
+     * @param config SysConfig
+     * @return AjaxResult
      */
     @Log(service = "参数管理", businessType = BusinessType.INSERT)
+    @PreAuthorize("@role.hasPermi('system:config:insert')")
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysConfig config) {
+    public AjaxResult insert(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
             return AjaxResult.error("新增参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
@@ -77,10 +99,14 @@ public class SysConfigController extends TWTController {
 
     /**
      * 修改参数配置
+     *
+     * @param config SysConfig
+     * @return AjaxResult
      */
     @Log(service = "参数管理", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@role.hasPermi('system:config:update')")
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysConfig config) {
+    public AjaxResult update(@Validated @RequestBody SysConfig config) {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config))) {
             return AjaxResult.error("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
         }
@@ -90,8 +116,12 @@ public class SysConfigController extends TWTController {
 
     /**
      * 删除参数配置
+     *
+     * @param configIds 配置ID数组
+     * @return AjaxResult
      */
     @Log(service = "参数管理", businessType = BusinessType.DELETE)
+    @PreAuthorize("@role.hasPermi('system:config:remove')")
     @DeleteMapping("/{configIds}")
     public AjaxResult remove(@PathVariable Long[] configIds) {
         return json(configService.deleteConfigByIds(configIds));
@@ -99,8 +129,11 @@ public class SysConfigController extends TWTController {
 
     /**
      * 清空缓存
+     *
+     * @return AjaxResult
      */
     @Log(service = "参数管理", businessType = BusinessType.CLEAN)
+    @PreAuthorize("@role.hasPermi('system:config:remove')")
     @DeleteMapping("/clearCache")
     public AjaxResult clearCache() {
         configService.clearCache();

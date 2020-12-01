@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysDeptServiceImpl implements ISysDeptService {
+
     @Autowired
     private SysDeptMapper deptMapper;
 

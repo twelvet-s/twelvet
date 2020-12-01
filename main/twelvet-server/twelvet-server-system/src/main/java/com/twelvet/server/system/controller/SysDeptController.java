@@ -27,14 +27,18 @@ import java.util.Map;
 @RestController
 @RequestMapping("/dept")
 public class SysDeptController extends TWTController {
+
     @Autowired
     private ISysDeptService deptService;
 
     /**
      * 获取部门列表
+     *
+     * @param dept SysDept
+     * @return AjaxResult
      */
-    @GetMapping
-    @PreAuthorize("@role.hasPermi('system:dept:query')")
+    @GetMapping("/list")
+    @PreAuthorize("@role.hasPermi('system:dept:list')")
     public AjaxResult list(SysDept dept) {
         // TODO 修改字段orderNum排序
         List<SysDept> depts = deptService.selectDeptList(dept);
@@ -43,6 +47,9 @@ public class SysDeptController extends TWTController {
 
     /**
      * 查询部门列表（排除节点）
+     *
+     * @param deptId 部门ID
+     * @return AjaxResult
      */
     @GetMapping("/list/exclude/{deptId}")
     @PreAuthorize("@role.hasPermi('system:dept:query')")
@@ -55,6 +62,9 @@ public class SysDeptController extends TWTController {
 
     /**
      * 根据部门编号获取详细信息
+     *
+     * @param deptId 部门ID
+     * @return AjaxResult
      */
     @GetMapping(value = "/{deptId}")
     @PreAuthorize("@role.hasPermi('system:dept:query')")
@@ -64,6 +74,9 @@ public class SysDeptController extends TWTController {
 
     /**
      * 获取部门下拉树列表
+     *
+     * @param dept SysDept
+     * @return AjaxResult
      */
     @GetMapping("/treeSelect")
     public AjaxResult treeSelect(SysDept dept) {
@@ -73,6 +86,9 @@ public class SysDeptController extends TWTController {
 
     /**
      * 加载对应角色部门列表树
+     *
+     * @param roleId 部门ID
+     * @return AjaxResult
      */
     @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
     public AjaxResult roleDeptTreeSelect(@PathVariable("roleId") Long roleId) {
@@ -86,11 +102,14 @@ public class SysDeptController extends TWTController {
 
     /**
      * 新增部门
+     *
+     * @param dept SysDept
+     * @return AjaxResult
      */
     @Log(service = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:dept:add')")
-    public AjaxResult add(@Validated @RequestBody SysDept dept) {
+    @PreAuthorize("@role.hasPermi('system:dept:insert')")
+    public AjaxResult insert(@Validated @RequestBody SysDept dept) {
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
             return AjaxResult.error("新增部门'" + dept.getDeptName() + "'失败，部门名称已存在");
         }
@@ -100,11 +119,14 @@ public class SysDeptController extends TWTController {
 
     /**
      * 修改部门
+     *
+     * @param dept SysDept
+     * @return AjaxResult
      */
     @Log(service = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    @PreAuthorize("@role.hasPermi('system:dept:edit')")
-    public AjaxResult edit(@Validated @RequestBody SysDept dept) {
+    @PreAuthorize("@role.hasPermi('system:dept:update')")
+    public AjaxResult update(@Validated @RequestBody SysDept dept) {
         if (UserConstants.NOT_UNIQUE.equals(deptService.checkDeptNameUnique(dept))) {
             return AjaxResult.error("修改部门'" + dept.getDeptName() + "'失败，部门名称已存在");
         } else if (dept.getParentId().equals(dept.getDeptId())) {
@@ -119,6 +141,9 @@ public class SysDeptController extends TWTController {
 
     /**
      * 删除部门
+     *
+     * @param deptId 部门ID
+     * @return AjaxResult
      */
     @Log(service = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")

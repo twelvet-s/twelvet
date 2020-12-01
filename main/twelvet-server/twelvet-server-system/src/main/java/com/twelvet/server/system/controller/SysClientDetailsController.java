@@ -30,10 +30,11 @@ public class SysClientDetailsController extends TWTController {
     /**
      * 查询终端配置列表
      *
+     * @param sysClientDetails SysClientDetails
      * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('system:client:list')")
-    @GetMapping
+    @GetMapping("/pageQuery")
     public AjaxResult pageQuery(SysClientDetails sysClientDetails) {
         startPage();
         List<SysClientDetails> list = sysClientDetailsService.selectSysClientDetailsList(sysClientDetails);
@@ -42,6 +43,9 @@ public class SysClientDetailsController extends TWTController {
 
     /**
      * 获取终端配置详细信息
+     *
+     * @param clientId 终端ID
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('system:client:query')")
     @GetMapping(value = "/{clientId}")
@@ -51,11 +55,14 @@ public class SysClientDetailsController extends TWTController {
 
     /**
      * 新增终端配置
+     *
+     * @param sysClientDetails SysClientDetails
+     * @return AjaxResult
      */
-    @PreAuthorize("@role.hasPermi('system:client:add')")
+    @PreAuthorize("@role.hasPermi('system:client:insert')")
     @Log(service = "终端配置", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysClientDetails sysClientDetails) {
+    public AjaxResult insert(@RequestBody SysClientDetails sysClientDetails) {
         String clientId = sysClientDetails.getClientId();
         if (StringUtils.isNotNull(sysClientDetailsService.selectSysClientDetailsById(clientId))) {
             return AjaxResult.error("新增终端'" + clientId + "'失败，编号已存在");
@@ -66,13 +73,16 @@ public class SysClientDetailsController extends TWTController {
 
     /**
      * 修改终端配置
+     *
+     * @param sysClientDetails sysClientDetails
+     * @return AjaxResult
      */
-    @PreAuthorize("@role.hasPermi('system:client:edit')")
+    @PreAuthorize("@role.hasPermi('system:client:update')")
     @Log(service = "终端配置", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysClientDetails sysClientDetails) {
+    public AjaxResult update(@RequestBody SysClientDetails sysClientDetails) {
         // 重新设置密码
-        if(TWTUtils.isNotEmpty(sysClientDetails.getClientSecret())){
+        if (TWTUtils.isNotEmpty(sysClientDetails.getClientSecret())) {
             sysClientDetails.setClientSecret(SecurityUtils.encryptPassword(sysClientDetails.getClientSecret()));
         }
 
@@ -81,6 +91,9 @@ public class SysClientDetailsController extends TWTController {
 
     /**
      * 删除终端配置
+     *
+     * @param clientIds 终端ID数组
+     * @return 成功删除个数
      */
     @PreAuthorize("@role.hasPermi('system:client:remove')")
     @Log(service = "终端配置", businessType = BusinessType.DELETE)

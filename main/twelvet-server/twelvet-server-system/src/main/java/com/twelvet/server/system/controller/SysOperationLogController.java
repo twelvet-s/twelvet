@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/operationLog")
 public class SysOperationLogController extends TWTController {
+
     @Autowired
     private ISysOperationLogService iSysOperationLogService;
 
@@ -32,7 +33,7 @@ public class SysOperationLogController extends TWTController {
      * @return AjaxResult
      */
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:operlog:insert')")
     public AjaxResult insert(@RequestBody SysOperationLog operationLog) {
         return json(iSysOperationLogService.insertOperationLog(operationLog));
     }
@@ -45,7 +46,7 @@ public class SysOperationLogController extends TWTController {
      */
     @Log(service = "操作日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{operationLogIds}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:operlog:remove')")
     public AjaxResult remove(@PathVariable Long[] operationLogIds) {
         return json(iSysOperationLogService.deleteOperationLogByIds(operationLogIds));
     }
@@ -57,7 +58,7 @@ public class SysOperationLogController extends TWTController {
      */
     @Log(service = "操作日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:operlog:remove')")
     public AjaxResult clean() {
         iSysOperationLogService.cleanOperationLog();
         return AjaxResult.success();
@@ -69,8 +70,8 @@ public class SysOperationLogController extends TWTController {
      * @param operationLog SysOperationLog
      * @return AjaxResult
      */
-    @GetMapping()
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @GetMapping("/pageQuery")
+    @PreAuthorize("@role.hasPermi('system:operlog:list')")
     public AjaxResult pageQuery(SysOperationLog operationLog) {
         startPage();
         List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
@@ -84,9 +85,9 @@ public class SysOperationLogController extends TWTController {
      * @param operationLog SysOperationLog
      */
     @Log(service = "操作日志", businessType = BusinessType.EXPORT)
-    @PostMapping("/exportExcel")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public void exportExcel(HttpServletResponse response, SysOperationLog operationLog) {
+    @PostMapping("/export")
+    @PreAuthorize("@role.hasPermi('system:operlog:export')")
+    public void export(HttpServletResponse response, SysOperationLog operationLog) {
         List<SysOperationLog> list = iSysOperationLogService.selectOperationLogList(operationLog);
         ExcelUtils<SysOperationLog> exportExcel = new ExcelUtils<>(SysOperationLog.class);
         exportExcel.exportExcel(response, list, "操作日志");

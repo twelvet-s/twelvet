@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 调度任务日志信息 数据层
  */
 public interface SysJobLogMapper {
+
     /**
      * 获取quartz调度器日志的计划任务
      *

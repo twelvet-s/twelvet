@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Service
 public class SysOperationLogServiceImpl implements ISysOperationLogService {
+
     @Autowired
     private SysOperationLogMapper sysOperationLogMapper;
 
@@ -45,8 +46,7 @@ public class SysOperationLogServiceImpl implements ISysOperationLogService {
      * 清空操作日志
      */
     @Override
-    public void cleanOperationLog()
-    {
+    public void cleanOperationLog() {
         sysOperationLogMapper.cleanOperationLog();
     }
 
@@ -57,8 +57,7 @@ public class SysOperationLogServiceImpl implements ISysOperationLogService {
      * @return 操作日志集合
      */
     @Override
-    public List<SysOperationLog> selectOperationLogList(SysOperationLog operationLog)
-    {
+    public List<SysOperationLog> selectOperationLogList(SysOperationLog operationLog) {
         return sysOperationLogMapper.selectOperationLogList(operationLog);
     }
 

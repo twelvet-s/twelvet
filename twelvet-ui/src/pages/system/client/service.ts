@@ -1,4 +1,4 @@
-import request, { download } from '@/utils/request'
+import request from '@/utils/request'
 
 // 请求的控制器名称
 const controller = "/system/client";
@@ -44,7 +44,7 @@ export async function update(params: { [key: string]: any }) {
  * @param params 搜索参数
  */
 export async function pageQuery(params: { [key: string]: any }) {
-    return request(`${controller}`, {
+    return request(`${controller}/pageQuery`, {
         method: 'GET',
         data: {
             ...params

@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 参数配置 服务层实现
  */
 public interface ISysConfigService {
+
     /**
      * 查询参数配置信息
      *

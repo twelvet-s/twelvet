@@ -11,6 +11,7 @@ import java.util.List;
  * @Description: 时任务调度日志信息信息 服务层
  */
 public interface ISysJobLogService {
+
     /**
      * 获取quartz调度器日志的计划任务
      *

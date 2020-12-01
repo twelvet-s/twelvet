@@ -11,6 +11,7 @@ import java.util.List;
  * @Description: 部门管理 数据层
  */
 public interface SysDeptMapper {
+
     /**
      * 查询部门管理数据
      *

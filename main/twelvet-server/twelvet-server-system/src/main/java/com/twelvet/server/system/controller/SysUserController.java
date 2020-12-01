@@ -54,10 +54,11 @@ public class SysUserController extends TWTController {
     /**
      * 获取用户列表
      *
+     * @param user SysUser
      * @return AjaxResult
      */
-    @GetMapping
-    @PreAuthorize("@role.hasPermi('system:user:query')")
+    @GetMapping("/pageQuery")
+    @PreAuthorize("@role.hasPermi('system:user:list')")
     public AjaxResult pageQuery(SysUser user) {
         startPage();
         List<SysUser> list = iSysUserService.selectUserList(user);
@@ -70,10 +71,10 @@ public class SysUserController extends TWTController {
      * @param response HttpServletResponse
      * @param user     SysUser
      */
-    @PostMapping("/exportExcel")
+    @PostMapping("/export")
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@role.hasPermi('system:user:export')")
-    public void exportExcel(HttpServletResponse response, SysUser user) {
+    public void export(HttpServletResponse response, SysUser user) {
         List<SysUser> list = iSysUserService.selectUserList(user);
         ExcelUtils<SysUser> excelUtils = new ExcelUtils<>(SysUser.class);
         excelUtils.exportExcel(response, list, "用户数据");
@@ -164,8 +165,8 @@ public class SysUserController extends TWTController {
      * @param userId Long
      * @return AjaxResult
      */
-    @GetMapping({"/", "/{userId}"})
     @PreAuthorize("@role.hasPermi('system:user:query')")
+    @GetMapping({"/", "/{userId}"})
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId) {
         Map<String, Object> res = new HashMap<>(5);
         List<SysRole> roles = iSysRoleService.selectRoleAll();
@@ -185,10 +186,10 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @PostMapping
     @Log(service = "用户管理", businessType = BusinessType.INSERT)
-    @PreAuthorize("@role.hasPermi('system:user:add')")
-    public AjaxResult add(@Validated @RequestBody SysUser user) {
+    @PreAuthorize("@role.hasPermi('system:user:insert')")
+    @PostMapping
+    public AjaxResult insert(@Validated @RequestBody SysUser user) {
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkUserNameUnique(user.getUsername()))) {
             return AjaxResult.error("新增用户'" + user.getUsername() + "'失败，登录账号已存在");
         } else if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkPhoneUnique(user))) {
@@ -207,10 +208,10 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @PutMapping
     @Log(service = "用户管理", businessType = BusinessType.UPDATE)
-    @PreAuthorize("@role.hasPermi('system:user:edit')")
-    public AjaxResult edit(@Validated @RequestBody SysUser user) {
+    @PreAuthorize("@role.hasPermi('system:user:update')")
+    @PutMapping
+    public AjaxResult update(@Validated @RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         if (UserConstants.NOT_UNIQUE.equals(iSysUserService.checkPhoneUnique(user))) {
             return AjaxResult.error("修改用户'" + user.getUsername() + "'失败，手机号码已存在");
@@ -227,8 +228,8 @@ public class SysUserController extends TWTController {
      * @param userIds Long[]
      * @return AjaxResult
      */
-    @PreAuthorize("@role.hasPermi('system:user:remove')")
     @Log(service = "用户管理", businessType = BusinessType.DELETE)
+    @PreAuthorize("@role.hasPermi('system:user:remove')")
     @DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable Long[] userIds) {
         return json(iSysUserService.deleteUserByIds(userIds));
@@ -240,9 +241,9 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @PutMapping("/resetPwd")
     @Log(service = "用户管理", businessType = BusinessType.UPDATE)
     @PreAuthorize("@role.hasPermi('system:user:resetPwd')")
+    @PutMapping("/resetPwd")
     public AjaxResult resetPwd(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
@@ -256,9 +257,9 @@ public class SysUserController extends TWTController {
      * @param user SysUser
      * @return AjaxResult
      */
-    @PutMapping("/changeStatus")
     @Log(service = "用户管理", businessType = BusinessType.UPDATE)
     @PreAuthorize("@role.hasPermi('system:user:edit')")
+    @PutMapping("/changeStatus")
     public AjaxResult changeStatus(@RequestBody SysUser user) {
         iSysUserService.checkUserAllowed(user);
         user.setUpdateBy(SecurityUtils.getUsername());

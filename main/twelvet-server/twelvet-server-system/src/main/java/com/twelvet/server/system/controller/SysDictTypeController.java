@@ -25,19 +25,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/dictionaries/type")
 public class SysDictTypeController extends TWTController {
+
     @Autowired
     private ISysDictTypeService dictTypeService;
 
-    @GetMapping
-    @PreAuthorize("@role.hasPermi('system:dict:query')")
+    /**
+     * 数据字典信息分页查询
+     *
+     * @param dictType SysDictType
+     * @return AjaxResult
+     */
+    @GetMapping("/pageQuery")
+    @PreAuthorize("@role.hasPermi('system:dict:list')")
     public AjaxResult pageQuery(SysDictType dictType) {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
         return AjaxResult.success(getDataTable(list));
     }
 
+    /**
+     * 数据字典导出
+     *
+     * @param response HttpServletResponse
+     * @param dictType SysDictType
+     */
     @Log(service = "字典类型", businessType = BusinessType.EXPORT)
-    @PostMapping("/exportExcel")
+    @PostMapping("/export")
     @PreAuthorize("@role.hasPermi('system:dict:export')")
     public void export(HttpServletResponse response, SysDictType dictType) {
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);
@@ -47,6 +60,9 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 查询字典类型详细
+     *
+     * @param dictId 数据字典ID
+     * @return AjaxResult
      */
     @GetMapping(value = "/{dictId}")
     @PreAuthorize("@role.hasPermi('system:dict:query')")
@@ -56,11 +72,14 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 新增字典类型
+     *
+     * @param dict SysDictType
+     * @return AjaxResult
      */
     @Log(service = "字典类型", businessType = BusinessType.INSERT)
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:dict:add')")
-    public AjaxResult add(@Validated @RequestBody SysDictType dict) {
+    @PreAuthorize("@role.hasPermi('system:dict:insert')")
+    public AjaxResult insert(@Validated @RequestBody SysDictType dict) {
         if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
             return AjaxResult.error("新增字典'" + dict.getDictName() + "'失败，字典类型已存在");
         }
@@ -70,11 +89,14 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 修改字典类型
+     *
+     * @param dict SysDictType
+     * @return AjaxResult
      */
     @Log(service = "字典类型", businessType = BusinessType.UPDATE)
     @PutMapping
-    @PreAuthorize("@role.hasPermi('system:dict:edit')")
-    public AjaxResult edit(@Validated @RequestBody SysDictType dict) {
+    @PreAuthorize("@role.hasPermi('system:dict:update')")
+    public AjaxResult update(@Validated @RequestBody SysDictType dict) {
         if (UserConstants.NOT_UNIQUE.equals(dictTypeService.checkDictTypeUnique(dict))) {
             return AjaxResult.error("修改字典'" + dict.getDictName() + "'失败，字典类型已存在");
         }
@@ -84,6 +106,9 @@ public class SysDictTypeController extends TWTController {
 
     /**
      * 删除字典类型
+     *
+     * @param dictIds 数据字典Ids
+     * @return AjaxResult
      */
     @Log(service = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictIds}")

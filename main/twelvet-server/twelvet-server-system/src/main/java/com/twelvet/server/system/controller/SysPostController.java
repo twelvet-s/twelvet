@@ -37,8 +37,8 @@ public class SysPostController extends TWTController {
      */
     @Log(service = "岗位管理", businessType = BusinessType.INSERT)
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public AjaxResult add(@Validated @RequestBody SysPost sysPost) {
+    @PreAuthorize("@role.hasPermi('system:post:insert')")
+    public AjaxResult insert(@Validated @RequestBody SysPost sysPost) {
         if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostNameUnique(sysPost))) {
             return AjaxResult.error("新增岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在");
         } else if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostCodeUnique(sysPost))) {
@@ -56,7 +56,7 @@ public class SysPostController extends TWTController {
      */
     @Log(service = "岗位管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{postIds}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:post:remove')")
     public AjaxResult remove(@PathVariable Long[] postIds) {
         return json(iSysPostService.deletePostByIds(postIds));
     }
@@ -69,8 +69,8 @@ public class SysPostController extends TWTController {
      */
     @Log(service = "岗位管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public AjaxResult edit(@Validated @RequestBody SysPost sysPost) {
+    @PreAuthorize("@role.hasPermi('system:post:update')")
+    public AjaxResult update(@Validated @RequestBody SysPost sysPost) {
         if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostNameUnique(sysPost))) {
             return AjaxResult.error("修改岗位'" + sysPost.getPostName() + "'失败，岗位名称已存在");
         } else if (UserConstants.NOT_UNIQUE.equals(iSysPostService.checkPostCodeUnique(sysPost))) {
@@ -82,9 +82,12 @@ public class SysPostController extends TWTController {
 
     /**
      * 获取岗位列表
+     *
+     * @param post SysPost
+     * @return AjaxResult
      */
     @GetMapping
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @PreAuthorize("@role.hasPermi('system:post:list')")
     public AjaxResult pageQuery(SysPost post) {
         startPage();
         List<SysPost> list = iSysPostService.selectPostList(post);
@@ -97,8 +100,8 @@ public class SysPostController extends TWTController {
      * @param postId 唯一ID
      * @return AjaxResult
      */
-    @GetMapping(value = "/{postId}")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
+    @GetMapping("/{postId}")
+    @PreAuthorize("@role.hasPermi('system:post:query')")
     public AjaxResult getByPostId(@PathVariable Long postId) {
         return AjaxResult.success(iSysPostService.selectPostById(postId));
     }
@@ -109,7 +112,6 @@ public class SysPostController extends TWTController {
      * @return AjaxResult
      */
     @GetMapping("/optionSelect")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
     public AjaxResult optionSelect() {
         List<SysPost> posts = iSysPostService.selectPostAll();
         return AjaxResult.success(posts);
@@ -122,9 +124,9 @@ public class SysPostController extends TWTController {
      * @param sysPost  SysPost
      */
     @Log(service = "岗位管理", businessType = BusinessType.EXPORT)
-    @PostMapping("/exportExcel")
-    @PreAuthorize("@role.hasPermi('system:job:list')")
-    public void exportExcel(HttpServletResponse response, SysPost sysPost) {
+    @PostMapping("/export")
+    @PreAuthorize("@role.hasPermi('system:post:export')")
+    public void export(HttpServletResponse response, SysPost sysPost) {
         List<SysPost> list = iSysPostService.selectPostList(sysPost);
         ExcelUtils<SysPost> excelUtils = new ExcelUtils<>(SysPost.class);
         excelUtils.exportExcel(response, list, "岗位数据");

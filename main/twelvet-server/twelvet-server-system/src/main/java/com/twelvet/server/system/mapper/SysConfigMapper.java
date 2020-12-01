@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 参数配置 数据层
  */
 public interface SysConfigMapper {
+
     /**
      * 查询参数配置信息
      *

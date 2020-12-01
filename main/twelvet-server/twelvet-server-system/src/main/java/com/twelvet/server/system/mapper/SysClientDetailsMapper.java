@@ -5,6 +5,7 @@ import com.twelvet.api.system.domain.SysClientDetails;
 import java.util.List;
 
 public interface SysClientDetailsMapper {
+
     /**
      * 查询终端配置
      *

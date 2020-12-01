@@ -11,6 +11,7 @@ import java.util.List;
  * @Description: 字典 业务层
  */
 public interface ISysDictTypeService {
+
     /**
      * 根据条件分页查询字典类型
      *

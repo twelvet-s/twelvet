@@ -10,6 +10,7 @@ import java.util.List;
  * @Description: 调度任务信息 数据层
  */
 public interface SysJobMapper {
+
     /**
      * 查询调度任务日志集合
      *
