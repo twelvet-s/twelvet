@@ -20,7 +20,7 @@ const Login: React.FC<{}> = () => {
     const { RangePicker } = DatePicker
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '任务名称', ellipsis: true, valueType: "text", dataIndex: 'jobName',
         },

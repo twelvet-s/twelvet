@@ -78,7 +78,7 @@ const Role: React.FC<{}> = () => {
     }
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '角色名称', ellipsis: true, valueType: "text", dataIndex: 'roleName',
         },

@@ -42,7 +42,7 @@ const Menu: React.FC<{}> = () => {
     }
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '菜单名称', ellipsis: true, valueType: "text", dataIndex: 'menuName',
         },

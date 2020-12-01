@@ -4,7 +4,6 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, Radio } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { TableListItem } from './data'
 import { pageQuery, remove, exportExcel, getBydictId, insert, update, clearCache } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -47,7 +46,7 @@ const Dictionaries: React.FC<{}> = () => {
     }
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '字典名称', ellipsis: true, valueType: "text", dataIndex: 'dictName',
         },

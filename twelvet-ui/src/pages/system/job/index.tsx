@@ -2,12 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip, TreeSelect, Tree, Select } from 'antd'
-import { TableListItem } from './data'
+import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
 import { pageQuery, remove, exportExcel, run, insert, update, getByJobId } from './service'
 import { system } from '@/utils/twelvet'
-import { RequestData } from '@ant-design/pro-table'
-import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
 import JobStatus from './components/jobStatusSwitch/Index'
 import Details from './components/details/Index'
 import { FormInstance } from 'antd/lib/form'
@@ -48,7 +45,7 @@ const Job: React.FC<{}> = () => {
 
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '任务名称', ellipsis: true, valueType: "text", dataIndex: 'jobName',
         },
@@ -76,9 +73,7 @@ const Job: React.FC<{}> = () => {
         {
             title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (
                 _: string,
-                row: { [key: string]: string },
-                action: UseFetchDataAction<RequestData<string>>
-            ) => {
+                row: { [key: string]: string }            ) => {
                 return (
                     <Space>
 

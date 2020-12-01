@@ -47,7 +47,7 @@ const DrawerInfo: React.FC<{
     }
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '字典名称',
             key: 'dictType',

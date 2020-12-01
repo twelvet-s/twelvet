@@ -38,7 +38,7 @@ const Post: React.FC<{}> = () => {
     }
 
     // Form参数
-    const columns: ProColumns<TableListItem> = [
+    const columns: ProColumns = [
         {
             title: '岗位编码', ellipsis: true, valueType: "text", dataIndex: 'postCode',
         },
