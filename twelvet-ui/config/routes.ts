@@ -40,6 +40,21 @@ export default [
                     path: '/system',
                     routes: [
                         {
+                            title: '系统配置',
+                            icon: 'icon-settings',
+                            name: 'config',
+                            path: '/system/config',
+                            routes: [
+                                {
+                                    title: '基础配置',
+                                    icon: 'icon-base-config',
+                                    name: 'baseConfig',
+                                    path: '/system/config/base',
+                                    component: './system/config/base'
+                                }
+                            ]
+                        },
+                        {
                             title: '菜单管理',
                             icon: 'icon-menu',
                             name: 'menu',

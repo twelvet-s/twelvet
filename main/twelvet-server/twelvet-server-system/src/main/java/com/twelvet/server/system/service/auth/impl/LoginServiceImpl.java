@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
-
     /**
      * 用户登录
      *
