@@ -50,26 +50,8 @@ const LoginModel: LoginModelType = {
                 type: 'changeLoginStatus',
                 payload: response,
             })
-
-            // Login successfully
-            if (code === 200) {
-                const urlParams = new URL(window.location.href)
-                const params = getPageQuery()
-                let { redirect } = params as { redirect: string }
-                if (redirect) {
-                    const redirectUrlParams = new URL(redirect)
-                    if (redirectUrlParams.origin === urlParams.origin) {
-                        redirect = redirect.substr(urlParams.origin.length)
-                        if (redirect.match(/^\/.*#/)) {
-                            redirect = redirect.substr(redirect.indexOf('#') + 1)
-                        }
-                    } else {
-                        window.location.href = '/'
-                        return
-                    }
-                }
-                history.replace(redirect || '/')
-            }
+            // 跳转至首页，不使用路由跳转，避免数据获取异常
+            window.location.href = '/'
         },
         // 刷新令牌
         *refreshToken({ payload }, { call, put }) {

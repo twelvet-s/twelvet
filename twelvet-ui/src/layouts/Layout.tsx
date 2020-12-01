@@ -133,6 +133,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             fixSiderbar={true}
             colorWeak={false}
             iconfontUrl='//at.alicdn.com/t/font_2059726_aw0jk1jnlus.js'
+            // 渲染菜单数据
+            menuDataRender={() => currentUser.menuData.data}
             menu={{
                 defaultOpenAll: false,
                 locale: false,
@@ -140,8 +142,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 loading: currentUser.menuData.loading,
             }}
             logo={logo}
-            // 渲染菜单数据
-            menuDataRender={() => currentUser.menuData.data}
             // 额外主体渲染
             menuExtraRender={({ collapsed }) =>
                 // 菜单搜索框
