@@ -7,6 +7,17 @@ import layout from '@/pages/login/layout'
  */
 const BaseConfig: React.FC<{}> = () => {
 
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 4 },
+            sm: { span: 4 },
+        },
+        wrapperCol: {
+            xs: { span: 12 },
+            sm: { span: 12 },
+        },
+    };
+
     return (
         <Tabs animated defaultActiveKey="1" style={{ background: '#ffffff', padding: '0 20px 0 20px' }}>
             <Tabs.TabPane tab="基础设置" key="1">
@@ -16,6 +27,7 @@ const BaseConfig: React.FC<{}> = () => {
                     initialValues={{ remember: true }}
                 >
                     <Form.Item
+                        {...formItemLayout}
                         label="Username"
                         name="username"
                         rules={[{ required: true, message: 'Please input your username!' }]}
@@ -24,6 +36,7 @@ const BaseConfig: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="Password"
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
@@ -31,11 +44,15 @@ const BaseConfig: React.FC<{}> = () => {
                         <Input.Password />
                     </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
+                    <Form.Item
+                        {...formItemLayout}
+                        name="remember" valuePropName="checked">
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
 
-                    <Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                    >
                         <Button type="primary" htmlType="submit">
                             Submit
                         </Button>
@@ -44,12 +61,12 @@ const BaseConfig: React.FC<{}> = () => {
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="SEO设置" key="2">
-            <Form
-                    {...layout}
+                <Form
                     name="basic"
                     initialValues={{ remember: true }}
                 >
                     <Form.Item
+                        {...formItemLayout}
                         label="Username"
                         name="username"
                         rules={[{ required: true, message: 'Please input your username!' }]}
@@ -58,6 +75,7 @@ const BaseConfig: React.FC<{}> = () => {
                     </Form.Item>
 
                     <Form.Item
+                        {...formItemLayout}
                         label="Password"
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
@@ -65,11 +83,11 @@ const BaseConfig: React.FC<{}> = () => {
                         <Input.Password />
                     </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
+                    <Form.Item {...formItemLayout} name="remember" valuePropName="checked">
                         <Checkbox>Remember me</Checkbox>
                     </Form.Item>
 
-                    <Form.Item>
+                    <Form.Item {...formItemLayout}>
                         <Button type="primary" htmlType="submit">
                             Submit
                         </Button>
