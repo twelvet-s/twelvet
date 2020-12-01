@@ -1,6 +1,6 @@
 package com.twelvet.framework.log.service;
 
-import com.twelvet.api.system.RemoteLogService;
+import com.twelvet.api.system.feign.RemoteLogService;
 import com.twelvet.api.system.domain.SysOperationLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

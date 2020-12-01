@@ -1,7 +1,7 @@
 package com.twelvet.api.system.factory;
 
 
-import com.twelvet.api.system.RemoteUserService;
+import com.twelvet.api.system.feign.RemoteUserService;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
 package com.twelvet.api.system.factory;
 
 
-import com.twelvet.api.system.RemoteLogService;
+import com.twelvet.api.system.feign.RemoteLogService;
 import com.twelvet.api.system.domain.SysOperationLog;
 import com.twelvet.framework.core.domain.R;
 import feign.hystrix.FallbackFactory;

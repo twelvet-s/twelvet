@@ -1,6 +1,6 @@
 package com.twelvet.framework.security.service;
 
-import com.twelvet.api.system.RemoteUserService;
+import com.twelvet.api.system.feign.RemoteUserService;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.domain.R;

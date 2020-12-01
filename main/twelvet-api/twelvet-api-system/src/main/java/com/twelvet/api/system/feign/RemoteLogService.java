@@ -1,4 +1,4 @@
-package com.twelvet.api.system;
+package com.twelvet.api.system.feign;
 
 
 import com.twelvet.api.system.domain.SysOperationLog;

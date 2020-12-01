@@ -4,7 +4,7 @@ import { history, Reducer, Effect } from 'umi'
 import { message } from 'antd'
 
 import { login, refreshToken } from '@/services/login'
-import { setAuthority } from '@/utils/authority'
+import { removeAuthority, setAuthority } from '@/utils/authority'
 import { getPageQuery, } from '@/utils/utils'
 
 export interface StateType {
@@ -62,6 +62,9 @@ const LoginModel: LoginModelType = {
             const { redirect } = getPageQuery()
             // Note: There may be security issues, please note
             if (window.location.pathname !== '/login' && !redirect) {
+                // 移除令牌
+                removeAuthority()
+
                 history.replace({
                     pathname: '/login',
                     search: stringify({

@@ -25,11 +25,27 @@ export function getAuthority(str?: string): string | string[] {
     return authority;
 }
 
+/**
+ * 设置授权令牌
+ * @param authority 
+ */
 export function setAuthority(authority: { [key: string]: any }): void {
     // 设置access_token
     localStorage.setItem(TWT.accessToken, authority.access_token);
     // 设置refresh_token
     localStorage.setItem(TWT.refreshToken, authority.refresh_token);
+    // auto reload
+    reloadAuthorized();
+}
+
+/**
+ * 移除授权令牌
+ */
+export function removeAuthority() {
+    // 设置access_token
+    localStorage.removeItem(TWT.accessToken);
+    // 设置refresh_token
+    localStorage.removeItem(TWT.refreshToken);
     // auto reload
     reloadAuthorized();
 }

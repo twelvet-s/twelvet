@@ -1,4 +1,4 @@
-package com.twelvet.api.system;
+package com.twelvet.api.system.feign;
 
 import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
 import com.twelvet.api.system.model.UserInfo;
@@ -26,6 +26,6 @@ public interface RemoteUserService {
      * @param username 用户名称
      * @return R<UserInfo>
      */
-    @GetMapping(value = "/user/info/{username}")
+    @GetMapping("/user/info/{username}")
     R<UserInfo> getUserInfo(@PathVariable("username") String username);
 }

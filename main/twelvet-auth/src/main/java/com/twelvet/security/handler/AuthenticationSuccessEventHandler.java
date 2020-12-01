@@ -1,6 +1,6 @@
 package com.twelvet.security.handler;
 
-import com.twelvet.api.system.RemoteLogService;
+import com.twelvet.api.system.feign.RemoteLogService;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.utils.TWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
