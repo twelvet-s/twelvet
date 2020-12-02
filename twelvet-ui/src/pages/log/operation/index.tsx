@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
+import ProDescriptions from '@ant-design/pro-descriptions'
 import { Popconfirm, Button, message, Modal, DatePicker, Descriptions } from 'antd'
 import moment, { Moment } from 'moment'
 import { pageQuery, remove, exportExcel } from './service'
@@ -62,7 +63,7 @@ const Operation: React.FC<{}> = () => {
             title: '操作时间', width: 200, valueType: "dateTime", search: false, dataIndex: 'operTime'
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Button type="default" onClick={() => handleView(row)}>
                         <EyeOutlined />
@@ -176,50 +177,53 @@ const Operation: React.FC<{}> = () => {
                 onCancel={handleCancel}
                 footer={null}
             >
+                <ProDescriptions
+                    column={2}
+                >
 
-                <Descriptions column={2}>
-                    <Descriptions.Item label="操作模块">
+                    <ProDescriptions.Item label="操作模块">
                         {descriptions && descriptions.service}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="请求方式">
+                    <ProDescriptions.Item label="请求方式">
                         {descriptions && descriptions.requestMethod}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="请求地址" span={2}>
+                    <ProDescriptions.Item label="请求地址">
                         {descriptions && descriptions.operUrl}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="操作方法" span={2}>
+                    <ProDescriptions.Item label="操作方法">
                         {descriptions && descriptions.method}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="请求参数" span={2}>
+                    <ProDescriptions.Item label="请求参数" valueType="jsonCode">
                         {descriptions && descriptions.operParam}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="返回参数" span={2}>
+                    <ProDescriptions.Item label="返回参数" valueType="jsonCode">
                         {descriptions && descriptions.jsonResult}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="操作状态">
+                    <ProDescriptions.Item label="操作状态">
                         {
                             descriptions && descriptions.status === 1 ? '正常' : '失败'
                         }
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="操作人员">
+                    <ProDescriptions.Item label="操作人员">
                         {descriptions && descriptions.operName}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="操作时间">
+                    <ProDescriptions.Item label="操作时间">
                         {descriptions && descriptions.operTime}
-                    </Descriptions.Item>
+                    </ProDescriptions.Item>
 
-                    <Descriptions.Item label="操作地点">
+                    <ProDescriptions.Item label="操作地点">
                         {descriptions && descriptions.operIp}
-                    </Descriptions.Item>
-                </Descriptions>
+                    </ProDescriptions.Item>
+
+                </ProDescriptions>
 
             </Modal>
         </>
