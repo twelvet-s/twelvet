@@ -1,9 +1,12 @@
 package com.twelvet.server.system.controller;
 
+import com.twelvet.api.system.domain.auth.Login;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.server.system.service.auth.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +27,9 @@ public class LoginController extends TWTController {
      *
      * @return AjaxResult
      */
-    public AjaxResult login() {
+    @PostMapping
+    public AjaxResult login(@RequestBody Login login) {
+        loginService.login(login);
         return null;
     }
 

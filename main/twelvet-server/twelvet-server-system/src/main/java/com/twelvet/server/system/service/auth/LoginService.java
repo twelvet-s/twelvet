@@ -1,5 +1,6 @@
 package com.twelvet.server.system.service.auth;
 
+import com.twelvet.api.system.domain.auth.Login;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 
 /**
@@ -14,7 +15,7 @@ public interface LoginService {
      *
      * @return AjaxResult
      */
-    AjaxResult login();
+    AjaxResult login(Login login);
 
     /**
      * 用户退出

@@ -1,10 +1,12 @@
-package com.twelvet.security.feign;
+package com.twelvet.api.system.feign;
 
+import com.twelvet.api.system.domain.auth.Login;
 import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.constants.ServiceNameConstants;
 import com.twelvet.framework.core.domain.R;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -25,6 +27,6 @@ public interface RemoteSysLoginService {
      * @param username 用户名称
      * @return R<UserInfo>
      */
-    @PostMapping("/oauth/token")
-    R<UserInfo> login(String username);
+    @GetMapping("/oauth/token")
+    R<UserInfo> login(Login login);
 }
