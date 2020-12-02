@@ -12,8 +12,6 @@ import { FormInstance } from 'antd/lib/form'
  */
 const Dept: React.FC<{}> = () => {
 
-    // 是否加载中部门数据
-    const [loading, setLoading] = useState<boolean>(true)
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
@@ -38,10 +36,10 @@ const Dept: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '部门名称', ellipsis: true, valueType: "text", dataIndex: 'deptName',
+            title: '部门名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'deptName',
         },
         {
-            title: '排序', ellipsis: false, valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '排序', ellipsis: false, width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
             title: '状态',
@@ -53,10 +51,10 @@ const Dept: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', valueType: "dateTime", search: false, dataIndex: 'createTime'
+            title: '创建时间', width: 200, valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作', search: false, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', search: false, width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
                         {
@@ -225,7 +223,6 @@ const Dept: React.FC<{}> = () => {
                 actionRef={acForm}
                 rowKey="deptId"
                 columns={columns}
-                loading={loading}
                 defaultExpandAllRows={true}
                 // 处理响应的数据
                 postData={(dataSource) => {
@@ -233,7 +230,6 @@ const Dept: React.FC<{}> = () => {
                         dataSource: dataSource,
                         id: 'deptId'
                     })
-                    setLoading(false)
                     return tree
                 }}
                 request={list}

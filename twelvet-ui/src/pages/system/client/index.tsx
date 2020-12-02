@@ -38,22 +38,22 @@ const Post: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '编号', valueType: "text", dataIndex: 'clientId',
+            title: '编号', width: 200, valueType: "text", dataIndex: 'clientId',
         },
         {
-            title: '授权范围', valueType: "text", search: false, dataIndex: 'scope'
+            title: '授权范围', width: 200, valueType: "text", search: false, dataIndex: 'scope'
         },
         {
-            title: '授权类型', valueType: "text", search: false, dataIndex: 'authorizedGrantTypes'
+            title: '授权类型', width: 200, valueType: "text", search: false, dataIndex: 'authorizedGrantTypes'
         },
         {
-            title: '令牌有效期', valueType: "text", search: false, dataIndex: 'accessTokenValidity'
+            title: '令牌有效期', width: 200, valueType: "text", search: false, dataIndex: 'accessTokenValidity'
         },
         {
-            title: '刷新令牌有效期', valueType: "text", search: false, dataIndex: 'refreshTokenValidity'
+            title: '刷新令牌有效期', width: 200, valueType: "text", search: false, dataIndex: 'refreshTokenValidity'
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />

@@ -26,16 +26,16 @@ const Operation: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '系统模块', ellipsis: true, valueType: "text", dataIndex: 'service',
+            title: '系统模块', ellipsis: true, width: 200, valueType: "text", dataIndex: 'service',
         },
         {
-            title: '请求方式', search: false, valueType: "text", dataIndex: 'requestMethod'
+            title: '请求方式', search: false, width: 200, valueType: "text", dataIndex: 'requestMethod'
         },
         {
-            title: '操作类型', valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '操作类型', width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
-            title: '操作人员', valueType: "text", dataIndex: 'operName'
+            title: '操作人员', width: 200, valueType: "text", dataIndex: 'operName'
         },
         {
             title: '操作地点', search: false, dataIndex: 'component'
@@ -59,10 +59,10 @@ const Operation: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作时间', valueType: "dateTime", search: false, dataIndex: 'operTime'
+            title: '操作时间', width: 200, valueType: "dateTime", search: false, dataIndex: 'operTime'
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Button type="default" onClick={() => handleView(row)}>
                         <EyeOutlined />

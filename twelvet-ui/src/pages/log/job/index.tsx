@@ -23,16 +23,16 @@ const Login: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '任务名称', ellipsis: true, valueType: "text", dataIndex: 'jobName',
+            title: '任务名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'jobName',
         },
         {
-            title: '任务组名', valueType: "text", dataIndex: 'jobGroup'
+            title: '任务组名', width: 200, valueType: "text", dataIndex: 'jobGroup'
         },
         {
-            title: '调用目标方法', valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '调用目标方法', width: 200, valueType: "text", search: false, dataIndex: 'invokeTarget'
         },
         {
-            title: '日志信息', valueType: "text", search: false, dataIndex: 'jobMessage'
+            title: '日志信息', width: 200, valueType: "text", search: false, dataIndex: 'jobMessage'
         },
         {
             title: '执行状态',
@@ -44,7 +44,7 @@ const Login: React.FC<{}> = () => {
             },
         },
         {
-            title: '执行时间', valueType: "text", search: false, dataIndex: 'createTime'
+            title: '执行时间', width: 200, valueType: "text", search: false, dataIndex: 'createTime'
         },
         {
             title: '执行时间',
@@ -59,7 +59,7 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
                 return (
                     <Button type="default">
                         <EyeOutlined />

@@ -50,14 +50,15 @@ const Dictionaries: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '字典名称', ellipsis: true, valueType: "text", dataIndex: 'dictName',
+            title: '字典名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'dictName',
         },
         {
-            title: '字典类型', valueType: "text", dataIndex: 'dictType'
+            title: '字典类型', width: 200, valueType: "text", dataIndex: 'dictType'
         },
         {
             title: '状态',
             ellipsis: false,
+            width: 80,
             dataIndex: 'status',
             valueEnum: {
                 1: { text: '正常', status: 'success' },
@@ -65,13 +66,13 @@ const Dictionaries: React.FC<{}> = () => {
             },
         },
         {
-            title: '备注', search: false, valueType: "text", dataIndex: 'remark'
+            title: '备注', search: false, width: 200, valueType: "text", dataIndex: 'remark'
         },
         {
-            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />

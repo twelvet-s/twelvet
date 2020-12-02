@@ -110,7 +110,7 @@ public class SysPostController extends TWTController {
      * @param post SysPost
      * @return AjaxResult
      */
-    @GetMapping
+    @GetMapping("/pageQuery")
     @PreAuthorize("@role.hasPermi('system:post:list')")
     public AjaxResult pageQuery(SysPost post) {
         startPage();

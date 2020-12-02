@@ -12,8 +12,6 @@ import { FormInstance } from 'antd/lib/form'
  */
 const Menu: React.FC<{}> = () => {
 
-    // 是否加载中菜单数据
-    const [loading, setLoading] = useState<boolean>(true)
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
@@ -43,24 +41,25 @@ const Menu: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '菜单名称', ellipsis: true, valueType: "text", dataIndex: 'menuName',
+            title: '菜单名称', fixed: 'left', width: 200, ellipsis: true, width: 200, valueType: "text", dataIndex: 'menuName',
         },
         {
-            title: 'Icon', ellipsis: false, valueType: "text", search: false, dataIndex: 'icon', render: (item: string) => {
+            title: 'Icon', width: 50, ellipsis: false, width: 200, valueType: "text", search: false, dataIndex: 'icon', render: (item: string) => {
                 return < IconFont type={item} />
             }
         },
         {
-            title: '排序', ellipsis: true, valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '排序', width: 50, ellipsis: true, width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
-            title: '权限标识', search: false, dataIndex: 'perms'
+            title: '权限标识', width: 200, search: false, dataIndex: 'perms'
         },
         {
-            title: '组件路径', search: false, dataIndex: 'component'
+            title: '组件路径', width: 200, search: false, dataIndex: 'component'
         },
         {
             title: '状态',
+            width: 80,
             ellipsis: false,
             dataIndex: 'status',
             valueEnum: {
@@ -69,10 +68,10 @@ const Menu: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', valueType: "dateTime", search: false, dataIndex: 'createTime'
+            title: '创建时间', width: 150, width: 200, valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作', search: false, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 280, search: false, width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
                         {
@@ -253,14 +252,12 @@ const Menu: React.FC<{}> = () => {
                 actionRef={acForm}
                 rowKey="menuId"
                 columns={columns}
-                loading={loading}
                 // 处理响应的数据
                 postData={(dataSource) => {
                     const tree = makeTree({
                         dataSource: dataSource,
                         id: 'menuId'
                     })
-                    setLoading(false)
                     return tree
                 }}
                 request={list}

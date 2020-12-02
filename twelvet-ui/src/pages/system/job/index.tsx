@@ -49,16 +49,16 @@ const Job: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '任务名称', ellipsis: true, valueType: "text", dataIndex: 'jobName',
+            title: '任务名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'jobName',
         },
         {
-            title: '任务组名', valueType: "text", dataIndex: 'jobGroup'
+            title: '任务组名', width: 200, valueType: "text", dataIndex: 'jobGroup'
         },
         {
-            title: '调用目标字符串', valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '调用目标字符串', width: 200, valueType: "text", search: false, dataIndex: 'invokeTarget'
         },
         {
-            title: 'cron执行表达式', search: false, valueType: "text", dataIndex: 'cronExpression'
+            title: 'cron执行表达式', search: false, width: 200, valueType: "text", dataIndex: 'cronExpression'
         },
         {
             title: '状态',
@@ -73,7 +73,7 @@ const Job: React.FC<{}> = () => {
             ]
         },
         {
-            title: '操作', valueType: "option", search: false, dataIndex: 'operation', render: (
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (
                 _: string,
                 row: { [key: string]: string }) => {
                 return (

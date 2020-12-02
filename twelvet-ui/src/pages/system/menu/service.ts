@@ -44,7 +44,7 @@ export async function update(params: { [key: string]: any }) {
  * @param params 搜索参数
  */
 export async function list(params: { [key: string]: any }) {
-    return request(`${controller}`, {
+    return request(`${controller}/list`, {
         method: 'GET',
         data: {
             ...params

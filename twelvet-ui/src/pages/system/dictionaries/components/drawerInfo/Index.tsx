@@ -58,13 +58,13 @@ const DrawerInfo: React.FC<{
             renderFormItem: () => <SelectType {...props}/>
         },
         {
-            title: '字典标签', ellipsis: true, valueType: "text", dataIndex: 'dictLabel',
+            title: '字典标签', ellipsis: true, width: 200, valueType: "text", dataIndex: 'dictLabel',
         },
         {
-            title: '字典键值', search: false, valueType: "text", dataIndex: 'dictValue'
+            title: '字典键值', search: false, width: 200, valueType: "text", dataIndex: 'dictValue'
         },
         {
-            title: '字典排序', search: false, valueType: "text", dataIndex: 'dictSort'
+            title: '字典排序', search: false, width: 200, valueType: "text", dataIndex: 'dictSort'
         },
         {
             title: '状态',
@@ -76,13 +76,13 @@ const DrawerInfo: React.FC<{
             },
         },
         {
-            title: '备注', search: false, valueType: "text", dataIndex: 'remark'
+            title: '备注', search: false, width: 200, valueType: "text", dataIndex: 'remark'
         },
         {
-            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />

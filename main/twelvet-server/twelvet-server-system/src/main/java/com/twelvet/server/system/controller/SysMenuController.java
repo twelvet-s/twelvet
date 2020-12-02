@@ -91,7 +91,7 @@ public class SysMenuController extends TWTController {
      * @param sysMenu sysMenu
      * @return 菜单数据
      */
-    @GetMapping
+    @GetMapping("/list")
     @PreAuthorize("@role.hasPermi('system:menu:list')")
     public AjaxResult list(SysMenu sysMenu) {
         LoginUser loginUser = SecurityUtils.getLoginUser();

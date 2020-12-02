@@ -24,16 +24,16 @@ const Login: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '用户名称', ellipsis: true, valueType: "text", dataIndex: 'userName',
+            title: '用户名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'userName',
         },
         {
-            title: 'IP', valueType: "text", dataIndex: 'ipaddr'
+            title: 'IP', width: 200, valueType: "text", dataIndex: 'ipaddr'
         },
         {
-            title: '登录地区', valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '登录地区', width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
-            title: '终端', search: false, valueType: "text", dataIndex: 'perms'
+            title: '终端', search: false, width: 200, valueType: "text", dataIndex: 'perms'
         },
         {
             title: '操作系统', search: false, dataIndex: 'component'
@@ -48,7 +48,7 @@ const Login: React.FC<{}> = () => {
             },
         },
         {
-            title: '登录信息', valueType: "text", search: false, dataIndex: 'msg'
+            title: '登录信息', width: 200, valueType: "text", search: false, dataIndex: 'msg'
         },
         {
             title: '搜索日期',
@@ -63,7 +63,7 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '登录时间', valueType: "Date", search: false, dataIndex: 'accessTime'
+            title: '登录时间', width: 200, valueType: "Date", search: false, dataIndex: 'accessTime'
         },
     ]
 

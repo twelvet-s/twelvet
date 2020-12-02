@@ -64,20 +64,21 @@ const Staff: React.FC<{}> = () => {
             renderFormItem: () => <DpetSearch placeholder="部门" />
         },
         {
-            title: '用户账号', ellipsis: true, valueType: "text", dataIndex: 'username',
+            title: '用户账号', ellipsis: true, width: 200, valueType: "text", dataIndex: 'username',
         },
         {
-            title: '用户昵称', valueType: "text", search: false, dataIndex: 'nickName'
+            title: '用户昵称', width: 200, valueType: "text", search: false, dataIndex: 'nickName'
         },
         {
-            title: '部门', valueType: "text", search: false, dataIndex: 'postSort'
+            title: '部门', width: 200, valueType: "text", search: false, dataIndex: 'postSort'
         },
         {
-            title: '手机号码', valueType: "text", dataIndex: 'phonenumber'
+            title: '手机号码', width: 200, valueType: "text", dataIndex: 'phonenumber'
         },
         {
             title: '状态',
             ellipsis: false,
+            width: 80,
             dataIndex: 'status',
             valueEnum: {
                 "1": { text: '正常', status: 'success' },
@@ -85,7 +86,7 @@ const Staff: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
             title: '搜索日期',
@@ -100,7 +101,7 @@ const Staff: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />

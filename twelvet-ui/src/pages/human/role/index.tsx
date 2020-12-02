@@ -81,27 +81,28 @@ const Role: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '角色名称', ellipsis: true, valueType: "text", dataIndex: 'roleName',
+            title: '角色名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'roleName',
         },
         {
-            title: '权限字符', valueType: "text", dataIndex: 'roleKey'
+            title: '权限字符', width: 200, valueType: "text", dataIndex: 'roleKey'
         },
         {
-            title: '显示顺序', valueType: "text", search: false, dataIndex: 'roleSort'
+            title: '显示顺序', width: 200, valueType: "text", search: false, dataIndex: 'roleSort'
         },
         {
             title: '状态',
             ellipsis: false,
+            width: 80,
             dataIndex: 'status',
             render: (_: string, row: { [key: string]: string }) => [
                 <RoleStatusSwitch row={row}/>
             ]
         },
         {
-            title: '创建时间', search: false, valueType: "dateTime", dataIndex: 'createTime'
+            title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
-            title: '操作', valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />
