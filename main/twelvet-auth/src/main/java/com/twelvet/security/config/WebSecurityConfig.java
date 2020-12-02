@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -74,11 +75,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/actuator/**",
                         "/oauth/*",
-                        "/token/**").permitAll()
+                        "/oauth/user/token",
+                        "/token/**")
+                .permitAll()
                 // 除以上所有进行拦截
                 .anyRequest().authenticated()
                 // 关闭csrf
                 .and().csrf().disable();
+    }
+
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html", "/webjars/**", "/doc.html", "/login.html");
+        web.ignoring().antMatchers("/js/**");
+        web.ignoring().antMatchers("/css/**");
+        web.ignoring().antMatchers("/health");
+        // 忽略登录界面
+        web.ignoring().antMatchers("/login.html");
+        web.ignoring().antMatchers("/index.html");
+        web.ignoring().antMatchers("/oauth/user/token");
+        web.ignoring().antMatchers("/oauth/client/token");
+        web.ignoring().antMatchers("/validata/code/**");
+        web.ignoring().antMatchers("/sms/**");
+        web.ignoring().antMatchers("/authentication/**");
+
     }
 
 }
