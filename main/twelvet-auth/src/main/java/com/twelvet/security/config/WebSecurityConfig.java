@@ -86,20 +86,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                "/swagger-ui.html", "/webjars/**", "/doc.html", "/login.html");
-        web.ignoring().antMatchers("/js/**");
-        web.ignoring().antMatchers("/css/**");
-        web.ignoring().antMatchers("/health");
-        // 忽略登录界面
-        web.ignoring().antMatchers("/login.html");
-        web.ignoring().antMatchers("/index.html");
-        web.ignoring().antMatchers("/oauth/user/token");
-        web.ignoring().antMatchers("/oauth/client/token");
-        web.ignoring().antMatchers("/validata/code/**");
-        web.ignoring().antMatchers("/sms/**");
-        web.ignoring().antMatchers("/authentication/**");
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/oauth/system/login");
 
     }
 

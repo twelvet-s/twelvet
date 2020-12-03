@@ -124,14 +124,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     return (
         <ProLayout
-            navTheme='dark'
+            navTheme='light'
             // 拂晓蓝
             primaryColor='#1890ff'
-            layout='side'
+            layout='mix'
             contentWidth='Fluid'
             fixedHeader={false}
             fixSiderbar={true}
             colorWeak={false}
+            splitMenus={true}
             iconfontUrl='//at.alicdn.com/t/font_2059726_aw0jk1jnlus.js'
             // 渲染菜单数据
             menuDataRender={() => currentUser.menuData.data}

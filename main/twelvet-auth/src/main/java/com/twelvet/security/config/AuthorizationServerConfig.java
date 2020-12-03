@@ -72,6 +72,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      *
      * @return RedisClientDetailsService
      */
+    @Bean
     public RedisClientDetailsService redisClientDetails() {
         return new RedisClientDetailsService(dataSource);
     }
@@ -100,19 +101,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
-     * 自定义生成令牌
+     * 自定义扩展令牌信息
      */
     @Bean
     public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
-            if (accessToken instanceof DefaultOAuth2AccessToken) {
+            /*if (accessToken instanceof DefaultOAuth2AccessToken) {
                 LoginUser user = (LoginUser) authentication.getUserAuthentication().getPrincipal();
                 Map<String, Object> additionalInformation = new LinkedHashMap<>();
-                additionalInformation.put("code", HttpStatus.OK.value());
                 additionalInformation.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
                 additionalInformation.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
-            }
+            }*/
             return accessToken;
         };
     }

@@ -1,7 +1,8 @@
-package com.twelvet.security.service;
+package com.twelvet.security.service.impl;
 
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.security.service.RedisClientDetailsService;
+import com.twelvet.security.service.SysTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,6 @@ import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 
 /**
@@ -28,11 +28,8 @@ import java.util.HashMap;
 @Service
 public class SysTokenServiceImpl implements SysTokenService {
 
-    /**
-     * 数据源
-     */
     @Autowired
-    private DataSource dataSource;
+    private RedisClientDetailsService redisClientDetailsService;
 
     @Autowired
     private AuthorizationServerTokenServices authorizationServerTokenServices;
@@ -54,9 +51,8 @@ public class SysTokenServiceImpl implements SysTokenService {
     }
 
     @Override
-    public OAuth2AccessToken getUserTokenInfo(String clientId, String clientSecret, String username, String password) {
+    public OAuth2AccessToken login(String clientId, String clientSecret, String username, String password) {
         try {
-            RedisClientDetailsService redisClientDetailsService = new RedisClientDetailsService(dataSource);
             OAuth2AccessToken oauth2AccessToken;
             this.preCheckClient(clientId, clientSecret);
             ClientDetails clientDetails = redisClientDetailsService.loadClientByClientId(clientId);
@@ -67,8 +63,7 @@ public class SysTokenServiceImpl implements SysTokenService {
                 throw new UnapprovedClientAuthenticationException("clientSecret不匹配");
             }
 
-            TokenRequest tokenRequest = new TokenRequest(new HashMap<>(), clientId, clientDetails.getScope(),
-                    "password");
+            TokenRequest tokenRequest = new TokenRequest(new HashMap<>(2), clientId, clientDetails.getScope(), "password");
 
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
 
