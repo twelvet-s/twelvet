@@ -40,7 +40,7 @@ const LoginModel: LoginModelType = {
         // 登录
         *login({ payload }, { call, put }) {
             const response = yield call(login, payload)
-            const { code, msg } = response
+            const { code, msg, data } = response
 
             // 请求错误立即返回
             if (code != 200) {

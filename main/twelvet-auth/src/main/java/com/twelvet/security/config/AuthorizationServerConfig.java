@@ -4,6 +4,8 @@ import com.twelvet.framework.security.constans.CacheConstants;
 import com.twelvet.framework.security.constans.SecurityConstants;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.service.RedisClientDetailsService;
+import com.twelvet.security.granter.impl.PhonePasswordTokenGranter;
+import com.twelvet.security.service.impl.TwTUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +21,21 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author twelvet
@@ -36,6 +45,9 @@ import java.util.Map;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    private TwTUserDetailsServiceImpl twTUserDetailsService;
 
     /**
      * 用户信息认证管理器
@@ -106,13 +118,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
-            /*if (accessToken instanceof DefaultOAuth2AccessToken) {
+            if (accessToken instanceof DefaultOAuth2AccessToken) {
                 LoginUser user = (LoginUser) authentication.getUserAuthentication().getPrincipal();
                 Map<String, Object> additionalInformation = new LinkedHashMap<>();
+                additionalInformation.put("code", HttpStatus.OK.value());
                 additionalInformation.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
                 additionalInformation.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
-            }*/
+            }
             return accessToken;
         };
     }
@@ -124,9 +137,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+
+        List<TokenGranter> tokenGranters = getTokenGranters(
+                endpoints.getAuthorizationCodeServices(),
+                endpoints.getTokenServices(),
+                endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory()
+        );
+
         endpoints
+                // 配置系统支持的授权模式
+                .tokenGranter(new CompositeTokenGranter(tokenGranters))
                 // 请求方式
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST)
                 // 指定token存储位置
                 .tokenStore(tokenStore())
                 // 自定义账号密码登录（Oauth2密码模式需要）
@@ -144,11 +167,32 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * 配置Oauth2安全
      *
-     * @param oauthServer oauthServer
+     * @param security AuthorizationServerSecurityConfigurer
      */
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
-        oauthServer.allowFormAuthenticationForClients().checkTokenAccess("permitAll()");
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+
+        security.allowFormAuthenticationForClients().checkTokenAccess("permitAll()");
+    }
+
+    /**
+     * 配置系统支持的授权模式
+     *
+     * @param authorizationCodeServices AuthorizationCodeServices
+     * @param tokenServices             TokenStore
+     * @param clientDetailsService      AuthorizationServerTokenServices
+     * @param requestFactory            OAuth2RequestFactory
+     * @return List<TokenGranter>
+     */
+    private List<TokenGranter> getTokenGranters(AuthorizationCodeServices authorizationCodeServices, AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
+        return new ArrayList<>(Arrays.asList(
+                // 手机号密码模式
+                new PhonePasswordTokenGranter(tokenServices, clientDetailsService, requestFactory, twTUserDetailsService),
+                // 授权码模式
+                new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory),
+                // 密码模式
+                new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory)
+        ));
     }
 
 }

@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 、编码模式
+     * 编码模式
      *
      * @param auth auth
      * @throws Exception Exception
@@ -76,19 +76,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/**",
                         "/oauth/*",
                         "/oauth/user/token",
-                        "/token/**")
+                        "/token/**"
+                )
                 .permitAll()
                 // 除以上所有进行拦截
                 .anyRequest().authenticated()
                 // 关闭csrf
                 .and().csrf().disable();
-    }
-
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/oauth/system/login");
-
     }
 
 }

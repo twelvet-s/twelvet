@@ -1,19 +1,22 @@
-package com.twelvet.framework.security.service;
+package com.twelvet.security.service.impl;
 
 import com.twelvet.api.system.feign.RemoteUserService;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.domain.R;
 import com.twelvet.framework.security.domain.LoginUser;
+import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -34,7 +37,24 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
     private RemoteUserService remoteUserService;
 
     /**
-     * 登录
+     * 通过手机号密码模式进行登录
+     *
+     * @param phone 手机号码
+     * @param password 密码
+     * @return UserDetails
+     */
+    public UserDetails loadUserByPhoneAndPassword(String phone, String password) {
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password)) {
+            throw new InvalidGrantException("无效的手机号码");
+        }
+        // TODO 模拟手机登录
+        R<UserInfo> userResult = remoteUserService.getUserInfo("admin");
+        auth(userResult, "admin");
+        return getUserDetails(userResult);
+    }
+
+    /**
+     * 用户名称登录
      *
      * @param username String
      * @return UserDetails
