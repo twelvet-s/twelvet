@@ -153,7 +153,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 指定token存储位置
                 .tokenStore(tokenStore())
                 // 自定义账号密码登录（Oauth2密码模式需要）
-                .userDetailsService(userDetailsService)
+                //.userDetailsService(userDetailsService)
                 // 指定认证管理器
                 .authenticationManager(authenticationManager)
                 // 是否重复使用 refresh_token
