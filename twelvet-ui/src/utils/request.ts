@@ -64,7 +64,7 @@ const request = extend({
     // 默认错误处理
     errorHandler,
     // 超时时间（毫秒）
-    timeout: 8888,
+    timeout: 15000,
     // 默认请求是否带上cookie(配置后无法跨域)
     // credentials: 'include',
 })
