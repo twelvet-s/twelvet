@@ -60,17 +60,21 @@ const Staff: React.FC<{}> = () => {
             title: '部门',
             key: 'deptId',
             hideInTable: true,
-            dataIndex: 'deptId',
+            dataIndex: 'deptId',                
             renderFormItem: () => <DpetSearch placeholder="部门" />
         },
         {
-            title: '用户账号', ellipsis: true, width: 200, valueType: "text", dataIndex: 'username',
+            title: '用户账号', width: 200, valueType: "text", dataIndex: 'username',
         },
         {
             title: '用户昵称', width: 200, valueType: "text", search: false, dataIndex: 'nickName'
         },
         {
-            title: '部门', width: 200, valueType: "text", search: false, dataIndex: 'postSort'
+            title: '部门', width: 200, ellipsis: false, valueType: "text", search: false, dataIndex: 'dept', render: (dept: {
+                deptName: string
+            }) => {
+                return dept.deptName
+            }
         },
         {
             title: '手机号码', width: 200, valueType: "text", dataIndex: 'phonenumber'
@@ -101,7 +105,7 @@ const Staff: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />
