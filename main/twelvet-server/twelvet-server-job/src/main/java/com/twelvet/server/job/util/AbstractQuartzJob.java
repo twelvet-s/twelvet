@@ -1,19 +1,19 @@
 package com.twelvet.server.job.util;
 
-import java.util.Date;
-
 import com.twelvet.api.job.domain.SysJob;
 import com.twelvet.api.job.domain.SysJobLog;
 import com.twelvet.framework.core.constant.ScheduleConstants;
-import com.twelvet.framework.utils.ExceptionUtil;
 import com.twelvet.framework.utils.SpringUtils;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.bean.BeanUtils;
+import com.twelvet.framework.utils.exception.TWTUtilsException;
 import com.twelvet.server.job.service.ISysJobLogService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * @author twelvet
@@ -82,7 +82,7 @@ public abstract class AbstractQuartzJob implements Job
         if (e != null)
         {
             sysJobLog.setStatus("1");
-            String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
+            String errorMsg = StringUtils.substring(TWTUtilsException.getExceptionMessage(e), 0, 2000);
             sysJobLog.setExceptionInfo(errorMsg);
         }
         else

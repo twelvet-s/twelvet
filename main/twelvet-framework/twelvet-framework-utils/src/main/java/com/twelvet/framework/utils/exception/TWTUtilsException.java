@@ -1,5 +1,11 @@
 package com.twelvet.framework.utils.exception;
 
+import com.twelvet.framework.utils.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
@@ -9,46 +15,38 @@ public class TWTUtilsException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private String msg;
-
-    private int code = 500;
-
-    public TWTUtilsException(String msg) {
-        super(msg);
-        this.msg = msg;
+    public TWTUtilsException(Throwable e) {
+        super(e.getMessage(), e);
     }
 
-    public TWTUtilsException(String msg, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
+    public TWTUtilsException(String message) {
+        super(message);
     }
 
-    public TWTUtilsException(String msg, int code) {
-        super(msg);
-        this.msg = msg;
-        this.code = code;
+    public TWTUtilsException(String message, Throwable throwable) {
+        super(message, throwable);
     }
 
-    public TWTUtilsException(String msg, int code, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-        this.code = code;
+    /**
+     * 获取exception的详细错误信息。
+     */
+    public static String getExceptionMessage(Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        String str = sw.toString();
+        return str;
     }
 
-    public String getMsg() {
-        return msg;
+    public static String getRootErrorMseeage(Exception e) {
+        Throwable root = ExceptionUtils.getRootCause(e);
+        root = (root == null ? e : root);
+        if (root == null) {
+            return "";
+        }
+        String msg = root.getMessage();
+        if (msg == null) {
+            return "null";
+        }
+        return StringUtils.defaultString(msg);
     }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
 }

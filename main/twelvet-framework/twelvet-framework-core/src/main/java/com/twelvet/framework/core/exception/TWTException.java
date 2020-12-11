@@ -9,46 +9,63 @@ public class TWTException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private String msg;
+    /**
+     * 所属模块
+     */
+    private String module;
 
-    private int code = 500;
+    /**
+     * 错误码
+     */
+    private String code;
 
-    public TWTException(String msg) {
-        super(msg);
-        this.msg = msg;
-    }
+    /**
+     * 错误码对应的参数
+     */
+    private Object[] args;
 
-    public TWTException(String msg, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-    }
+    /**
+     * 错误消息
+     */
+    private String defaultMessage;
 
-    public TWTException(String msg, int code) {
-        super(msg);
-        this.msg = msg;
+    public TWTException(String module, String code, Object[] args, String defaultMessage) {
+        this.module = module;
         this.code = code;
+        this.args = args;
+        this.defaultMessage = defaultMessage;
     }
 
-    public TWTException(String msg, int code, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-        this.code = code;
+    public TWTException(String module, String code, Object[] args) {
+        this(module, code, args, null);
     }
 
-    public String getMsg() {
-        return msg;
+    public TWTException(String module, String defaultMessage) {
+        this(module, null, null, defaultMessage);
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public TWTException(String code, Object[] args) {
+        this(null, code, args, null);
     }
 
-    public int getCode() {
+    public TWTException(String defaultMessage) {
+        this(null, null, null, defaultMessage);
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public String getDefaultMessage() {
+        return defaultMessage;
     }
 
 }
