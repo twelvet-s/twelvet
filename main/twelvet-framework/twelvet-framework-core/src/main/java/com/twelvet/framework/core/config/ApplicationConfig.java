@@ -11,6 +11,7 @@ import java.util.TimeZone;
  * @Description: 系统配置
  */
 public class ApplicationConfig {
+
     /**
      * 时区配置
      */

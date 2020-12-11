@@ -58,6 +58,12 @@
             </exclusions>
         </dependency>
 
+        <!-- Commons Io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

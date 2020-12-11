@@ -74,7 +74,7 @@ const Details: React.FC<{
 
                 <Descriptions.Item label="任务状态">
                     {descriptions.status == 1 && '正常'}
-                    {descriptions.status == 0 && '失败'}
+                    {descriptions.status == 0 && '停止'}
                 </Descriptions.Item>
 
                 <Descriptions.Item label="是否并发">

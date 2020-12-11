@@ -10,12 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>twelvet-server</artifactId>
+    <description>系统核心服务</description>
+
     <packaging>pom</packaging>
+
     <modules>
         <module>twelvet-server-system</module>
         <module>twelvet-server-job</module>
+        <module>twelvet-server-dfs</module>
     </modules>
-    <description>服务层</description>
 
     <dependencies>
 

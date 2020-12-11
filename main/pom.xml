@@ -51,6 +51,8 @@
         <fastjson.version>1.2.47</fastjson.version>
         <pagehelper.boot.version>1.2.12</pagehelper.boot.version>
         <poi.version>3.17</poi.version>
+        <fast-dfs.version>1.26.5</fast-dfs.version>
+        <commons.io.version>2.5</commons.io.version>
     </properties>
 
     <!--依赖版本声明-->
@@ -105,6 +107,13 @@
                 <version>${fastjson.version}</version>
             </dependency>
 
+            <!-- FastDFS 分布式文件系统 -->
+            <dependency>
+                <groupId>com.github.tobato</groupId>
+                <artifactId>fastdfs-client</artifactId>
+                <version>${fast-dfs.version}</version>
+            </dependency>
+
             <!-- Mybatis 依赖配置 -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -117,6 +126,13 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
+            </dependency>
+
+            <!-- io常用工具类 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
             </dependency>
 
             <!-- excel工具 -->
