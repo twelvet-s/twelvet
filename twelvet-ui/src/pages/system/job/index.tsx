@@ -73,7 +73,7 @@ const Job: React.FC<{}> = () => {
             ]
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (
+            title: '操作',  fixed: 'right', width: 380, valueType: "option", search: false, dataIndex: 'operation', render: (
                 _: string,
                 row: { [key: string]: string }) => {
                 return (
