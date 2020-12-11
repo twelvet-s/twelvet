@@ -13,6 +13,7 @@
     <description>系统核心服务</description>
 
     <packaging>pom</packaging>
+
     <modules>
         <module>twelvet-server-system</module>
         <module>twelvet-server-job</module>

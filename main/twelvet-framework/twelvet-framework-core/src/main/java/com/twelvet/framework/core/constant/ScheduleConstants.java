@@ -37,11 +37,11 @@ public class ScheduleConstants {
         /**
          * 正常
          */
-        NORMAL(0),
+        NORMAL(1),
         /**
          * 暂停
          */
-        PAUSE(1);
+        PAUSE(0);
 
         private int value;
 
