@@ -34,8 +34,11 @@ public class DFSServiceImpl implements IDFSService {
      */
     @Override
     public String uploadFile(MultipartFile file) throws Exception {
-        StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(),
-                FilenameUtils.getExtension(file.getOriginalFilename()), null);
+        StorePath storePath = storageClient.uploadFile(
+                file.getInputStream(), file.getSize(),
+                FilenameUtils.getExtension(file.getOriginalFilename()),
+                null
+        );
         return domain + "/" + storePath.getFullPath();
     }
 }

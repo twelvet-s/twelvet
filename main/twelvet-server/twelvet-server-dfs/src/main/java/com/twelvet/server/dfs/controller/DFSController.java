@@ -29,7 +29,7 @@ public class DFSController extends TWTController {
      * @param file MultipartFile
      * @return R<SysFile>
      */
-    @PostMapping("upload")
+    @PostMapping("/upload")
     public R<SysFile> upload(MultipartFile file) {
         try {
             // 上传并返回访问地址
