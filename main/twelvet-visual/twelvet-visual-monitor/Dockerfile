@@ -1,5 +1,11 @@
+# 指定基础镜像
 FROM java:8
+LABEL maintainer="2471835953@qq.com"
+# 挂载到/tmp(集群共享,数据持久化)
 VOLUME /tmp
-ADD movie-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+# 将jar复制到容器的跟目录并且设置指定名称linux cp
+ADD twelvet-visual-monitor.jar twelvet-visual-monitor.jar
+# 端口号
+EXPOSE 8100
+# 启动容器时执行的命令
+ENTRYPOINT ["java","-jar","/twelvet-visual-monitor.jar"]
