@@ -53,7 +53,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public List<SysMenu> selectMenuList(SysMenu menu, Long userId) {
-        List<SysMenu> menuList = null;
+        List<SysMenu> menuList;
         // 管理员显示所有菜单信息
         if (SysUser.isAdmin(userId)) {
             menuList = menuMapper.selectMenuList(menu);
