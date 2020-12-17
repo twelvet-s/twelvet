@@ -30,6 +30,7 @@ const Role: React.FC<{}> = () => {
 
     const [menuData, setMenuData] = useState<DataNode[]>()
     const [checkdMenuData, setCheckdMenuData] = useState<Key[]>([])
+    const [finalCheckdMenuData, setFinalCheckdMenuData] = useState<Key[]>([])
 
     const [deptData, setDeptData] = useState<DataNode[]>()
     const [checkdDeptData, setCheckdDeptData] = useState<Key[]>([])
@@ -95,14 +96,14 @@ const Role: React.FC<{}> = () => {
             width: 80,
             dataIndex: 'status',
             render: (_: string, row: { [key: string]: string }) => [
-                <RoleStatusSwitch row={row}/>
+                <RoleStatusSwitch row={row} />
             ]
         },
         {
             title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
                     <Button type="primary" onClick={() => refPut(row)}>
                         <EditOutlined />
@@ -172,12 +173,45 @@ const Role: React.FC<{}> = () => {
                 return message.error(msg)
             }
 
-            setCheckdMenuData(data.checkedKeys)
-            setMenuData(data.menus)
+            const { checkedKeys, menus } = data
+
+            
+            // 初始最终提交数据
+            setFinalCheckdMenuData(checkedKeys)
+
+            
+            
+            const keys: Key[] =  initMakeCheckKeys(menus)
+
+            // 显示数据
+            setCheckdMenuData(keys)
+
+            // 设置菜单数据
+            setMenuData(menus)
 
         } catch (e) {
             system.error(e)
         }
+    }
+
+    /**
+     * 初始化制作选中数据
+     */
+    const initMakeCheckKeys = (menu: [{}]) => {
+        // 处理显示数据
+        menus.map((menu : {
+            menuId: number
+            children: {}
+        }) => {
+            // 存在muneId将进行检测
+            if(checkedKeys.indexOf(menu.menuId)){
+                // 不存在子元素视为选择key
+                if(!menu.children){
+                    keys.push(menu.menuId)
+                }
+            }
+            
+        })
     }
 
     /**
@@ -292,7 +326,7 @@ const Role: React.FC<{}> = () => {
                         // 开启加载中
                         setLoadingModal(true)
                         // 设置菜单权限
-                        fields.menuIds = checkdMenuData
+                        fields.menuIds = finalCheckdMenuData
                         // 设置数据权限
                         fields.deptIds = checkdDeptData
 
@@ -323,7 +357,6 @@ const Role: React.FC<{}> = () => {
     return (
         <>
             <TWTProTable
-                actionRef={acForm}
                 formRef={formRef}
                 rowKey="roleId"
                 columns={columns}
@@ -490,9 +523,18 @@ const Role: React.FC<{}> = () => {
                             showLine
                             checkable
                             height={150}
-                            onCheck={(checkedKeys: any) => {
+                            onCheck={(checkedKeys: any, halfChecked: any) => {
+
+                                // 显示在页面的数据
                                 setCheckdMenuData(checkedKeys)
+
+                                // 解决无法选中未完全选中时，无法获取父ID
+                                const keys = [...checkedKeys, ...halfChecked.halfCheckedKeys]
+                                // 最终提交数据需加上父ID
+                                setFinalCheckdMenuData(keys)
+
                             }}
+                            // 默认选中的数据
                             checkedKeys={checkdMenuData}
                             treeData={menuData}
                         />
