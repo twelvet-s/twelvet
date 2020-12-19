@@ -64,7 +64,8 @@ public class TWTException extends RuntimeException {
         return args;
     }
 
-    public String getDefaultMessage() {
+    @Override
+    public String getMessage() {
         return defaultMessage;
     }
 

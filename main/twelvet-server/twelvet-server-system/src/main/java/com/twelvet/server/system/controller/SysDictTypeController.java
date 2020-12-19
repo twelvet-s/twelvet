@@ -36,7 +36,7 @@ public class SysDictTypeController extends TWTController {
      * @return AjaxResult
      */
     @GetMapping("/pageQuery")
-    @PreAuthorize("@role.hasPermi('system:dict:list')")
+    @PreAuthorize("@role.hasPermi('system:dictionaries:list')")
     public AjaxResult pageQuery(SysDictType dictType) {
         startPage();
         List<SysDictType> list = dictTypeService.selectDictTypeList(dictType);

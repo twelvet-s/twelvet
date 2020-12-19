@@ -49,7 +49,7 @@ const Menu: React.FC<{}> = () => {
             }
         },
         {
-            title: '排序', width: 50, ellipsis: true, width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '排序', width: 50, ellipsis: true, valueType: "text", search: false, dataIndex: 'orderNum'
         },
         {
             title: '权限标识', width: 200, search: false, dataIndex: 'perms'
@@ -68,14 +68,14 @@ const Menu: React.FC<{}> = () => {
             },
         },
         {
-            title: '创建时间', width: 150, width: 200, valueType: "dateTime", search: false, dataIndex: 'createTime'
+            title: '创建时间', width: 150, valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作', fixed: 'right', width: 280, search: false, width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 280, search: false, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
                     <Space>
                         {
-                            row.menuType == `M` && (
+                            (row.menuType == `M` || row.menuType == `C`) && (
                                 <Button type="default" onClick={() => refPost(row)}>
                                     <PlusOutlined />
                                     新增
@@ -340,13 +340,17 @@ const Menu: React.FC<{}> = () => {
                         </Radio.Group>
                     </Form.Item>
 
-                    <Form.Item
-                        label="菜单图标"
-                        name="icon"
-                        rules={[{ required: true, message: '菜单图标不能为空' }]}
-                    >
-                        <Input placeholder="菜单图标" />
-                    </Form.Item>
+                    {
+                        menuType != 'F' && (
+                            <Form.Item
+                                label="菜单图标"
+                                name="icon"
+                                rules={[{ required: true, message: '菜单图标不能为空' }]}
+                            >
+                                <Input placeholder="菜单图标" />
+                            </Form.Item>
+                        )
+                    }
 
                     <Row>
                         <Col sm={12} xs={24}>

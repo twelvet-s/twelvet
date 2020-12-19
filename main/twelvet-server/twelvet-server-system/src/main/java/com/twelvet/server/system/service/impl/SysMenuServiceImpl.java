@@ -106,7 +106,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @return 选中菜单列表
      */
     @Override
-    public List<Integer> selectMenuListByRoleId(Long roleId) {
+    public List<SysMenu> selectMenuListByRoleId(Long roleId) {
         return menuMapper.selectMenuListByRoleId(roleId);
     }
 
@@ -121,7 +121,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         List<RouterVo> routers = new LinkedList<>();
         for (SysMenu menu : menus) {
             RouterVo router = new RouterVo();
-            router.setHidden("1".equals(menu.getVisible()));
+            router.setHidden(menu.getVisible() == 1);
             router.setName(menu.getMenuName());
             router.setPath(getRouterPath(menu));
             router.setComponent(getComponent(menu));

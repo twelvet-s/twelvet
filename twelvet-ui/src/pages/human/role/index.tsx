@@ -173,15 +173,29 @@ const Role: React.FC<{}> = () => {
                 return message.error(msg)
             }
 
-            const { checkedKeys, menus } = data
+            const { checkedMenus, menus } = data
 
-            
+            // 显示数据
+            let keys: Key[] = []
+
+            // 最终提交数据
+            let finalkeys: Key[] = []
+
+            // 初始化选中菜单数据
+            checkedMenus.map((menu: {
+                menuId: number
+                menuType: String
+            }) => {
+                // 显示数据只需要C类型权限
+                if (menu.menuType == 'F') {
+                    keys.push(menu.menuId)
+                }
+                // 所有初始化数据都必须提交
+                finalkeys.push(menu.menuId)
+            })
+
             // 初始最终提交数据
-            setFinalCheckdMenuData(checkedKeys)
-
-            
-            
-            const keys: Key[] =  initMakeCheckKeys(menus)
+            setFinalCheckdMenuData(finalkeys)
 
             // 显示数据
             setCheckdMenuData(keys)
@@ -192,26 +206,6 @@ const Role: React.FC<{}> = () => {
         } catch (e) {
             system.error(e)
         }
-    }
-
-    /**
-     * 初始化制作选中数据
-     */
-    const initMakeCheckKeys = (menu: [{}]) => {
-        // 处理显示数据
-        menus.map((menu : {
-            menuId: number
-            children: {}
-        }) => {
-            // 存在muneId将进行检测
-            if(checkedKeys.indexOf(menu.menuId)){
-                // 不存在子元素视为选择key
-                if(!menu.children){
-                    keys.push(menu.menuId)
-                }
-            }
-            
-        })
     }
 
     /**
@@ -341,7 +335,7 @@ const Role: React.FC<{}> = () => {
                         if (acForm.current) {
                             acForm.current.reload()
                         }
-
+                        
                         // 关闭模态框
                         handleCancel()
                     } catch (e) {
@@ -357,6 +351,7 @@ const Role: React.FC<{}> = () => {
     return (
         <>
             <TWTProTable
+                actionRef={acForm}
                 formRef={formRef}
                 rowKey="roleId"
                 columns={columns}

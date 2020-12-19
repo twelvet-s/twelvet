@@ -126,7 +126,7 @@ public class SysMenuController extends TWTController {
         List<SysMenu> menus = iSysMenuService.selectMenuList(userId);
 
         Map<String, Object> res = new HashMap<>(2);
-        res.put("checkedKeys", iSysMenuService.selectMenuListByRoleId(roleId));
+        res.put("checkedMenus", iSysMenuService.selectMenuListByRoleId(roleId));
         res.put("menus", iSysMenuService.buildMenuTreeSelect(menus));
 
         return AjaxResult.success(res);

@@ -4,6 +4,7 @@ import com.twelvet.api.system.feign.RemoteUserService;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.domain.R;
+import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;
@@ -39,7 +40,7 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
     /**
      * 通过手机号密码模式进行登录
      *
-     * @param phone 手机号码
+     * @param phone    手机号码
      * @param password 密码
      * @return UserDetails
      */
@@ -69,13 +70,20 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
     /**
      * 自定义账号状态检测
      *
-     * @param userResult userResult
-     * @param username   username
+     * @param userInfo userResult
+     * @param username username
      */
-    private void auth(R<UserInfo> userResult, String username) {
-        if (TWTUtils.isEmpty(userResult) || TWTUtils.isEmpty(userResult.getData())) {
+    private void auth(R<UserInfo> userInfo, String username) {
+        if (TWTUtils.isEmpty(userInfo) || TWTUtils.isEmpty(userInfo.getData())) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
+        }
+
+        // 获取用户状态信息
+        SysUser sysUser = userInfo.getData().getSysUser();
+        if (sysUser.getStatus().equals(0)) {
+            log.info("{}： 用户已被冻结.", username);
+            throw new TWTException("账号已被冻结");
         }
     }
 

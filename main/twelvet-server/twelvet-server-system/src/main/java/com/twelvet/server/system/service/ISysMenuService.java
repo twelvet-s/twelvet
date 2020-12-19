@@ -53,7 +53,7 @@ public interface ISysMenuService {
      * @param roleId 角色ID
      * @return 选中菜单列表
      */
-    List<Integer> selectMenuListByRoleId(Long roleId);
+    List<SysMenu> selectMenuListByRoleId(Long roleId);
 
     /**
      * 构建前端路由所需要的菜单

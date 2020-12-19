@@ -64,7 +64,7 @@ public interface SysMenuMapper {
      * @param roleId 角色ID
      * @return 选中菜单列表
      */
-    List<Integer> selectMenuListByRoleId(Long roleId);
+    List<SysMenu> selectMenuListByRoleId(Long roleId);
 
     /**
      * 根据菜单ID查询信息

@@ -10,8 +10,8 @@ import java.util.Set;
  * @WebSite www.twelvet.cn
  * @Description: 登录用户基本信息实体
  */
-public class UserInfo implements Serializable
-{
+public class UserInfo implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,33 +29,27 @@ public class UserInfo implements Serializable
      */
     private Set<String> roles;
 
-    public SysUser getSysUser()
-    {
+    public SysUser getSysUser() {
         return sysUser;
     }
 
-    public void setSysUser(SysUser sysUser)
-    {
+    public void setSysUser(SysUser sysUser) {
         this.sysUser = sysUser;
     }
 
-    public Set<String> getPermissions()
-    {
+    public Set<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<String> permissions)
-    {
+    public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
     }
 
-    public Set<String> getRoles()
-    {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles)
-    {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 }
