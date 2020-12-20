@@ -4,8 +4,9 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import DpetSearch from './components/dpetSearch'
-import ImportStaff from './components/importStaff'
+import DpetSearch from './components/dpetSearch/Index'
+import ImportStaff from './components/importStaff/Index'
+import StaffStatusSwitch from './components/staffStatusSwitch/Index'
 import { pageQuery, remove, exportExcel, getByStaffId, insert, update, treeSelect } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -84,10 +85,9 @@ const Staff: React.FC<{}> = () => {
             ellipsis: false,
             width: 80,
             dataIndex: 'status',
-            valueEnum: {
-                "1": { text: '正常', status: 'success' },
-                "0": { text: '停用', status: 'error' },
-            },
+            render: (_: string, row: { [key: string]: string }) => [
+                <StaffStatusSwitch row={row} />
+            ]
         },
         {
             title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'

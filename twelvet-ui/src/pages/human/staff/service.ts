@@ -53,6 +53,19 @@ export async function pageQuery(params: { [key: string]: any }) {
 }
 
 /**
+ * 
+ * @param params 
+ */
+export async function changeStatus(params: { [key: string]: any }) {
+    return request(`${controller}/changeStatus`, {
+        method: 'PUT',
+        data: {
+            ...params
+        },
+    });
+}
+
+/**
  * 获取指定职员信息
  * @param params 搜索参数
  */
