@@ -3,7 +3,7 @@ import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import RoleStatusSwitch from './components/Switch'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Tree, TreeSelect, Row, Col } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Tree, TreeSelect, Row, Col, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { pageQuery, remove, exportExcel, getByroleId, insert, update, roleMenuTreeSelectByMenuId, roleMenuTreeSelect, roleDeptTreeSelectByDeptId, roleDeptTreeSelect } from './service'
 import { system } from '@/utils/twelvet'
@@ -105,18 +105,23 @@ const Role: React.FC<{}> = () => {
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
-                    <Button type="primary" onClick={() => refPut(row)}>
-                        <EditOutlined />
-                        修改
-                    </Button>,
+                    <a onClick={() => refPut(row)}>
+                        <Space>
+                            <EditOutlined />
+                            修改
+                        </Space>
+                    </a>,
+                    <Divider type="vertical" />,
                     <Popconfirm
                         onConfirm={() => refRemove(row.roleId)}
                         title="确定删除吗"
                     >
-                        <Button type="primary" danger>
-                            <CloseOutlined />
-                             删除
-                        </Button>
+                        <a href='#'>
+                            <Space>
+                                <CloseOutlined />
+                                删除
+                            </Space>
+                        </a>
                     </Popconfirm>
                 ]
             }
@@ -335,7 +340,7 @@ const Role: React.FC<{}> = () => {
                         if (acForm.current) {
                             acForm.current.reload()
                         }
-                        
+
                         // 关闭模态框
                         handleCancel()
                     } catch (e) {

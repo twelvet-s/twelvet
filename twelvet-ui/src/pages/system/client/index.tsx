@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, PlusOutlined, EditOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Tooltip } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Tooltip, Divider, Space } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { pageQuery, remove, getByClientId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
@@ -55,18 +55,23 @@ const Post: React.FC<{}> = () => {
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
-                    <Button type="primary" onClick={() => refPut(row)}>
-                        <EditOutlined />
-                        修改
-                    </Button>,
+                    <a onClick={() => refPut(row)}>
+                        <Space>
+                            <EditOutlined />
+                            修改
+                        </Space>
+                    </a>,
+                    <Divider type="vertical" />,
                     <Popconfirm
                         onConfirm={() => refRemove(row.clientId)}
                         title="确定删除吗"
                     >
-                        <Button type="primary" danger>
-                            <CloseOutlined />
-                             删除
-                        </Button>
+                        <a href='#'>
+                            <Space>
+                                <CloseOutlined />
+                                删除
+                            </Space>
+                        </a>
                     </Popconfirm>
                 ]
             }

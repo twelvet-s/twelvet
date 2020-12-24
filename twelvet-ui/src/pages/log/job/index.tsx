@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker } from 'antd'
+import { Popconfirm, Button, message, DatePicker, Space } from 'antd'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
@@ -59,19 +59,21 @@ const Login: React.FC<{}> = () => {
             )
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
                 return (
-                    <Button type="default">
-                        <EyeOutlined />
+                    <a href='#'>
+                        <Space>
+                            <EyeOutlined />
                             详情
-                    </Button>
+                        </Space>
+                    </a>
                 )
             }
         },
     ]
 
     /**
-     * 移除菜单
+     * 移除
      * @param row jobLogIds
      */
     const refRemove = async (jobLogIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {

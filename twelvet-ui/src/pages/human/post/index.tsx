@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, InputNumber, Radio, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { pageQuery, remove, exportExcel, getByPostId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
@@ -20,7 +20,7 @@ const Post: React.FC<{}> = () => {
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
     const acForm = useRef<ActionType>()
-    
+
     const formRef = useRef<FormInstance>()
 
     const [form] = Form.useForm<FormInstance>()
@@ -62,20 +62,25 @@ const Post: React.FC<{}> = () => {
             title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
         },
         {
-            title: '操作',  fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
-                    <Button type="primary" onClick={() => refPut(row)}>
-                        <EditOutlined />
-                        修改
-                    </Button>,
+                    <a onClick={() => refPut(row)}>
+                        <Space>
+                            <EditOutlined />
+                            修改
+                        </Space>
+                    </a>,
+                    <Divider type="vertical" />,
                     <Popconfirm
                         onConfirm={() => refRemove(row.postId)}
                         title="确定删除吗"
                     >
-                        <Button type="primary" danger>
-                            <CloseOutlined />
-                             删除
-                        </Button>
+                        <a href='#'>
+                            <Space>
+                                <CloseOutlined />
+                                删除
+                            </Space>
+                        </a>
                     </Popconfirm>
                 ]
             }

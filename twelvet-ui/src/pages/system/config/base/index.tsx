@@ -1,5 +1,5 @@
 import React, { } from 'react'
-import { Button, Checkbox, Form, Input, Tabs, Image } from 'antd'
+import { Button, Checkbox, Form, Input, Tabs } from 'antd'
 import layout from '@/pages/login/layout'
 
 /**

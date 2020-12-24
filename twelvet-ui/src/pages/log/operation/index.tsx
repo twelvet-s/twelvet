@@ -3,7 +3,7 @@ import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
 import ProDescriptions from '@ant-design/pro-descriptions'
-import { Popconfirm, Button, message, Modal, DatePicker, Descriptions } from 'antd'
+import { Popconfirm, Button, message, Modal, DatePicker, Descriptions, Space } from 'antd'
 import moment, { Moment } from 'moment'
 import { pageQuery, remove, exportExcel } from './service'
 import { system } from '@/utils/twelvet'
@@ -65,10 +65,12 @@ const Operation: React.FC<{}> = () => {
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
-                    <Button type="default" onClick={() => handleView(row)}>
-                        <EyeOutlined />
-                        详情
-                    </Button>
+                    <a onClick={() => handleView(row)}>
+                        <Space>
+                            <EyeOutlined />
+                            详情
+                        </Space>
+                    </a>
                 )
             }
         },

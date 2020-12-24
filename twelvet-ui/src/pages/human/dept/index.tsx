@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { PlusOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons'
-import { Row, Col, Button, message, Space, Popconfirm, Modal, Form, Input, InputNumber, Radio, TreeSelect } from 'antd'
+import { Row, Col, Button, message, Space, Popconfirm, Modal, Form, Input, InputNumber, Radio, TreeSelect, Divider } from 'antd'
 import { list, getInfo, remove, insert, update } from './service'
 import { system, makeTree } from '@/utils/twelvet'
 import { FormInstance } from 'antd/lib/form'
@@ -54,34 +54,43 @@ const Dept: React.FC<{}> = () => {
             title: '创建时间', width: 200, valueType: "dateTime", search: false, dataIndex: 'createTime'
         },
         {
-            title: '操作',  fixed: 'right', search: false, width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+            title: '操作', fixed: 'right', search: false, width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
-                    <Space>
+                    <>
                         {
                             row.menuType == `M` && (
-                                <Button type="default" onClick={() => refPost(row)}>
-                                    <PlusOutlined />
-                                    新增
-                                </Button>
+                                <>
+                                    <a onClick={() => refPost(row)}>
+                                        <Space>
+                                            <PlusOutlined />
+                                            新增
+                                        </Space>
+                                    </a>
+                                    <Divider type="vertical" />
+                                </>
                             )
                         }
-
-                        <Button type="primary" onClick={() => refPut(row)}>
-                            <EditOutlined />
-                            修改
-                        </Button >
-
+                        
+                        <a onClick={() => refPut(row)}>
+                            <Space>
+                                <EditOutlined />
+                                修改
+                            </Space>
+                        </a >
+                        <Divider type="vertical" />
                         <Popconfirm
                             onConfirm={() => refRemove(row)}
                             title="确定删除吗"
                         >
-                            <Button type="primary" danger>
-                                <CloseOutlined />
-                                删除
-                            </Button>
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
                         </Popconfirm>
 
-                    </Space >
+                    </>
                 )
             }
         },

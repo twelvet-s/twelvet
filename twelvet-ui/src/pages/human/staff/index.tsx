@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, Radio, Row, Col, Select, TreeSelect, DatePicker, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import DpetSearch from './components/dpetSearch/Index'
 import ImportStaff from './components/importStaff/Index'
@@ -61,7 +61,7 @@ const Staff: React.FC<{}> = () => {
             title: '部门',
             key: 'deptId',
             hideInTable: true,
-            dataIndex: 'deptId',                
+            dataIndex: 'deptId',
             renderFormItem: () => <DpetSearch placeholder="部门" />
         },
         {
@@ -107,18 +107,23 @@ const Staff: React.FC<{}> = () => {
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return [
-                    <Button type="primary" onClick={() => refPut(row)}>
-                        <EditOutlined />
-                        修改
-                    </Button>,
+                    <a onClick={() => refPut(row)}>
+                        <Space>
+                            <EditOutlined />
+                            修改
+                        </Space>
+                    </a>,
+                    <Divider type="vertical" />,
                     <Popconfirm
                         onConfirm={() => refRemove(row.userId)}
                         title="确定删除吗"
                     >
-                        <Button type="primary" danger>
-                            <CloseOutlined />
-                             删除
-                        </Button>
+                        <a href='#'>
+                            <Space>
+                                <CloseOutlined />
+                                删除
+                            </Space>
+                        </a>
                     </Popconfirm>
                 ]
             }

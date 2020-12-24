@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CaretRightOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FundProjectionScreenOutlined, PlusOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip } from 'antd'
+import { Popconfirm, Button, message, Space, Radio, Form, Modal, Input, Row, Col, Tooltip, Divider } from 'antd'
 import { pageQuery, remove, exportExcel, run, insert, update, getByJobId } from './service'
 import { system } from '@/utils/twelvet'
 import JobStatus from './components/jobStatusSwitch/Index'
@@ -73,50 +73,54 @@ const Job: React.FC<{}> = () => {
             ]
         },
         {
-            title: '操作',  fixed: 'right', width: 380, valueType: "option", search: false, dataIndex: 'operation', render: (
+            title: '操作', fixed: 'right', width: 380, valueType: "option", search: false, dataIndex: 'operation', render: (
                 _: string,
                 row: { [key: string]: string }) => {
                 return (
-                    <Space>
-
-                        <Button type="primary" onClick={() => refPut(row)}>
-                            <EditOutlined />
+                    <>
+                        <a onClick={() => refPut(row)}>
+                            <Space>
+                                <EditOutlined />
                                 修改
-                        </Button >
-
+                            </Space>
+                        </a >
+                        <Divider type="vertical" />
                         <Popconfirm
                             onConfirm={() => runJob(row)}
                             title="是否执行任务"
                         >
-                            <Button type="primary">
-                                <CaretRightOutlined />
-                                执行
-                            </Button >
+                            <a href='#'>
+                                <Space>
+                                    <CaretRightOutlined />
+                                    执行
+                                </Space>
+                            </a >
                         </Popconfirm>
-
-                        <Button type="default" onClick={() => {
+                        <Divider type="vertical" />
+                        <a type="default" onClick={() => {
                             setModelDetails({
                                 vimodelDetails: true,
                                 jobId: row.jobId
                             })
                         }}>
-                            <EyeOutlined />
-                            详情
-                        </Button>
-
+                            <Space>
+                                <EyeOutlined />
+                                详情
+                            </Space>
+                        </a>
+                        <Divider type="vertical" />
                         <Popconfirm
                             onConfirm={() => refRemove(row.jobId)}
                             title="是否删除"
                         >
-                            <Button
-                                type="primary" danger
-                            >
-                                <DeleteOutlined />
-                                删除
-                        </Button>
+                            <a href='#'>
+                                <Space>
+                                    <DeleteOutlined />
+                                    删除
+                                </Space>
+                            </a>
                         </Popconfirm>
-
-                    </Space >
+                    </>
                 )
             }
         },
