@@ -393,11 +393,11 @@ const Menu: React.FC<{}> = () => {
                                         {...formItemLayout}
                                         label="是否外链"
                                         name="isFrame"
-                                        initialValue={false}
+                                        initialValue={0}
                                     >
                                         <Radio.Group>
-                                            <Radio value={true}>是</Radio>
-                                            <Radio value={false}>否</Radio>
+                                            <Radio value={1}>是</Radio>
+                                            <Radio value={0}>否</Radio>
                                         </Radio.Group>
                                     </Form.Item>
                                 </Col>
@@ -457,11 +457,11 @@ const Menu: React.FC<{}> = () => {
                                         {...formItemLayout}
                                         label="显示状态"
                                         name="visible"
-                                        initialValue={true}
+                                        initialValue={1}
                                     >
                                         <Radio.Group>
-                                            <Radio value={true}>是</Radio>
-                                            <Radio value={false}>否</Radio>
+                                            <Radio value={1}>是</Radio>
+                                            <Radio value={0}>否</Radio>
                                         </Radio.Group>
                                     </Form.Item>
                                 </Col>
@@ -471,11 +471,11 @@ const Menu: React.FC<{}> = () => {
                                         {...formItemLayout}
                                         label="菜单状态"
                                         name="status"
-                                        initialValue={true}
+                                        initialValue={1}
                                     >
                                         <Radio.Group>
-                                            <Radio value={true}>正常</Radio>
-                                            <Radio value={false}>停用</Radio>
+                                            <Radio value={1}>正常</Radio>
+                                            <Radio value={0}>停用</Radio>
                                         </Radio.Group>
                                     </Form.Item>
                                 </Col>

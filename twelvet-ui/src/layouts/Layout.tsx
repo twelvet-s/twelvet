@@ -132,7 +132,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             fixedHeader={false}
             fixSiderbar={true}
             colorWeak={false}
-            iconfontUrl='//at.alicdn.com/t/font_2059726_aw0jk1jnlus.js'
+            iconfontUrl='//at.alicdn.com/t/font_2059726_uajhyn2p1ga.js'
             // 渲染菜单数据
             menuDataRender={() => currentUser.menuData.data}
             menu={{
