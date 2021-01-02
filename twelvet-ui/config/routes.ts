@@ -81,6 +81,13 @@ export default [
                             name: 'client',
                             path: '/system/client',
                             component: './system/client'
+                        },
+                        {
+                            title: '分布式文件管理',
+                            icon: 'icon-dfs',
+                            name: 'dfs',
+                            path: '/system/dfs',
+                            component: './system/dfs'
                         }
                     ]
                 },
