@@ -171,6 +171,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
+     * 获取文件后缀
+     *
+     * @param path 文件路径
+     * @return 后缀
+     */
+    public static String getSuffix(String path) {
+        return path.substring(path.lastIndexOf(".") + 1);
+    }
+
+    /**
      * 是否为Windows或者Linux（Unix）文件分隔符<br>
      * Windows平台下分隔符为\，Linux（Unix）为/
      *

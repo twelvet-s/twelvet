@@ -608,6 +608,9 @@ const Staff: React.FC<{}> = () => {
                 onCancel={() => {
                     setImportStaffVisible(false)
                 }}
+                ok={() => {
+                    acForm.current?.reload()
+                }}
             />
         </>
     )

@@ -26,6 +26,14 @@
             <artifactId>twelvet-api-system</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-api-dfs</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

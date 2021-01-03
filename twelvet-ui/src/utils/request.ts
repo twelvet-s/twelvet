@@ -191,6 +191,7 @@ export function download(url: string, params?: { [key: string]: any }, filename?
 export function upload(url: string, formData: FormData) {
     return request(`${url}`, {
         method: 'POST',
+        requestType: 'form',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Accept': '*/*',

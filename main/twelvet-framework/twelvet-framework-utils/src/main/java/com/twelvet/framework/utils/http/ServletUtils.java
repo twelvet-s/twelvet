@@ -1,14 +1,18 @@
 package com.twelvet.framework.utils.http;
 
+import com.twelvet.framework.utils.CharsetKit;
 import com.twelvet.framework.utils.Convert;
+import com.twelvet.framework.utils.exception.TWTUtilsException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -157,6 +161,42 @@ public class ServletUtils {
      */
     public static String getParameter(String name) {
         return getRequest().getParameter(name);
+    }
+
+    /**
+     * 导出文件给予前端
+     *
+     * @param httpServletResponse HttpServletResponse
+     * @param file                文件
+     * @param filename            文件名称
+     */
+    public static void download(HttpServletResponse httpServletResponse, byte[] file, String filename) {
+
+        try {
+
+            httpServletResponse.setCharacterEncoding(CharsetKit.UTF_8);
+            filename = URLEncoder.encode(filename, CharsetKit.UTF_8);
+            // Url编码，前台需自行还原
+            filename = "attachment; filename=" + filename;
+            // 设置Excel导出的名称
+            httpServletResponse.setHeader("Content-Disposition", filename);
+            ServletOutputStream outputStream = httpServletResponse.getOutputStream();
+            outputStream.write(file);
+
+        } catch (IOException e) {
+           throw new TWTUtilsException("文件导出出错");
+        }
+
+    }
+
+    /**
+     * 导出文件给予前端
+     *
+     * @param file     文件
+     * @param filename 文件名称
+     */
+    public static void download(byte[] file, String filename) {
+        download(getResponse(), file, filename);
     }
 
 }

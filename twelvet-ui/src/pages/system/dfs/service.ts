@@ -1,7 +1,7 @@
 import request, { download } from '@/utils/request'
 
 // 请求的控制器名称
-const controller = "/system/loginInfo";
+const controller = "/dfs";
 
 /**
  * 获取分页 Data
@@ -20,16 +20,16 @@ export async function pageQuery(params: { [key: string]: any }) {
  * 删除数据
  * @param params 删除id [1,2,3]
  */
-export async function remove(infoIds: string) {
-    return request(`${controller}/${infoIds}`, {
+export async function remove(fileIds: string) {
+    return request(`${controller}/${fileIds}`, {
         method: 'DELETE',
     });
 }
 
 /**
- * 导出Excel
- * @param params
+ * 下载文件
+ * @param fileId
  */
-export async function exportExcel(params?: { [key: string]: any }) {
-    return download(`${controller}/export`, params);
+export async function downloadFile(fileId: string) {
+    return download(`${controller}/download/${fileId}`);
 }

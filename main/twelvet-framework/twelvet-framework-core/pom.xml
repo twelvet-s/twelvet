@@ -20,12 +20,6 @@
             <artifactId>twelvet-framework-utils</artifactId>
         </dependency>
 
-        <!--Redis缓存-->
-        <dependency>
-            <groupId>com.twelvet</groupId>
-            <artifactId>twelvet-framework-redis</artifactId>
-        </dependency>
-
         <!--Spring容器-->
         <dependency>
             <groupId>org.springframework</groupId>

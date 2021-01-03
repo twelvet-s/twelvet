@@ -1,14 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { DeleteOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker } from 'antd'
-import moment, { Moment } from 'moment'
-import { pageQuery, remove, exportExcel } from './service'
-import { system } from '@/utils/twelvet'
-import { RequestData } from '@ant-design/pro-table'
-import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
+import { CloseOutlined, DeleteOutlined, DownloadOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, message, Popconfirm, Space } from 'antd'
+import { downloadFile, pageQuery, remove } from './service'
+import ImportDFS from './components/importDFS/Index'
 import { FormInstance } from 'antd/lib/form'
+import { isArray } from 'lodash'
+import { system } from '@/utils/twelvet'
 
 /**
  * 分布式文件系统
@@ -19,71 +18,81 @@ const DFS: React.FC<{}> = () => {
 
     const formRef = useRef<FormInstance>()
 
-    const { RangePicker } = DatePicker
+    const [importDFSVisible, setImpDFSVisible] = useState<boolean>(false)
+
 
     // Form参数
     const columns: ProColumns = [
         {
-            title: '用户名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'userName',
+            title: '空间', search: false, width: 80, valueType: "text", dataIndex: 'spaceName'
         },
         {
-            title: 'IP', width: 200, valueType: "text", dataIndex: 'ipaddr'
+            title: '文件名', width: 250, valueType: "text", search: false, dataIndex: 'fileName'
         },
         {
-            title: '登录地区', width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '文件原名', width: 200, valueType: "text", dataIndex: 'originalFileName'
         },
         {
-            title: '终端', search: false, width: 200, valueType: "text", dataIndex: 'perms'
+            title: '文件类型', width: 80, valueType: "text", search: false, dataIndex: 'type'
         },
         {
-            title: '操作系统', search: false, dataIndex: 'component'
+            title: '文件大小', width: 80, valueType: "text", search: false, dataIndex: 'size'
         },
         {
-            title: '状态',
-            ellipsis: false,
-            dataIndex: 'status',
-            valueEnum: {
-                1: { text: '正常', status: 'success' },
-                0: { text: '停用', status: 'error' },
-            },
+            title: '创建日期', width: 200, valueType: "Date", search: false, dataIndex: 'createTime'
         },
         {
-            title: '登录信息', width: 200, valueType: "text", search: false, dataIndex: 'msg'
-        },
-        {
-            title: '搜索日期',
-            key: 'between',
-            hideInTable: true,
-            dataIndex: 'between',
-            renderFormItem: () => (
-                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
-                    // 不允许选择大于今天的日期
-                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
-                }} />
-            )
-        },
-        {
-            title: '登录时间', width: 200, valueType: "Date", search: false, dataIndex: 'accessTime'
+            title: '操作', fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+                return [
+                    <a onClick={() => downloadFile(row.fileId)}>
+                        <Space>
+                            <DownloadOutlined />
+                            下载文件
+                        </Space>
+                    </a>,
+                    <Popconfirm
+                        onConfirm={() => refRemove(row.fileId)}
+                        title="确定删除吗"
+                    >
+                        <a href='#'>
+                            <Space>
+                                <CloseOutlined />
+                                删除
+                            </Space>
+                        </a>
+                    </Popconfirm>
+                ]
+            }
         },
     ]
 
     /**
-     * 移除菜单
-     * @param row infoIds
+     * 删除文件
+     * @param row fileIds
      */
-    const refRemove = async (infoIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
+    const refRemove = async (fileIds: (string | number)[] | string | undefined) => {
         try {
-            if (!infoIds) {
+
+            if (!fileIds) {
                 return true
             }
-            const { code, msg } = await remove(infoIds.join(","))
-            if (code != 200) {
+
+            let params
+            if (isArray(fileIds)) {
+                params = fileIds.join(",")
+            } else {
+                params = fileIds
+            }
+
+            const { code, msg } = await remove(params)
+
+            if (code !== 200) {
                 return message.error(msg)
             }
 
             message.success(msg)
 
-            action.reload()
+            acForm.current && acForm.current.reload()
 
         } catch (e) {
             system.error(e)
@@ -95,7 +104,7 @@ const DFS: React.FC<{}> = () => {
         <>
             <TWTProTable
                 actionRef={acForm}
-                rowKey="infoId"
+                rowKey="fileId"
                 columns={columns}
                 request={pageQuery}
                 formRef={formRef}
@@ -115,33 +124,36 @@ const DFS: React.FC<{}> = () => {
                 }}
                 toolBarRender={(action, { selectedRowKeys }) => [
                     <Popconfirm
-                        disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
-                        onConfirm={() => refRemove(selectedRowKeys, action)}
+                        disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
+                        onConfirm={() => refRemove(selectedRowKeys)}
                         title="是否删除选中数据"
                     >
                         <Button
-                            disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
+                            disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
                             type="primary" danger
                         >
                             <DeleteOutlined />
                             批量删除
                         </Button>
                     </Popconfirm>,
-                    <Popconfirm
-                        title="是否导出数据"
-                        onConfirm={() => {
-                            exportExcel({
-                                ...formRef.current?.getFieldsValue()
-                            })
-                        }}
-                    >
-                        <Button type="default">
-                            <FundProjectionScreenOutlined />
-                        导出数据
+                    <Button type="primary" onClick={() => {
+                        setImpDFSVisible(true)
+                    }}>
+                        <PlusOutlined />
+                        上传文件
                     </Button>
-                    </Popconfirm>
                 ]}
 
+            />
+
+            <ImportDFS
+                visible={importDFSVisible}
+                onCancel={() => {
+                    setImpDFSVisible(false)
+                }}
+                ok={() => {
+                    acForm.current?.reload()
+                }}
             />
         </>
     )

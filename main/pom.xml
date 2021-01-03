@@ -194,6 +194,13 @@
                 <version>${twelvet.version}</version>
             </dependency>
 
+            <!--DFS API-->
+            <dependency>
+                <groupId>com.twelvet</groupId>
+                <artifactId>twelvet-api-dfs</artifactId>
+                <version>${twelvet.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

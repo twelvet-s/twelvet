@@ -4,6 +4,11 @@ import com.twelvet.api.system.domain.SysClientDetails;
 
 import java.util.List;
 
+/**
+ * @author twelvet
+ * @WebSite www.twelvet.cn
+ * @Description: Oauth2 数据层
+ */
 public interface SysClientDetailsMapper {
 
     /**
