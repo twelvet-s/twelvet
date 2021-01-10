@@ -1,4 +1,5 @@
-import request from '@/utils/request';
+import request from '@/utils/request'
+import TWT from '../setting'
 
 const api = '/system'
 
@@ -12,13 +13,25 @@ export async function currentUser(): Promise<any> {
 }
 
 export async function query(): Promise<any> {
-  return request('/api/users');
+    return request('/api/users');
 }
 
 export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
+    return request('/api/currentUser');
 }
 
 export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
+    return request('/api/notices');
+}
+
+export async function refreshTokenService(): Promise<any> {
+    return request(`/auth/oauth/token`, {
+        method: `POST`,
+        params: {
+            grant_type: `refresh_token`,
+            refresh_token: localStorage.getItem(TWT.refreshToken),
+            client_id: `twelvet`,
+            client_secret: `123456`
+        }
+    });
 }

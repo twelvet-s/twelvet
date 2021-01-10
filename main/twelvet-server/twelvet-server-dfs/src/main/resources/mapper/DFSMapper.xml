@@ -15,6 +15,10 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <sql id="selectSysDFSVo">
+        SELECT `file_id`, `file_name`, `original_file_name`, `space_name`, `path`, `size`, `type`, `create_time` FROM sys_dfs
+    </sql>
+
     <insert id="batchSysDfs" parameterType="SysDfs">
         insert into sys_dfs(file_name,original_file_name, space_name, path, size, type, create_time) values
         <foreach item="item" index="index" collection="list" separator=",">
@@ -30,7 +34,7 @@
     </delete>
 
     <select id="selectDfsList" resultMap="SysDfsResult" parameterType="SysDfs">
-        SELECT * FROM `sys_dfs`
+        <include refid="selectSysDFSVo"/>
         <where>
             <if test="originalFileName != null and originalFileName != ''">
                 AND original_file_name like concat('%', #{originalFileName}, '%')
@@ -43,7 +47,8 @@
     </select>
 
     <select id="selectDfsListByFileIds" resultMap="SysDfsResult" parameterType="Long">
-        SELECT * FROM `sys_dfs` where file_id in
+        <include refid="selectSysDFSVo"/>
+        where file_id in
         <foreach collection="array" item="fileId" open="(" separator="," close=")">
             #{fileId}
         </foreach>

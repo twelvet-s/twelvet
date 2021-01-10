@@ -4,10 +4,11 @@
  */
 import { extend } from 'umi-request'
 import { notification } from 'antd'
-import { history } from 'umi'
+import { history, getDvaApp } from 'umi'
 import { system } from '@/utils/twelvet'
 import TWT from '../setting'
 import { isArray } from 'lodash'
+
 
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -30,7 +31,7 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response }): Response => {
+const errorHandler = async (error: { response: Response }): Promise<Response> => {
     const { response } = error
 
     if (response && response.status) {
@@ -92,24 +93,55 @@ request.use(
         // 附加参数
         ctx.req.options = {
             ...options,
+            requestPath: url,
             headers: {
                 ...options.headers,
                 // 加入认证信息
                 'Authorization': `Bearer ${localStorage.getItem(TWT.accessToken)}`
             }
         }
+
         await next()
     }
 )
 
+
 // Filter【请求后的处理】
-request.interceptors.response.use(async (response, request) => {
-    // blob类型直接返回
-    if (request.responseType === 'blob') {
-        return response;
+request.interceptors.response.use(async (httpResponse, httpRequest) => {
+
+
+    const data = await httpResponse.clone().json();
+
+    // 默认返回
+    let responseRes = httpResponse
+
+    // 处理401状态
+    if (data.code === 401) {
+        const { params, method, requestPath } = httpRequest
+
+        // 执行刷新token
+        const res = await getDvaApp()._store.dispatch({
+            type: 'user/refreshToken',
+            payload: {
+                requestPath: requestPath,
+                method: method,
+                data: params
+            }
+        })
+
+        // 存在返回再设置
+        if (res) {
+            responseRes = res
+        }
+
     }
 
-    const data = await response.clone().json();
+    // blob类型直接返回
+    if (httpRequest.responseType === 'blob') {
+        return httpResponse;
+    }
+
+
     if (data && data.code === 403) {
         notification.error({
             message: data.msg,
@@ -122,7 +154,8 @@ request.interceptors.response.use(async (response, request) => {
             message: data.msg
         });
     }
-    return response;
+
+    return responseRes;
 
 })
 

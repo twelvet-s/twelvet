@@ -29,6 +29,7 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
+import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -152,8 +153,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST)
                 // 指定token存储位置
                 .tokenStore(tokenStore())
-                // 自定义账号密码登录（Oauth2密码模式需要）
-                //.userDetailsService(userDetailsService)
+                // 自定义账号密码登录（Oauth2密码模式需要,刷新模式也需要）
+                .userDetailsService(userDetailsService)
                 // 指定认证管理器
                 .authenticationManager(authenticationManager)
                 // 是否重复使用 refresh_token
@@ -191,7 +192,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 授权码模式
                 new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory),
                 // 密码模式
-                new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory)
+                new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory),
+                // 支持刷新模式
+                new RefreshTokenGranter(tokenServices, redisClientDetails(), requestFactory)
         ));
     }
 

@@ -1,7 +1,11 @@
 import { Effect, Reducer } from 'umi'
 
-import { queryCurrent, query as queryUsers, currentUser } from '@/services/user'
+import { queryCurrent, query as queryUsers, currentUser, refreshTokenService } from '@/services/user'
 import { MenuDataItem } from '@ant-design/pro-layout'
+import { setAuthority } from '@/utils/authority'
+import TWT from '../setting'
+import { history } from 'umi'
+import request from '@/utils/request'
 
 export interface CurrentUser {
     sysUser?: {
@@ -31,9 +35,13 @@ export interface UserModelType {
         fetch: Effect
         fetchCurrent: Effect
         getCurrentUser: Effect
+        refreshToken: Effect
     }
     reducers: {
         setCurrentUser: Reducer<UserModelState>
+        setRefresh: Reducer<UserModelState>
+
+
         saveCurrentUser: Reducer<UserModelState>
         changeNotifyCount: Reducer<UserModelState>
     }
@@ -49,6 +57,8 @@ const UserModel: UserModelType = {
                 loading: true
             }
         },
+        // 用户令牌是否正处于刷新状态
+        isRefresh: true
     },
 
     effects: {
@@ -70,7 +80,58 @@ const UserModel: UserModelType = {
             })
         },
 
+        *refreshToken({ payload }, { call, put, select }) {
+            const { params, method, requestPath } = payload
 
+            let response
+
+            const isRefresh = yield select((state: { num: any }) => state.isRefresh)
+
+            // 判断是否正在刷新
+            if (!isRefresh) {
+
+                // 开启禁止刷新
+                yield put({
+                    type: 'setRefresh',
+                    payload: {
+                        isRefresh: true
+                    },
+                })
+
+                // 续签失败将要求重新登录
+                const res = yield call(refreshTokenService)
+
+                if (res.code != 200) {
+                    return history.push('/login');
+                }
+
+                setAuthority(res)
+
+                // 重新请求本次数据
+                yield request(requestPath, {
+                    method: method,
+                    // 禁止自动序列化response
+                    parseResponse: false,
+                    data: {
+                        ...params
+                    }
+                }).then((res) => {
+                    response = res
+                })
+
+                // 关闭禁止刷新
+                yield put({
+                    type: 'setRefresh',
+                    payload: {
+                        isRefresh: true
+                    },
+                })
+
+                // 返回响应
+                return response
+            }
+
+        },
 
         *fetch(_, { call, put }) {
             const response = yield call(queryUsers)
@@ -108,9 +169,22 @@ const UserModel: UserModelType = {
                         loading: false
                     },
                     role: action.payload.role || [],
-                    permissions: action.payload.permissions || [],
+                    permissions: action.payload.permissions || []
                 }
 
+
+            }
+        },
+
+        /**
+         * 设置刷新的令牌
+         * @param state 
+         * @param action 
+         */
+        setRefresh(state, action) {
+            return {
+                ...state,
+                isRefresh: action.payload.isRefresh
             }
         },
 
