@@ -239,6 +239,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                     })
                 } catch (e) {
                     system.trace("TWTProTable：", e)
+                    return Promise.resolve()
                 }
             }}
             expandable={{

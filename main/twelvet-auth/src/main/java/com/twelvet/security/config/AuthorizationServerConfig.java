@@ -194,7 +194,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 密码模式
                 new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory),
                 // 支持刷新模式
-                new RefreshTokenGranter(tokenServices, redisClientDetails(), requestFactory)
+                new RefreshTokenGranter(tokenServices, clientDetailsService, requestFactory)
         ));
     }
 
