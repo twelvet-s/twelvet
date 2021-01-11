@@ -168,7 +168,7 @@ public class SysUserController extends TWTController {
     @PreAuthorize("@role.hasPermi('system:user:query')")
     @GetMapping({"/", "/{userId}"})
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId) {
-        Map<String, Object> res = new HashMap<>(5);
+        Map<String, Object> res = new HashMap<>(6);
         List<SysRole> roles = iSysRoleService.selectRoleAll();
         res.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         res.put("posts", iSysPostService.selectPostAll());

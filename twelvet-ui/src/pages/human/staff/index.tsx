@@ -7,7 +7,7 @@ import { FormInstance } from 'antd/lib/form'
 import DpetSearch from './components/dpetSearch/Index'
 import ImportStaff from './components/importStaff/Index'
 import StaffStatusSwitch from './components/staffStatusSwitch/Index'
-import { pageQuery, remove, exportExcel, getByStaffId, insert, update, treeSelect } from './service'
+import { pageQuery, remove, exportExcel, getByStaffId, getByStaff, insert, update, treeSelect } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 import moment, { Moment } from 'moment'
@@ -136,6 +136,47 @@ const Staff: React.FC<{}> = () => {
      */
     const refPost = async () => {
         setModal({ title: "新增", visible: true, modelType: 'POST' })
+        // 获取新增用户所属数据
+        const { code, msg, data } = await getByStaff()
+        if (code != 200) {
+            return message.error(msg)
+        }
+
+        const { posts, roles } = data
+
+        let POSTS: Array<{ [key: string]: any }> = new Array<{ [key: string]: any }>()
+        // 制作岗位数据
+        posts.filter((item: {
+            postName: string,
+            postId: number,
+        }
+        ) => {
+            POSTS.push({
+                title: item.postName,
+                key: item.postId,
+                value: item.postId
+            })
+        })
+
+        setPOSTS(POSTS)
+
+        let ROLES: Array<{ [key: string]: any }> = new Array<{ [key: string]: any }>()
+        // 制作岗位数据
+        roles.filter((item: {
+            roleName: string,
+            roleId: number,
+        }) => {
+            ROLES.push({
+                title: item.roleName,
+                key: item.roleId,
+                value: item.roleId
+            })
+        })
+
+        setROLES(ROLES)
+
+        // 获得部门数据
+        makeDept()
     }
 
     /**
