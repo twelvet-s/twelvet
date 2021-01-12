@@ -81,7 +81,7 @@ const UserModel: UserModelType = {
         },
 
         *refreshToken({ payload }, { call, put, select }) {
-            const { params, method, requestPath } = payload
+            const { params, method, requestPath, responseType } = payload
 
             let response
 
@@ -110,6 +110,7 @@ const UserModel: UserModelType = {
                 // 重新请求本次数据
                 yield request(requestPath, {
                     method: method,
+                    responseType: responseType === 'blob' ? 'blob' : 'json',
                     // 禁止自动序列化response
                     parseResponse: false,
                     data: {

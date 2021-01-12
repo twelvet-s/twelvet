@@ -109,6 +109,10 @@ request.use(
 // Filter【请求后的处理】
 request.interceptors.response.use(async (httpResponse, httpRequest) => {
 
+    // blob类型直接返回
+    if (httpRequest.responseType === 'blob' && httpResponse.status == 200) {
+        return httpResponse;
+    }
 
     const data = await httpResponse.clone().json();
 
@@ -125,6 +129,7 @@ request.interceptors.response.use(async (httpResponse, httpRequest) => {
             payload: {
                 requestPath: requestPath,
                 method: method,
+                responseType: httpRequest.responseType,
                 data: params
             }
         })
@@ -135,12 +140,6 @@ request.interceptors.response.use(async (httpResponse, httpRequest) => {
         }
 
     }
-
-    // blob类型直接返回
-    if (httpRequest.responseType === 'blob') {
-        return httpResponse;
-    }
-
 
     if (data && data.code === 403) {
         notification.error({

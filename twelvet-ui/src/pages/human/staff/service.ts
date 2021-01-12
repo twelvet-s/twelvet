@@ -76,6 +76,16 @@ export async function getByStaffId(userId: number) {
 }
 
 /**
+ * 获取职员新增所属信息
+ * @param userId 
+ */
+export async function getByStaff() {
+    return request(`${controller}/`, {
+        method: 'GET'
+    });
+}
+
+/**
  * 导出Excel
  * @param params
  */
