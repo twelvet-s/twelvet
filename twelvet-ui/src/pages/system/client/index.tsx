@@ -7,6 +7,7 @@ import { FormInstance } from 'antd/lib/form'
 import { pageQuery, remove, getByClientId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
+import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
 
 /**
  * 终端模块
@@ -96,6 +97,10 @@ const Post: React.FC<{}> = () => {
             if (code != 200) {
                 return message.error(msg)
             }
+
+            // 分割授权类型数据
+            data.authorizedGrantTypes = data.authorizedGrantTypes.split(',');
+
             // 赋值表单数据
             form.setFieldsValue(data)
 
@@ -157,6 +162,10 @@ const Post: React.FC<{}> = () => {
             .then(
                 async (fields) => {
                     try {
+
+                        // 需合并授权结果
+                        fields.authorizedGrantTypes = fields.authorizedGrantTypes.join(',')
+                        
                         // 开启加载中
                         setLoadingModal(true)
                         // ID为0则insert，否则将update
@@ -274,22 +283,11 @@ const Post: React.FC<{}> = () => {
 
                     <Form.Item
                         {...formItemLayout}
-                        label={
-                            <Tooltip title={() => [
-                                <p>注意：多个请使用英文,分割</p>,
-                                <p>授权码模式：authorization_code</p>,
-                                <p>密码模式： password</p>,
-                                <p>客户端模式： client_credentials</p>,
-                                <p>简化模式：implicit</p>,
-                                <p>支持token续时：refresh_token</p>
-                            ]}>
-                                授权类型 <QuestionCircleOutlined />
-                            </Tooltip>
-                        }
+                        label={'授权类型'}
                         name="authorizedGrantTypes"
                         rules={[{ required: true, message: '授权范围不能为空' }]}
                     >
-                        <Input placeholder='授权范围' />
+                        <DictionariesSelect type='sys_oauth_client_details' />
                     </Form.Item>
 
                     <Form.Item

@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysClientDetailsList" parameterType="SysClientDetails" resultMap="SysClientDetailsResult">
         <include refid="selectSysClientDetailsVo"/>
         <where>  
-            <if test="clientId != null  and clientId != ''"> and client_id = #{clientId}</if>
+            <if test="clientId != null  and clientId != ''"> and client_id like concat('%', #{clientId}, '%')</if>
         </where>
     </select>
     
