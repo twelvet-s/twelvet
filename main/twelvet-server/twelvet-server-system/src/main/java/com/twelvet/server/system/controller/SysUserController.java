@@ -181,7 +181,7 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 新增用户
+     * 新增用户    
      *
      * @param user SysUser
      * @return AjaxResult
