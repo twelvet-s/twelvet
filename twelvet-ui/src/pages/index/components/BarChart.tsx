@@ -4,6 +4,7 @@ import 'echarts/lib/chart/bar'
 import 'echarts/theme/macarons'
 import styles from './styles.less'
 import React from 'react'
+import { Card } from 'antd'
 
 /**
  * 扇形图
@@ -59,11 +60,14 @@ const BarChart = () => {
     }, [])
 
     return (
-        <div
-            ref={(ref: HTMLDivElement) => barChart = ref}
-            className={styles.barChart}
-        >
-        </div>
+        <Card title="数据分析">
+            <div
+                ref={(ref: HTMLDivElement) => barChart = ref}
+                className={styles.barChart}
+            >
+            </div>
+        </Card>
+
     )
 
 }

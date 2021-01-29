@@ -4,6 +4,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/theme/macarons';
 import styles from './styles.less';
 import React from 'react';
+import { Card } from 'antd';
 
 interface LineChartProps {
     option: { [key: string]: any }
@@ -124,11 +125,13 @@ const LineChart: React.FC<LineChartProps> = props => {
     }
 
     return (
-        <div
-            ref={(ref: HTMLDivElement) => { lineChartRef = ref }}
-            className={styles.lineChart}
-        >
-        </div>
+        <Card title="实时数据">
+            <div
+                ref={(ref: HTMLDivElement) => { lineChartRef = ref }}
+                className={styles.lineChart}
+            >
+            </div>
+        </Card>
     )
 
 }

@@ -1,5 +1,4 @@
-import { Row, Col, Card } from 'antd'
-import FastCtr from './components/FastCtr'
+import { Row, Col, Card, Image } from 'antd'
 import History from './components/History'
 import Panel from './components/Panel'
 import { system } from '@/utils/twelvet'
@@ -56,12 +55,12 @@ const Index: React.FC<{}> = () => {
     return (
         <>
             <Row gutter={[15, 30]}>
-                <Col sm={{ span: 18 }} xs={{ span: 24 }}>
+                <Col md={{ span: 16 }} sm={{ span: 24 }}>
                     <Panel />
                 </Col>
 
-                <Col sm={{ span: 6 }} xs={{ span: 24 }}>
-                    <FastCtr />
+                <Col md={{ span: 8 }} sm={{ span: 24 }}>
+                    <BarChart />
                 </Col>
             </Row>
 
@@ -80,14 +79,28 @@ const Index: React.FC<{}> = () => {
 
             <Row gutter={[15, 30]}>
 
-                <Col sm={{ span: 16 }} xs={{ span: 24 }}>
+                <Col xl={{ span: 6 }} sm={{ span: 24 }}>
+                    <Card title="官方信息">
+                        <p>
+                            官网：<a href="https://www.twelvet.cn/" target='_blank' >https://www.twelvet.cn</a>
+                        </p>
+                        <p>
+                            交流群：985830229
+                        </p>
+
+                    </Card>
+                </Col>
+
+                <Col xl={{ span: 10 }} sm={{ span: 24 }}>
                     <Card title="TwelveT发展史">
                         <History />
                     </Card>
                 </Col>
 
-                <Col sm={{ span: 8 }} xs={{ span: 24 }}>
-                    <BarChart />
+                <Col xl={{ span: 8 }} sm={{ span: 24 }}>
+                    <Card title="捐赠支持">
+                        <Image src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                    </Card>
                 </Col>
             </Row>
         </>
