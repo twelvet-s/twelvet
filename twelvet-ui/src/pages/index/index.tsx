@@ -8,8 +8,6 @@ import BarChart from './components/BarChart'
 
 import React, { useState, useEffect } from 'react'
 
-import pay from '@/assets/images/pay.png'
-
 /**
  * 首页
  */
@@ -101,7 +99,7 @@ const Index: React.FC<{}> = () => {
 
                 <Col xl={{ span: 8 }} sm={{ span: 24 }}>
                     <Card title="捐赠支持">
-                        <Image src={pay} />
+                        <Image src='https://www.twelvet.cn/assets/images/pay.png' />
                     </Card>
                 </Col>
             </Row>
