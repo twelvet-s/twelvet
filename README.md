@@ -73,4 +73,8 @@ com.twelvet
 QQ群： [![加入QQ群](https://img.shields.io/badge/985830229-blue.svg)](https://jq.qq.com/?_wv=1027&k=cznM6Q00) 点击按钮入群。
 
 ## 捐赠与支持
+<<<<<<< HEAD
 <img src="https://www.twelvet.cn/assets/images/pay.png"/>
+=======
+<img src="https://www.twelvet.cn/assets/images/pay.png"/>
+>>>>>>> 71ac63acae74f37a3278bab7e4258a35f2a4c1af
