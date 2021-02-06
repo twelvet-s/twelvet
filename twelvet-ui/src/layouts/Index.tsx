@@ -15,8 +15,9 @@ import { getAuthorityFromRouter } from '@/utils/utils'
 import logo from '@/assets/logo.jpg'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import Footer from '@/components/TwelveT/Footer'
-import { stringify } from 'querystring'
 import { CurrentUser } from '@/models/user'
+import TWT from '../setting'
+import { stringify } from 'querystring'
 
 const IconFont = createFromIconfontCN();
 
@@ -69,6 +70,20 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
 
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+
+    // 不存在token需要求登录
+    if(props.location.pathname !== '/login' && !localStorage.getItem(TWT.accessToken)){
+
+        let queryString = stringify({
+            redirect: window.location.href,
+          });
+          
+          if (window.location.href.indexOf("login") > 0) {
+            queryString = "";
+          }
+
+        return <Redirect to={`/login?${queryString}`} />
+    }
 
     // 登录组件
     if (props.location.pathname === '/login') {
@@ -144,130 +159,121 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     const { formatMessage } = useIntl()
 
     return (
-        <>
 
-            {
-                // 未登录不允许访问
-                (!currentUser && window.location.pathname !== '/login') &&<Redirect to={`/login?${stringify({
-                    redirect: window.location.href,
-                })}`} />
+        <ProLayout
+            navTheme='light'
+            // 拂晓蓝
+            primaryColor='#1890ff'
+            layout='mix'
+            contentWidth='Fluid'
+            fixedHeader={false}
+            fixSiderbar={true}
+            colorWeak={false}
+            iconfontUrl='//at.alicdn.com/t/font_2059726_uajhyn2p1ga.js'
+            // 渲染菜单数据
+            menuDataRender={() => currentUser.menuData.data}
+            menu={{
+                defaultOpenAll: false,
+                locale: false,
+                // 控制菜单渲染
+                loading: currentUser.menuData.loading,
+            }}
+            logo={logo}
+            // 额外主体渲染
+            menuExtraRender={({ collapsed }) =>
+                // 菜单搜索框
+                !collapsed && (
+                    <Input.Search
+                        allowClear
+                        enterButton
+                        placeholder='搜索菜单'
+                        size='small'
+                        onSearch={(e) => {
+                            setKeyWord(e);
+                        }}
+                    />
+                )
             }
+            postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
+            // 标题
+            title={title}
+            formatMessage={formatMessage}
+            onCollapse={handleMenuCollapse}
+            // 点击头部Logo
+            onMenuHeaderClick={() => history.push('/')}
+            // 重写菜单渲染
+            menuItemRender={(TWTProps) => {
+                const DOM = (
+                    <>
+                        <span role="img" className="anticon">
+                            {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
+                        </span>
+                        <span>
+                            {TWTProps.name}
+                        </span>
+                    </>
+                )
+                return (
+                    <span className="ant-pro-menu-item">
+                        {TWTProps.isUrl ? (
+                            <a target='_blank' href={TWTProps.path ? TWTProps.path : '#'}>
+                                {DOM}
+                            </a>
+                        ) : (
+                                <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
+                                    {DOM}
+                                </Link>
+                            )
 
-            <ProLayout
-                navTheme='light'
-                // 拂晓蓝
-                primaryColor='#1890ff'
-                layout='mix'
-                contentWidth='Fluid'
-                fixedHeader={false}
-                fixSiderbar={true}
-                colorWeak={false}
-                iconfontUrl='//at.alicdn.com/t/font_2059726_uajhyn2p1ga.js'
-                // 渲染菜单数据
-                menuDataRender={() => currentUser.menuData.data}
-                menu={{
-                    defaultOpenAll: false,
-                    locale: false,
-                    // 控制菜单渲染
-                    loading: currentUser.menuData.loading,
-                }}
-                logo={logo}
-                // 额外主体渲染
-                menuExtraRender={({ collapsed }) =>
-                    // 菜单搜索框
-                    !collapsed && (
-                        <Input.Search
-                            allowClear
-                            enterButton
-                            placeholder='搜索菜单'
-                            size='small'
-                            onSearch={(e) => {
-                                setKeyWord(e);
-                            }}
-                        />
-                    )
-                }
-                postMenuData={(menus) => filterByMenuDate(menus || [], keyWord)}
-                // 标题
-                title={title}
-                formatMessage={formatMessage}
-                onCollapse={handleMenuCollapse}
-                // 点击头部Logo
-                onMenuHeaderClick={() => history.push('/')}
-                // 重写菜单渲染
-                menuItemRender={(TWTProps) => {
-                    const DOM = (
-                        <>
+                        }
+                    </span>
+                )
+            }}
+            // 重写拥有子菜单菜单项的 render 方法
+            subMenuItemRender={(TWTProps) => {
+                return (
+                    <>
+                        <span className="ant-pro-menu-item">
                             <span role="img" className="anticon">
                                 {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
                             </span>
+
                             <span>
                                 {TWTProps.name}
                             </span>
-                        </>
-                    )
-                    return (
-                        <span className="ant-pro-menu-item">
-                            {TWTProps.isUrl ? (
-                                <a target='_blank' href={TWTProps.path ? TWTProps.path : '#'}>
-                                    {DOM}
-                                </a>
-                            ) : (
-                                    <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
-                                        {DOM}
-                                    </Link>
-                                )
-
-                            }
                         </span>
+
+                    </>
+                )
+            }}
+            breadcrumbRender={(routers = []) => [
+                {
+                    path: '/',
+                    breadcrumbName: formatMessage({ id: 'menu.home' }),
+                },
+                ...routers,
+            ]}
+            itemRender={(route, params, routes, paths) => {
+                const first = routes.indexOf(route) === 0
+                return first ? (
+                    <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+                ) : (
+                        <span>{route.breadcrumbName}</span>
                     )
-                }}
-                // 重写拥有子菜单菜单项的 render 方法
-                subMenuItemRender={(TWTProps) => {
-                    return (
-                        <>
-                            <span className="ant-pro-menu-item">
-                                <span role="img" className="anticon">
-                                    {TWTProps.icon && < IconFont type={TWTProps.icon.toString()} />}
-                                </span>
+            }}
+            footerRender={() => <Footer />}
+            rightContentRender={() => <RightContent />}
+            {...props}
 
-                                <span>
-                                    {TWTProps.name}
-                                </span>
-                            </span>
-
-                        </>
-                    )
-                }}
-                breadcrumbRender={(routers = []) => [
-                    {
-                        path: '/',
-                        breadcrumbName: formatMessage({ id: 'menu.home' }),
-                    },
-                    ...routers,
-                ]}
-                itemRender={(route, params, routes, paths) => {
-                    const first = routes.indexOf(route) === 0
-                    return first ? (
-                        <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-                    ) : (
-                            <span>{route.breadcrumbName}</span>
-                        )
-                }}
-                footerRender={() => <Footer />}
-                rightContentRender={() => <RightContent />}
-                {...props}
-
-            >
-                <Authorized authority={authorized!.authority} noMatch={noMatch}>
-                    {/* 页面位置信息 */}
-                    <PageHeaderWrapper>
-                        {/* 内容 */}
-                        {children}
-                    </PageHeaderWrapper>
-                </Authorized>
-            </ProLayout >
-        </>
+        >
+            <Authorized authority={authorized!.authority} noMatch={noMatch}>
+                {/* 页面位置信息 */}
+                <PageHeaderWrapper>
+                    {/* 内容 */}
+                    {children}
+                </PageHeaderWrapper>
+            </Authorized>
+        </ProLayout >
     )
 }
 

@@ -5,32 +5,33 @@ import { getRouteAuthority } from '@/utils/utils';
 import { ConnectState, UserModelState } from '@/models/connect';
 
 interface AuthComponentProps extends ConnectProps {
-  user: UserModelState;
+	user: UserModelState;
 }
 
 const AuthComponent: React.FC<AuthComponentProps> = ({
-  children,
-  route = {
-    routes: [],
-  },
-  location = {
-    pathname: '',
-  },
-  user,
+	children,
+	route = {
+		routes: [],
+	},
+	location = {
+		pathname: '',
+	},
+	user,
 }) => {
-  const { currentUser } = user;
-  const { routes = [] } = route;
-  const isLogin = currentUser && currentUser.name;
-  return (
-    <Authorized
-      authority={getRouteAuthority(location.pathname, routes) || ''}
-      noMatch={isLogin ? <Redirect to="/exception/403" /> : <Redirect to="/login" />}
-    >
-      {children}
-    </Authorized>
-  );
+	const { currentUser } = user;
+	const { routes = [] } = route;
+	const isLogin = currentUser && currentUser.name;
+	
+	return (
+		<Authorized
+			authority={getRouteAuthority(location.pathname, routes) || ''}
+			noMatch={isLogin ? <Redirect to="/exception/403" /> : <Redirect to="/login" />}
+		>
+			{children}
+		</Authorized>
+	);
 };
 
 export default connect(({ user }: ConnectState) => ({
-  user,
+	user,
 }))(AuthComponent);
