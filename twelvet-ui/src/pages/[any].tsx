@@ -17,4 +17,7 @@ const NoFoundPage: React.FC<{}> = () => {
 	)
 }
 
+// 修复umi bug兼容404
+NoFoundPage.path = undefined;
+
 export default NoFoundPage;
