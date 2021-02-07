@@ -37,6 +37,7 @@ const Login: React.FC<{}> = () => {
         {
             title: '执行状态',
             ellipsis: false,
+            width: 200,
             dataIndex: 'status',
             valueEnum: {
                 0: { text: '失败', status: 'error' },
