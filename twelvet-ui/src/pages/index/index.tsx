@@ -99,7 +99,7 @@ const Index: React.FC<{}> = () => {
 
                 <Col xl={{ span: 8 }} sm={{ span: 24 }}>
                     <Card title="捐赠支持">
-                        <Image src='https://www.twelvet.cn/assets/images/pay.png' />
+                        <Image style={{ cursor: 'pointer' }} src='https://www.twelvet.cn/assets/images/pay.png' />
                     </Card>
                 </Col>
             </Row>

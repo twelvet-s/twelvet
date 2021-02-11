@@ -1,4 +1,5 @@
 import TWT from '@/setting'
+import { history } from 'umi'
 
 /**
  * 系统日志输出
@@ -36,14 +37,14 @@ export const system = {
  * @param {{ [key: string]: any }} enhance 增强参数，通常用于增强或适配需要的参数
  * @param {number} rootId 根Id 默认 0
  */
-export function makeTree(params: {
+export const makeTree = (params: {
     dataSource: Array<{ [key: string]: any }>,
     id?: string | 'id',
     parentId?: string | 'parentId',
     children?: string | 'children',
     enhance?: { [key: string]: string } | {},
     rootId?: number | 0
-}) {
+}) => {
     // 获取默认数据
     const id = params.id || 'id'
     const parentId = params.parentId || 'parentId'
@@ -75,4 +76,16 @@ export function makeTree(params: {
     })
 
     return treeData.length > 0 ? treeData : params.dataSource
+}
+
+/**
+ * 统一退出登录操作
+ */
+export const logout = () => {
+
+    // 清除access_token/refresh_token
+    localStorage.removeItem(TWT.accessToken)
+    localStorage.removeItem(TWT.refreshToken)
+
+    history.push('/login');
 }

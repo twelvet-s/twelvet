@@ -3,8 +3,7 @@ import { Effect, Reducer } from 'umi'
 import { queryCurrent, query as queryUsers, currentUser, refreshTokenService } from '@/services/user'
 import { MenuDataItem } from '@ant-design/pro-layout'
 import { setAuthority } from '@/utils/authority'
-import TWT from '../setting'
-import { history } from 'umi'
+import { logout } from '@/utils/twelvet'
 import request from '@/utils/request'
 
 export interface CurrentUser {
@@ -102,7 +101,7 @@ const UserModel: UserModelType = {
                 const res = yield call(refreshTokenService)
 
                 if (res.code != 200) {
-                    return history.push('/login');
+                    return logout()
                 }
 
                 setAuthority(res)

@@ -4,10 +4,11 @@
  */
 import { extend } from 'umi-request'
 import { notification } from 'antd'
-import { history, getDvaApp } from 'umi'
+import { getDvaApp } from 'umi'
 import { system } from '@/utils/twelvet'
 import TWT from '../setting'
 import { isArray } from 'lodash'
+import { logout } from '@/utils/twelvet'
 
 
 const codeMessage = {
@@ -46,7 +47,7 @@ const errorHandler = async (error: { response: Response }): Promise<Response> =>
         // 401状态立即要求登录
         if (status === 401) {
             // 进行一次续签操作，继续失败将要求重新登录
-            return history.push('/login');
+            logout()
         }
 
     } else if (!response) {
@@ -54,7 +55,7 @@ const errorHandler = async (error: { response: Response }): Promise<Response> =>
             description: '您的网络发生异常，无法连接服务器',
             message: '网络异常',
         });
-        return history.push('/login');
+        logout()
     }
     return response
 }
