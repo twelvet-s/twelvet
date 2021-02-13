@@ -3,7 +3,7 @@ import { history, Reducer, Effect } from 'umi'
 
 import { message } from 'antd'
 
-import { login, refreshToken } from '@/services/login'
+import { login } from '@/services/login'
 import { removeAuthority, setAuthority } from '@/utils/authority'
 import { getPageQuery, } from '@/utils/utils'
 
@@ -40,7 +40,7 @@ const LoginModel: LoginModelType = {
         // 登录
         *login({ payload }, { call, put }) {
             const response = yield call(login, payload)
-            const { code, msg, data } = response
+            const { code, msg } = response
 
             // 请求错误立即返回
             if (code != 200) {
@@ -52,10 +52,6 @@ const LoginModel: LoginModelType = {
             })
             // 跳转至首页，不使用路由跳转，避免数据获取异常
             window.location.href = '/'
-        },
-        // 刷新令牌
-        *refreshToken({ payload }, { call, put }) {
-            const response = yield call(refreshToken)
         },
         // 退出
         logout() {

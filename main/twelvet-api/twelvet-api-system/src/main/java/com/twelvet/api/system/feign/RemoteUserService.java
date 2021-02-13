@@ -1,6 +1,6 @@
 package com.twelvet.api.system.feign;
 
-import com.twelvet.api.system.factory.RemoteUserFallbackFactory;
+import com.twelvet.api.system.feign.factory.RemoteUserFallbackFactory;
 import com.twelvet.api.system.model.UserInfo;
 import com.twelvet.framework.core.constants.ServiceNameConstants;
 import com.twelvet.framework.core.domain.R;

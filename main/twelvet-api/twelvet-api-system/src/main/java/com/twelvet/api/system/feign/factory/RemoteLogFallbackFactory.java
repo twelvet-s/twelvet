@@ -1,4 +1,4 @@
-package com.twelvet.api.system.factory;
+package com.twelvet.api.system.feign.factory;
 
 
 import com.twelvet.api.system.feign.RemoteLogService;

@@ -56,6 +56,11 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
                     <UserOutlined />
                     个人中心
                 </Menu.Item>
+
+                <Menu.Item key="settings">
+                    <SettingOutlined />
+                    个人设置
+                </Menu.Item>
                 
                 <Menu.Divider />
 
@@ -70,7 +75,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
             <HeaderDropdown overlay={menuHeaderDropdown}>
                 <span className={`${styles.action} ${styles.account}`}>
                     <Avatar size="small" className={styles.avatar} src={sysUser.avatar} alt="avatar" />
-                    <span className={`${styles.name} anticon`}>{sysUser.username}</span>
+                    <span className={`${styles.name} anticon`}>{sysUser.nickName ? sysUser.nickName : sysUser.username}</span>
                 </span>
             </HeaderDropdown>
         ) : (

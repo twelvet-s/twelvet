@@ -6,7 +6,7 @@ import { extend } from 'umi-request'
 import { notification } from 'antd'
 import { getDvaApp } from 'umi'
 import { system } from '@/utils/twelvet'
-import TWT from '../setting'
+import TWT from '@/setting'
 import { isArray } from 'lodash'
 import { logout } from '@/utils/twelvet'
 
@@ -43,12 +43,6 @@ const errorHandler = async (error: { response: Response }): Promise<Response> =>
             message: `请求错误 ${status}: ${url}`,
             description: errorText,
         })
-
-        // 401状态立即要求登录
-        if (status === 401) {
-            // 进行一次续签操作，继续失败将要求重新登录
-            logout()
-        }
 
     } else if (!response) {
         notification.error({

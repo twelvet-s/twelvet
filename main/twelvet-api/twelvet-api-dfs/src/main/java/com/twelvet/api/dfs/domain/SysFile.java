@@ -1,4 +1,4 @@
-package com.twelvet.api.system.domain;
+package com.twelvet.api.dfs.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

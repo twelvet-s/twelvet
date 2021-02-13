@@ -1,22 +1,22 @@
 package com.twelvet.server.dfs.controller;
 
 import com.twelvet.api.dfs.domain.SysDfs;
-import com.twelvet.api.system.domain.SysFile;
+import com.twelvet.api.dfs.domain.SysFile;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.domain.R;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.utils.file.FileUtils;
-import com.twelvet.server.dfs.mapper.DFSMapper;
 import com.twelvet.server.dfs.service.IDFSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -27,29 +27,58 @@ import java.util.List;
 @RestController
 public class DFSController extends TWTController {
 
-    private static final Logger log = LoggerFactory.getLogger(DFSController.class);
-
     @Autowired
     private IDFSService sysFileService;
 
     /**
+     * 域名或本机访问地址
+     */
+    @Value("${fdfs.domain}")
+    public String domain;
+
+    /**
+     * 多文件上传
+     *
      * @param files MultipartFile[]
      * @return R<SysFile>
      */
-    @Log(service = "文件上传", businessType = BusinessType.IMPORT)
-    @PostMapping("/upload")
+    @Log(service = "多文件上传", businessType = BusinessType.IMPORT)
+    @PostMapping("/uploads")
     public AjaxResult upload(MultipartFile[] files) {
-        try {
-            // 上传并返回访问地址
-            List<SysDfs> sysDfsList = sysFileService.uploadFile(files);
+        // 上传并返回访问地址
+        List<SysDfs> sysDfsList = sysFileService.uploadFiles(files);
 
-            return AjaxResult.success(sysDfsList);
-        } catch (Exception e) {
-            log.error("上传文件失败", e);
-            return AjaxResult.error(e.getMessage());
-        }
+        return AjaxResult.success(sysDfsList);
     }
 
+    /**
+     * 单文件上传API
+     *
+     * @param file MultipartFile
+     * @return R<SysFile>
+     */
+    @Log(service = "单文件上传", businessType = BusinessType.IMPORT)
+    @PostMapping("/upload")
+    public R<SysFile> upload(MultipartFile file) {
+        // 上传并返回访问地址
+        SysDfs sysDfs = sysFileService.uploadFile(file);
+
+        String path = sysDfs.getPath();
+
+        String url = domain + File.separator + path;
+
+        SysFile sysFile = new SysFile();
+        sysFile.setName(FileUtils.getName(url));
+        sysFile.setUrl(url);
+
+        return R.ok(sysFile);
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param fileId 文件ID
+     */
     @Log(service = "下载文件", businessType = BusinessType.EXPORT)
     @PostMapping("/download/{fileId}")
     public void download(@PathVariable Long fileId) {

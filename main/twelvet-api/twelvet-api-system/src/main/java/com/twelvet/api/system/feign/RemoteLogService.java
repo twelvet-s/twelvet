@@ -2,7 +2,7 @@ package com.twelvet.api.system.feign;
 
 
 import com.twelvet.api.system.domain.SysOperationLog;
-import com.twelvet.api.system.factory.RemoteLogFallbackFactory;
+import com.twelvet.api.system.feign.factory.RemoteLogFallbackFactory;
 import com.twelvet.framework.core.constants.ServiceNameConstants;
 import com.twelvet.framework.core.domain.R;
 import org.springframework.cloud.openfeign.FeignClient;

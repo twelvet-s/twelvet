@@ -9,6 +9,7 @@ import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.file.FileUtils;
 import com.twelvet.framework.utils.http.ServletUtils;
+import com.twelvet.server.dfs.exception.FileException;
 import com.twelvet.server.dfs.mapper.DFSMapper;
 import com.twelvet.server.dfs.service.IDFSService;
 import org.apache.commons.io.FilenameUtils;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class DFSServiceImpl implements IDFSService {
     private FastFileStorageClient storageClient;
 
     /**
-     * FastDfs文件上传接口
+     * FastDfs多文件文件上传接口
      *
      * @param files 上传的文件
      * @return 访问地址
@@ -47,11 +49,55 @@ public class DFSServiceImpl implements IDFSService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<SysDfs> uploadFile(MultipartFile[] files) throws Exception {
+    public List<SysDfs> uploadFiles(MultipartFile[] files) {
 
-        List<SysDfs> fileDfs = new ArrayList<>();
+        try {
+            List<SysDfs> fileDfs = new ArrayList<>();
 
-        for (MultipartFile file : files) {
+            for (MultipartFile file : files) {
+
+                long size = file.getSize();
+
+                StorePath storePath = storageClient.uploadFile(
+                        file.getInputStream(), size,
+                        FilenameUtils.getExtension(file.getOriginalFilename()),
+                        null
+                );
+
+                String fullPath = storePath.getFullPath();
+
+                SysDfs sysDfs = new SysDfs();
+                sysDfs.setSize(size);
+                sysDfs.setPath(fullPath);
+                sysDfs.setType(FileUtils.getSuffix(fullPath));
+                sysDfs.setFileName(FileUtils.getName(fullPath));
+                sysDfs.setOriginalFileName(file.getOriginalFilename());
+                sysDfs.setSpaceName(storePath.getGroup());
+                fileDfs.add(sysDfs);
+            }
+
+            // 插入数据库
+            dfsMapper.batchSysDfs(fileDfs);
+
+            return fileDfs;
+        } catch (IOException e) {
+            throw new TWTException("文件上传异常");
+        }
+
+
+    }
+
+    /**
+     * FastDfs文件上传接口
+     *
+     * @param file 上传的文件
+     * @return 访问地址
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public SysDfs uploadFile(MultipartFile file) {
+
+        try {
 
             long size = file.getSize();
 
@@ -70,13 +116,15 @@ public class DFSServiceImpl implements IDFSService {
             sysDfs.setFileName(FileUtils.getName(fullPath));
             sysDfs.setOriginalFileName(file.getOriginalFilename());
             sysDfs.setSpaceName(storePath.getGroup());
-            fileDfs.add(sysDfs);
+
+            // 插入数据库
+            dfsMapper.insertSysDfs(sysDfs);
+
+            return sysDfs;
+        } catch (IOException e) {
+            throw new TWTException("文件上传异常");
         }
 
-        // 插入数据库
-        dfsMapper.batchSysDfs(fileDfs);
-
-        return fileDfs;
     }
 
     /**

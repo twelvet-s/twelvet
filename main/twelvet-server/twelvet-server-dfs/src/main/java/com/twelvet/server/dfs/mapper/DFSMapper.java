@@ -12,11 +12,20 @@ import java.util.List;
 public interface DFSMapper {
 
     /**
-     * 插入数据
+     * 批量插入数据
      *
-     * @return 响应条数
+     * @param sysDfsList 文件列表
+     * @return 返回插入条数
      */
     int batchSysDfs(List<SysDfs> sysDfsList);
+
+    /**
+     * 插入数据
+     *
+     * @param sysDfs 文件信息
+     * @return 插入条数
+     */
+    int insertSysDfs(SysDfs sysDfs);
 
     /**
      * 删除数据

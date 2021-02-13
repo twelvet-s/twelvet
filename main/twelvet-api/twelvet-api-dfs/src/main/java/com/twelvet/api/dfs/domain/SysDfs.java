@@ -42,7 +42,6 @@ public class SysDfs extends BaseEntity {
      */
     private String type;
 
-
     public Long getFileId() {
         return fileId;
     }

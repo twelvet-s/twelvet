@@ -9,6 +9,7 @@ import request from '@/utils/request'
 export interface CurrentUser {
     sysUser?: {
         username?: string
+        nickName?: string
         avatar?: string
         email?: string
         phonenumber?: number

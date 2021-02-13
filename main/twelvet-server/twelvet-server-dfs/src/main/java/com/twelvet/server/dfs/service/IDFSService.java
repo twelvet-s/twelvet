@@ -13,18 +13,25 @@ import java.util.List;
 public interface IDFSService {
 
     /**
-     * 文件上传接口
+     * 多文件上传接口
      *
      * @param files 上传的文件
      * @return 访问地址
-     * @throws Exception
      */
-    List<SysDfs> uploadFile(MultipartFile[] files) throws Exception;
+    List<SysDfs> uploadFiles(MultipartFile[] files);
+
+    /**
+     * 多文件上传接口
+     *
+     * @param files 上传的文件
+     * @return 访问地址
+     */
+    SysDfs uploadFile(MultipartFile files);
 
     /**
      * 删除文件
      *
-     * @param fileIds
+     * @param fileIds 文件ID
      */
     void deleteFile(Long[] fileIds);
 

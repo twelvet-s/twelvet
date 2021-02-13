@@ -16,7 +16,15 @@
     </resultMap>
 
     <sql id="selectSysDFSVo">
-        SELECT `file_id`, `file_name`, `original_file_name`, `space_name`, `path`, `size`, `type`, `create_time` FROM sys_dfs
+        SELECT `file_id`,
+               `file_name`,
+               `original_file_name`,
+               `space_name`,
+               `path`,
+               `size`,
+               `type`,
+               `create_time`
+        FROM sys_dfs
     </sql>
 
     <insert id="batchSysDfs" parameterType="SysDfs">
@@ -24,6 +32,12 @@
         <foreach item="item" index="index" collection="list" separator=",">
             (#{item.fileName},#{item.originalFileName},#{item.spaceName},#{item.path},#{item.size},#{item.type},sysdate())
         </foreach>
+    </insert>
+
+    <insert id="insertSysDfs" parameterType="SysDfs">
+        insert into sys_dfs(file_name, original_file_name, space_name, path, size, type, create_time)
+        values (#{fileName}, #{originalFileName}, #{spaceName}, #{path}, #{size}, #{type},
+                sysdate())
     </insert>
 
     <delete id="deleteSysDfsByFileIds" parameterType="Long">
@@ -43,7 +57,9 @@
     </select>
 
     <select id="selectDfsByFileIds" resultMap="SysDfsResult" parameterType="Long">
-        SELECT * FROM `sys_dfs` where file_id = #{fileId}
+        SELECT *
+        FROM `sys_dfs`
+        where file_id = #{fileId}
     </select>
 
     <select id="selectDfsListByFileIds" resultMap="SysDfsResult" parameterType="Long">

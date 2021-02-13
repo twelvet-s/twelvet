@@ -17,4 +17,9 @@ public interface ServiceNameConstants {
      */
     String SYSTEM_SERVICE = "twelvet-system";
 
+    /**
+     * 文件服务的serviceid
+     */
+    public static final String FILE_SERVICE = "twelvet-dfs";
+
 }

@@ -27,10 +27,10 @@ const DFS: React.FC<{}> = () => {
             title: '空间', search: false, width: 80, valueType: "text", dataIndex: 'spaceName'
         },
         {
-            title: '文件名', width: 250, valueType: "text", search: false, dataIndex: 'fileName'
+            title: '文件名', copyable: true, width: 250, valueType: "text", search: false, dataIndex: 'fileName'
         },
         {
-            title: '文件原名', width: 200, valueType: "text", dataIndex: 'originalFileName'
+            title: '文件原名', copyable: true, width: 200, valueType: "text", dataIndex: 'originalFileName'
         },
         {
             title: '文件类型', width: 80, valueType: "text", search: false, dataIndex: 'type'
