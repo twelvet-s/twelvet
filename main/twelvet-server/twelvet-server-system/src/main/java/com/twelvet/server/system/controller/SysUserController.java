@@ -4,6 +4,7 @@ import com.twelvet.api.system.domain.SysMenu;
 import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.model.UserInfo;
+import com.twelvet.framework.security.annotation.AuthIgnore;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.constant.UserConstants;
@@ -119,6 +120,7 @@ public class SysUserController extends TWTController {
      * @param username String
      * @return R<UserInfo>
      */
+    @AuthIgnore
     @GetMapping("/info/{username}")
     public R<UserInfo> info(@PathVariable("username") String username) {
         SysUser sysUser = iSysUserService.selectUserByUserName(username);

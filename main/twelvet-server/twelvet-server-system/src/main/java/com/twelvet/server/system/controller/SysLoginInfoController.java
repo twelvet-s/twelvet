@@ -1,6 +1,7 @@
 package com.twelvet.server.system.controller;
 
 import com.twelvet.api.system.domain.SysLoginInfo;
+import com.twelvet.framework.security.annotation.AuthIgnore;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.log.annotation.Log;
@@ -74,6 +75,7 @@ public class SysLoginInfoController extends TWTController {
      * @param message  登录系统信息
      * @return 记录结果
      */
+    @AuthIgnore
     @PostMapping
     public AjaxResult add(
             @RequestParam("username") String username,

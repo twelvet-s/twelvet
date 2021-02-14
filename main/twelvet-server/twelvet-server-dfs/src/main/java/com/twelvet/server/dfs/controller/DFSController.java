@@ -2,6 +2,7 @@ package com.twelvet.server.dfs.controller;
 
 import com.twelvet.api.dfs.domain.SysDfs;
 import com.twelvet.api.dfs.domain.SysFile;
+import com.twelvet.framework.security.annotation.AuthIgnore;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.core.domain.R;
@@ -9,8 +10,6 @@ import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.utils.file.FileUtils;
 import com.twelvet.server.dfs.service.IDFSService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +56,7 @@ public class DFSController extends TWTController {
      * @param file MultipartFile
      * @return R<SysFile>
      */
+    @AuthIgnore
     @Log(service = "单文件上传", businessType = BusinessType.IMPORT)
     @PostMapping("/upload")
     public R<SysFile> upload(MultipartFile file) {

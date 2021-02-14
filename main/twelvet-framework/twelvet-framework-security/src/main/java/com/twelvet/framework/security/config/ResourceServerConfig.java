@@ -21,25 +21,19 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
- *
  * @author L
  * 资源服务器配置
  * 开启方法级别安全权限注解
- *
- * @EnableGlobalMethodSecurity(securedEnabled=true)
- * 开启@Secured 注解过滤权限
- *
- * @EnableGlobalMethodSecurity(jsr250Enabled=true)
- * 开启@RolesAllowed 注解过滤权限
- *
- * @EnableGlobalMethodSecurity(prePostEnabled=true)
- * 使用表达式时间方法级别的安全性 4个注解可用
+ * @EnableGlobalMethodSecurity(securedEnabled=true) 开启@Secured 注解过滤权限
+ * @EnableGlobalMethodSecurity(jsr250Enabled=true) 开启@RolesAllowed 注解过滤权限
+ * @EnableGlobalMethodSecurity(prePostEnabled=true) 使用表达式时间方法级别的安全性 4个注解可用
  * -@PreAuthorize 在方法调用之前,基于表达式的计算结果来限制对方法的访问
  * -@PostAuthorize 允许方法调用,但是如果表达式计算结果为false,将抛出一个安全性异常
  * -@PostFilter 允许方法调用,但必须按照表达式来过滤方法的结果
  * -@PreFilter 允许方法调用,但必须在进入方法之前过滤输入值
- *
  */
 @Configuration
 @EnableResourceServer
@@ -94,8 +88,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         // 不登录可以访问
-        authIgnoreConfig().getUrls().forEach(url -> registry.antMatchers(url).permitAll());
+        List<String> ignoreUrls = authIgnoreConfig().getIgnoreUrls();
+        authIgnoreConfig().getIgnoreUrls().forEach(url -> registry.antMatchers(url).permitAll());
         registry.anyRequest().authenticated();
+
     }
 
     @Override

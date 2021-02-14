@@ -1,6 +1,7 @@
 package com.twelvet.server.system.controller;
 
 import com.twelvet.api.system.domain.SysOperationLog;
+import com.twelvet.framework.security.annotation.AuthIgnore;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.log.annotation.Log;
@@ -32,6 +33,7 @@ public class SysOperationLogController extends TWTController {
      * @param operationLog SysOperationLog
      * @return AjaxResult
      */
+    @AuthIgnore
     @PostMapping
     @PreAuthorize("@role.hasPermi('system:operlog:insert')")
     public AjaxResult insert(@RequestBody SysOperationLog operationLog) {
