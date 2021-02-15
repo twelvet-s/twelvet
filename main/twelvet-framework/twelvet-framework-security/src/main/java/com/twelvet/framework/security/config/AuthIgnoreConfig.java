@@ -41,6 +41,9 @@ public class AuthIgnoreConfig implements InitializingBean {
         this.ignoreUrls = ignoreUrls;
     }
 
+    /**
+     * 重写bean注入后
+     */
     @Override
     public void afterPropertiesSet() {
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);

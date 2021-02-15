@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons'
-import { Button, Input, Upload, Form, message } from 'antd'
+import { Button, Input, Upload, Form, message, Modal } from 'antd'
 import { connect, FormattedMessage, formatMessage } from 'umi'
 import React, { Component } from 'react'
 
@@ -7,6 +7,10 @@ import { CurrentUser } from '../data.d'
 import styles from './BaseView.less'
 import TWT from '@/setting'
 import ImgCrop from 'antd-img-crop'
+
+// 图片剪辑样式
+import 'antd/es/modal/style';
+import 'antd/es/slider/style';
 
 
 // 头像组件 方便以后独立，增加裁剪之类的功能
@@ -18,6 +22,11 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
         <div className={styles.avatar}>
             <img src={avatar} alt="avatar" />
         </div>
+        <ImgCrop {...{
+            rotate: true,
+            grid: true,
+            modalTitle: '剪裁'
+        }}>
             <Upload
                 name='avatarFile'
                 headers={{
@@ -36,6 +45,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
                     </Button>
                 </div>
             </Upload>
+        </ImgCrop>
     </>
 )
 

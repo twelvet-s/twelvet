@@ -88,7 +88,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         // 不登录可以访问
-        List<String> ignoreUrls = authIgnoreConfig().getIgnoreUrls();
         authIgnoreConfig().getIgnoreUrls().forEach(url -> registry.antMatchers(url).permitAll());
         registry.anyRequest().authenticated();
 
