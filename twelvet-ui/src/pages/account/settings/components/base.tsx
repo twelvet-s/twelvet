@@ -1,120 +1,91 @@
-import { UploadOutlined } from '@ant-design/icons'
-import { Button, Input, Upload, Form, message, Modal } from 'antd'
-import { connect, FormattedMessage, formatMessage } from 'umi'
 import React, { Component } from 'react'
+import { Button, Input, Form, message } from 'antd'
+import { connect, FormattedMessage, formatMessage } from 'umi'
 
 import { CurrentUser } from '../data.d'
 import styles from './BaseView.less'
-import TWT from '@/setting'
-import ImgCrop from 'antd-img-crop'
 
 // 图片剪辑样式
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
+import TUpload from '@/components/TwelveT/upload'
 
 
-// 头像组件 方便以后独立，增加裁剪之类的功能
-const AvatarView = ({ avatar }: { avatar: string }) => (
-    <>
-        <div className={styles.avatar_title}>
-            <FormattedMessage id="accountandsettings.basic.avatar" defaultMessage="Avatar" />
-        </div>
-        <div className={styles.avatar}>
-            <img src={avatar} alt="avatar" />
-        </div>
-        <ImgCrop {...{
-            rotate: true,
-            grid: true,
-            modalTitle: '剪裁'
-        }}>
-            <Upload
-                name='avatarFile'
-                headers={{
-                    Authorization: `Bearer ${localStorage.getItem(TWT.accessToken)}`
-                }}
-                action='/api/system/user/profile/avatar'
-                showUploadList={false}
-            >
-                <div className={styles.button_view}>
-                    <Button>
-                        <UploadOutlined />
-                        <FormattedMessage
-                            id="accountandsettings.basic.change-avatar"
-                            defaultMessage="Change avatar"
-                        />
-                    </Button>
-                </div>
-            </Upload>
-        </ImgCrop>
-    </>
-)
 
 interface BaseViewProps {
     currentUser?: CurrentUser
 }
 
+const layout = {
+    labelCol: { span: 2 },
+    wrapperCol: { span: 6 },
+}
+
 class BaseView extends Component<BaseViewProps> {
+
     view: HTMLDivElement | undefined = undefined
 
-    getAvatarURL() {
-        const { currentUser } = this.props
-        if (currentUser) {
-            if (currentUser.avatar) {
-                return currentUser.avatar
-            }
-            const url = 'https://www.twelvet.cn/assets/images/pay.png'
-            return url
-        }
-        return ''
-    }
 
     getViewDom = (ref: HTMLDivElement) => {
         this.view = ref
     }
 
-    handleFinish = () => {
+    /**
+     * 保存信息
+     * @param value 
+     */
+    handleFinish = (value: any) => {
+        console.log(value)
         message.success(formatMessage({ id: 'accountandsettings.basic.update.success' }))
     }
 
     render() {
         const { currentUser } = this.props
-
         return (
-            <div className={styles.baseView} ref={this.getViewDom}>
-                <div className={styles.left}>
-                    <Form
-                        layout="vertical"
-                        onFinish={this.handleFinish}
-                        initialValues={currentUser}
-                        hideRequiredMark
-                    >
-                        <Form.Item
-                            name="nickName"
-                            label={formatMessage({ id: 'accountandsettings.basic.nickname' })}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: formatMessage({ id: 'accountandsettings.basic.nickname-message' }, {}),
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
+            <Form
+                layout='horizontal'
+                onFinish={this.handleFinish}
+                initialValues={currentUser}
+                hideRequiredMark
+            >
 
-                        <Form.Item>
-                            <Button htmlType="submit" type="primary">
-                                <FormattedMessage
-                                    id="accountandsettings.basic.update"
-                                    defaultMessage="Update Information"
-                                />
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
-                <div className={styles.right}>
-                    <AvatarView avatar={this.getAvatarURL()} />
-                </div>
-            </div>
+                <Form.Item
+                    {...layout}
+                    name="avatar"
+                    label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
+                >
+                    <TUpload
+                        name='avatarFile'
+                        title='用户头像'
+                        maxCount={1}
+                        action={`/system/user/profile/avatar`}
+                    >
+                    </TUpload>
+                </Form.Item>
+
+                <Form.Item
+                    {...layout}
+                    name="nickName"
+                    label={formatMessage({ id: 'accountandsettings.basic.nickname' })}
+                    rules={[
+                        {
+                            required: true,
+                            message: formatMessage({ id: 'accountandsettings.basic.nickname-message' }, {}),
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button htmlType="submit" type="primary">
+                        <FormattedMessage
+                            id="accountandsettings.basic.update"
+                            defaultMessage="Update Information"
+                        />
+                    </Button>
+                </Form.Item>
+            </Form>
         )
     }
 }

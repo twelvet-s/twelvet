@@ -1,20 +1,20 @@
 export interface TagType {
     key: string;
     label: string;
-  }
-  
-  export interface GeographicType {
+}
+
+export interface GeographicType {
     province: {
-      label: string;
-      key: string;
+        label: string;
+        key: string;
     };
     city: {
-      label: string;
-      key: string;
+        label: string;
+        key: string;
     };
-  }
-  
-  export interface NoticeType {
+}
+
+export interface NoticeType {
     id: string;
     title: string;
     logo: string;
@@ -23,9 +23,9 @@ export interface TagType {
     member: string;
     href: string;
     memberLink: string;
-  }
-  
-  export interface CurrentUser {
+}
+
+export interface CurrentUser {
     name: string;
     avatar: string;
     userid: string;
@@ -41,15 +41,15 @@ export interface TagType {
     geographic: GeographicType;
     address: string;
     phone: string;
-  }
-  
-  export interface Member {
+}
+
+export interface Member {
     avatar: string;
     name: string;
     id: string;
-  }
-  
-  export interface ListItemDataType {
+}
+
+export interface ListItemDataType {
     id: string;
     owner: string;
     title: string;
@@ -71,5 +71,4 @@ export interface TagType {
     message: number;
     content: string;
     members: Member[];
-  }
-  
+}

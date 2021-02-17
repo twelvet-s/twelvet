@@ -17,6 +17,7 @@ import com.twelvet.server.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.io.IOException;
 
@@ -62,9 +63,9 @@ public class SysProfileController extends TWTController {
      */
     @Log(service = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping("/avatar")
-    public AjaxResult avatar(@RequestParam("avatarFile") MultipartFile file) throws IOException {
+    public AjaxResult avatar(@RequestParam("avatarFile") MultipartFile file) {
 
-        if (!file.isEmpty()) {
+        try {
             R<SysFile> fileResult = remoteFileService.upload(file);
 
             if (StringUtils.isNull(fileResult) || StringUtils.isNull(fileResult.getData())) {
@@ -80,10 +81,9 @@ public class SysProfileController extends TWTController {
                 ajax.put("imgUrl", url);
                 return ajax;
             }
-
+        } catch ( e) {
+            return AjaxResult.error("请上传图片");
         }
-
-        return AjaxResult.error("请上传头像");
 
     }
 
