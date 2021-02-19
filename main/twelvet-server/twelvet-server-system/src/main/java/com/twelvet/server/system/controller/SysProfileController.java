@@ -77,14 +77,14 @@ public class SysProfileController extends TWTController {
             LoginUser user = SecurityUtils.getLoginUser();
 
             if (userService.updateUserAvatar(user.getUsername(), url)) {
-                AjaxResult ajax = AjaxResult.success();
+                AjaxResult ajax = AjaxResult.success("上传成功");
                 ajax.put("imgUrl", url);
                 return ajax;
             }
-        } catch ( e) {
+        } catch (Exception e) {
             return AjaxResult.error("请上传图片");
         }
-
+        return AjaxResult.error("上传失败");
     }
 
 }

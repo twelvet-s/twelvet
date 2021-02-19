@@ -74,6 +74,7 @@ const proSettings: TwelveT = {
     fixedHeader: false,
     fixSiderbar: true,
     colorWeak: false,
+    title: 'TwelveT',
     //title: 'TwelveT',
     // menu: {
     //     locale: false,

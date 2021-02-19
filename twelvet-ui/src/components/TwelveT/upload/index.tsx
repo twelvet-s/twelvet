@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { Modal, Upload } from 'antd'
+import { message, Modal, Upload } from 'antd'
 import { TUploadType } from './data'
 import TWT from '@/setting'
+import { UploadChangeParam } from 'antd/lib/upload'
 
-
+/**
+ * 图片上传组件
+ */
 class TUpload extends Component<TUploadType> {
 
     state = {
@@ -62,7 +65,16 @@ class TUpload extends Component<TUploadType> {
      * 上传后
      * @param param
      */
-    handleChange = ({ fileList }) => {
+    handleChange = ({fileList}: UploadChangeParam) => {
+        console.log(fileList);
+        if(fileList[0]){
+            console.log(fileList[0])
+            const {code, msg} = fileList[0].response
+            if(code !== 200){
+                return message.error(msg)
+            }
+            message.error(msg)
+        }
         this.setState({ fileList })
     }
 
@@ -81,7 +93,6 @@ class TUpload extends Component<TUploadType> {
                     method='POST'
                     name={name ? name : 'file'}
                     fileList={fileList}
-                    onChange={this.handleChange}
                     // 最大上传数量
                     maxCount={maxCount}
                     listType={listType ? listType : 'picture-card'}

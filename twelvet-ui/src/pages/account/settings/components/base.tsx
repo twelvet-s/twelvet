@@ -41,51 +41,60 @@ class BaseView extends Component<BaseViewProps> {
 
     render() {
         const { currentUser } = this.props
+
         return (
-            <Form
-                layout='horizontal'
-                onFinish={this.handleFinish}
-                initialValues={currentUser}
-                hideRequiredMark
-            >
-
-                <Form.Item
-                    {...layout}
-                    name="avatar"
-                    label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
-                >
-                    <TUpload
-                        name='avatarFile'
-                        title='用户头像'
-                        maxCount={1}
-                        action={`/system/user/profile/avatar`}
+            <div className={styles.baseView} ref={this.getViewDom}>
+                <div className={styles.left}>
+                    <Form
+                        layout="vertical"
+                        onFinish={this.handleFinish}
+                        initialValues={currentUser}
+                        hideRequiredMark
                     >
-                    </TUpload>
-                </Form.Item>
+                        <Form.Item
+                            name="nickName"
+                            label={formatMessage({ id: 'accountandsettings.basic.nickname' })}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: formatMessage({ id: 'accountandsettings.basic.nickname-message' }, {}),
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                <Form.Item
-                    {...layout}
-                    name="nickName"
-                    label={formatMessage({ id: 'accountandsettings.basic.nickname' })}
-                    rules={[
-                        {
-                            required: true,
-                            message: formatMessage({ id: 'accountandsettings.basic.nickname-message' }, {}),
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item>
-                    <Button htmlType="submit" type="primary">
-                        <FormattedMessage
-                            id="accountandsettings.basic.update"
-                            defaultMessage="Update Information"
-                        />
-                    </Button>
-                </Form.Item>
-            </Form>
+                        <Form.Item>
+                            <Button htmlType="submit" type="primary">
+                                <FormattedMessage
+                                    id="accountandsettings.basic.update"
+                                    defaultMessage="Update Information"
+                                />
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                <div className={styles.right}>
+                    <Form
+                        layout='horizontal'
+                        initialValues={currentUser}
+                    >
+                        <Form.Item
+                            {...layout}
+                            name="avatar"
+                            label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
+                        >
+                            <TUpload
+                                name='avatarFile'
+                                title='用户头像'
+                                maxCount={1}
+                                action={`/system/user/profile/avatar`}
+                            >
+                            </TUpload>
+                        </Form.Item>
+                    </Form>
+                </div>
+            </div>
         )
     }
 }
