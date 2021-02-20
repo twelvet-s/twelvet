@@ -10,4 +10,5 @@ export interface UploadType {
     imgCrop?: boolean
     // 支持上传的文件
     accept?: string
+    success?: () => void
 }

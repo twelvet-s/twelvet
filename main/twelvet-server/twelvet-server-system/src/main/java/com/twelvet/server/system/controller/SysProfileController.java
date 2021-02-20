@@ -55,11 +55,27 @@ public class SysProfileController extends TWTController {
     }
 
     /**
+     * 修改当前用户信息
+     *
+     * @param user SysUser
+     * @return 修改结果
+     */
+    @Log(service = "个人信息", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult updateProfile(@RequestBody SysUser user) {
+        Long userId = SecurityUtils.getLoginUser().getUserId();
+        user.setUserId(userId);
+        if (userService.updateUserProfile(user) > 0) {
+            return AjaxResult.success();
+        }
+        return AjaxResult.error("修改个人信息异常，请联系管理员");
+    }
+
+    /**
      * 修改用户头像
      *
      * @param file
      * @return 上传信息
-     * @throws IOException IO异常
      */
     @Log(service = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping("/avatar")
@@ -82,7 +98,7 @@ public class SysProfileController extends TWTController {
                 return ajax;
             }
         } catch (Exception e) {
-            return AjaxResult.error("请上传图片");
+            return AjaxResult.error("发生未知错误");
         }
         return AjaxResult.error("上传失败");
     }

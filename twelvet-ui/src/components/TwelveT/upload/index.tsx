@@ -126,6 +126,11 @@ class Upload extends Component<UploadType> {
                     }
                 }
 
+                // 上传成功后需要执行的方法
+                if(this.props.success){
+                    this.props.success()
+                }
+
                 message.success(msg)
             } else {
                 fileList.map(f => {
