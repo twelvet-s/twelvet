@@ -5,6 +5,7 @@ import { MenuDataItem } from '@ant-design/pro-layout'
 import { setAuthority } from '@/utils/authority'
 import { logout } from '@/utils/twelvet'
 import request from '@/utils/request'
+import { notification } from 'antd'
 
 export interface CurrentUser {
     sysUser?: {
@@ -102,23 +103,29 @@ const UserModel: UserModelType = {
                 const res = yield call(refreshTokenService)
 
                 if (res.code != 200) {
+                    notification.error({
+                        message: `续签失败`,
+                        description: `续签失败,请重新登录`,
+                    })
                     return logout()
                 }
 
                 setAuthority(res)
 
                 // 重新请求本次数据
-                yield request(requestPath, {
-                    method: method,
-                    responseType: responseType === 'blob' ? 'blob' : 'json',
-                    // 禁止自动序列化response
-                    parseResponse: false,
-                    data: {
-                        ...params
-                    }
-                }).then((res) => {
-                    response = res
-                })
+                if (requestPath) {
+                    yield request(requestPath, {
+                        method: method,
+                        responseType: responseType === 'blob' ? 'blob' : 'json',
+                        // 禁止自动序列化response
+                        parseResponse: false,
+                        data: {
+                            ...params
+                        }
+                    }).then((res) => {
+                        response = res
+                    })
+                }
 
                 // 关闭禁止刷新
                 yield put({

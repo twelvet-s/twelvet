@@ -8,7 +8,7 @@ import styles from './BaseView.less'
 // 图片剪辑样式
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-import TUpload from '@/components/TwelveT/upload'
+import Upload from '@/components/TwelveT/Upload'
 
 
 
@@ -84,13 +84,15 @@ class BaseView extends Component<BaseViewProps> {
                             name="avatar"
                             label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
                         >
-                            <TUpload
+                            <Upload
                                 name='avatarFile'
+                                // 开启图片剪裁
+                                imgCrop={true}
                                 title='用户头像'
                                 maxCount={1}
                                 action={`/system/user/profile/avatar`}
                             >
-                            </TUpload>
+                            </Upload>
                         </Form.Item>
                     </Form>
                 </div>
