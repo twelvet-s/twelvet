@@ -103,4 +103,33 @@ public class SysProfileController extends TWTController {
         return AjaxResult.error("上传失败");
     }
 
+    /**
+     * 重置密码
+     *
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return 重置结果
+     */
+    @Log(service = "个人信息", businessType = BusinessType.UPDATE)
+    @PutMapping("/updatePwd")
+    public AjaxResult updatePwd(String oldPassword, String newPassword) {
+        String username = SecurityUtils.getUsername();
+        SysUser user = userService.selectUserByUserName(username);
+        String password = user.getPassword();
+
+        if (!SecurityUtils.matchesPassword(oldPassword, password)) {
+            return AjaxResult.error("修改密码失败，旧密码错误");
+        }
+
+        if (SecurityUtils.matchesPassword(newPassword, password)) {
+            return AjaxResult.error("新密码不能与旧密码相同");
+        }
+
+        if (userService.resetUserPwd(username, SecurityUtils.encryptPassword(newPassword)) > 0) {
+            return AjaxResult.success();
+        }
+        
+        return AjaxResult.error("修改密码异常，请联系管理员");
+    }
+
 }

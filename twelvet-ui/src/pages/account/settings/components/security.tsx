@@ -1,7 +1,8 @@
 import { FormattedMessage, formatMessage } from 'umi';
 import React, { Component } from 'react';
 
-import { List } from 'antd';
+import { List, Modal } from 'antd';
+import Password from './security/password';
 
 type Unpacked<T> = T extends (infer U)[] ? U : T;
 
@@ -25,6 +26,7 @@ const passwordStrength = {
 };
 
 class SecurityView extends Component {
+
     getData = () => [
         {
             title: formatMessage({ id: 'accountandsettings.security.password' }, {}),
@@ -68,6 +70,7 @@ class SecurityView extends Component {
 
     render() {
         const data = this.getData();
+        
         return (
             <>
                 <List<Unpacked<typeof data>>
@@ -79,6 +82,9 @@ class SecurityView extends Component {
                         </List.Item>
                     )}
                 />
+
+                <Password />
+                
             </>
         );
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Input, Form, message } from 'antd'
-import { connect, FormattedMessage, formatMessage, getDvaApp } from 'umi'
+import { connect, FormattedMessage, getDvaApp } from 'umi'
 
 import { CurrentUser } from '../data.d'
 import styles from './BaseView.less'
@@ -83,11 +83,11 @@ class BaseView extends Component<BaseViewProps> {
                     >
                         <Form.Item
                             name="nickName"
-                            label={formatMessage({ id: 'accountandsettings.basic.nickname' })}
+                            label={<FormattedMessage id='accountandsettings.basic.nickname' />}
                             rules={[
                                 {
                                     required: true,
-                                    message: formatMessage({ id: 'accountandsettings.basic.nickname-message' }, {}),
+                                    message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
                                 },
                             ]}
                         >
@@ -112,7 +112,7 @@ class BaseView extends Component<BaseViewProps> {
                         <Form.Item
                             {...layout}
                             name="avatar"
-                            label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
+                            label={<FormattedMessage id='accountandsettings.basic.avatar' />}
                         >
                             <Upload
                                 name='avatarFile'
