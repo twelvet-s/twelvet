@@ -64,6 +64,22 @@ class BaseView extends Component<BaseViewProps> {
                             <Input />
                         </Form.Item>
 
+                        <Form.Item
+                            {...layout}
+                            name="avatar"
+                            label={formatMessage({ id: 'accountandsettings.basic.avatar' })}
+                        >
+                            <Upload
+                                name='avatarFile'
+                                // 开启图片剪裁
+                                imgCrop={false}
+                                title='用户头像'
+                                maxCount={1}
+                                action={`/system/user/profile/avatar`}
+                            >
+                            </Upload>
+                        </Form.Item>
+
                         <Form.Item>
                             <Button htmlType="submit" type="primary">
                                 <FormattedMessage
@@ -75,7 +91,7 @@ class BaseView extends Component<BaseViewProps> {
                     </Form>
                 </div>
                 <div className={styles.right}>
-                    <Form
+                    {/* <Form
                         layout='horizontal'
                         initialValues={currentUser}
                     >
@@ -94,7 +110,7 @@ class BaseView extends Component<BaseViewProps> {
                             >
                             </Upload>
                         </Form.Item>
-                    </Form>
+                    </Form> */}
                 </div>
             </div>
         )

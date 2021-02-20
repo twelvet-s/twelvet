@@ -1,4 +1,5 @@
 export interface UploadType {
+    onChange?: any
     value?: any
     name?: string
     title?: string

@@ -23,18 +23,31 @@ class Upload extends Component<UploadType> {
     }
 
     componentDidMount() {
-        const { value } = this.props
+        const { value, maxCount } = this.props
         if (value) {
-            this.setState({
-                fileList: [
-                    {
+            if (maxCount === 1) {
+                this.setState({
+                    fileList: [
+                        {
+                            uid: '-1',
+                            name: value,
+                            status: 'done',
+                            url: value,
+                        },
+                    ]
+                })
+            } else {
+                const fileList = value.map((file: string) => {
+                    return {
                         uid: '-1',
-                        name: value,
+                        name: file,
                         status: 'done',
-                        url: value,
-                    },
-                ]
-            })
+                        url: file,
+                    }
+                })
+                this.setState(fileList)
+            }
+
         }
 
     }
@@ -43,7 +56,7 @@ class Upload extends Component<UploadType> {
      * 获取图片流
      * @param file 
      */
-    getBase64 = (file) => {
+    getBase64 = (file: Blob) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader()
             reader.readAsDataURL(file);
@@ -56,7 +69,7 @@ class Upload extends Component<UploadType> {
      * 查看图片详情
      * @param file 
      */
-    handlePreview = async file => {
+    handlePreview = async (file: any) => {
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
         }
@@ -79,7 +92,7 @@ class Upload extends Component<UploadType> {
         if (file.length > 0 && file[0].response) {
 
             const uploadFile: UploadFile = file[0]
-            const { code, msg } = uploadFile.response
+            const { code, msg, imgUrl } = uploadFile.response
 
             // 续签失败将要求重新登录
             if (code == 401) {
@@ -90,6 +103,29 @@ class Upload extends Component<UploadType> {
             }
 
             if (code === 200) {
+                fileList.map(f => {
+                    if (f.uid != uploadFile.uid) {
+                        return f
+                    }
+                    // 设置图片url
+                    f.url = imgUrl
+                    return f
+                })
+
+                // 存在Form事件将改变值
+                if (this.props.onChange) {
+                    if (this.props.maxCount === 1) {
+                        // 单文件将直接设置为当前响应地址
+                        this.props.onChange(imgUrl)
+                    } else {
+                        const values = fileList.map(v => {
+                            return v.url
+                        })
+
+                        this.props.onChange(values)
+                    }
+                }
+
                 message.success(msg)
             } else {
                 fileList.map(f => {
@@ -103,6 +139,21 @@ class Upload extends Component<UploadType> {
                 message.error(msg)
             }
         }
+
+        // 数据为空时需清空数据
+        if (fileList.length === 0) {
+            if (this.props.onChange) {
+                if (this.props.maxCount === 1) {
+                    if (fileList.length === 0) {
+                        // 清空数据
+                        this.props.onChange()
+                    }
+                } else {
+                    this.props.onChange([])
+                }
+            }
+        }
+
         this.setState({ fileList })
     }
 
