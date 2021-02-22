@@ -4,6 +4,7 @@ import com.twelvet.api.system.domain.*;
 import com.twelvet.framework.core.constant.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.security.utils.SecurityUtils;
+import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.*;
 import com.twelvet.server.system.service.ISysConfigService;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,14 +61,31 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     /**
-     * 通过用户名查询用户
+     * 通过用户名查询用户(此接口会隐藏部分信息,请对号入座使用)
      *
      * @param userName 用户名
      * @return 用户对象信息
      */
     @Override
-    public SysUser selectUserByUserName(String userName) {
-        return sysUserMapper.selectUserByUserName(userName);
+    public SysUser selectUserByUserName(String userName, boolean hidden) {
+        SysUser sysUser = sysUserMapper.selectUserByUserName(userName);
+
+        if (hidden) {
+            // 隐藏手机号码/邮箱
+            String phoneNumber = sysUser.getPhonenumber();
+            String email = sysUser.getEmail();
+
+            String phoneNumberHide = StringUtils.hidePhone(phoneNumber);
+            String emailHide = StringUtils.hideEmail(email);
+
+            sysUser.setPhonenumber(phoneNumberHide);
+            sysUser.setEmail(emailHide);
+
+            // 隐藏密码
+            sysUser.setPassword(null);
+        }
+
+        return sysUser;
     }
 
     /**
@@ -349,7 +369,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * 导入用户数据
      *
      * @param userList        用户数据列表
-     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @param cover           更新操作人
      * @param operName        操作用户
      * @return 结果
      */

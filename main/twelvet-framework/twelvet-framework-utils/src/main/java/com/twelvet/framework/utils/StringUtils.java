@@ -355,4 +355,24 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return (T) obj;
     }
 
+    /**
+     * 隐藏手机号码
+     *
+     * @param phone 手机号码
+     * @return 隐藏的手机号码
+     */
+    public static String hidePhone(String phone) {
+        return phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+    }
+
+    /**
+     * 隐藏邮箱
+     *
+     * @param email 邮箱
+     * @return 隐藏的邮箱
+     */
+    public static String hideEmail(String email) {
+        return email.replaceAll("(\\w?)(\\w+)(\\w)(@\\w+\\.[a-z]+(\\.[a-z]+)?)", "$1****$3$4");
+    }
+
 }

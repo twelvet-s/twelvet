@@ -1,86 +1,84 @@
-import { FormattedMessage, formatMessage } from 'umi';
-import React, { Component } from 'react';
+import { FormattedMessage, formatMessage, connect } from 'umi'
+import React, { Component } from 'react'
 
-import { List, Modal } from 'antd';
-import Password from './security/password/index';
+import { List } from 'antd'
+import Password from './security/password/index'
+import Email from './security/email'
+import Phone from './security/phone'
+import { CurrentUser } from '../data.d'
 
-type Unpacked<T> = T extends (infer U)[] ? U : T;
+type Unpacked<T> = T extends (infer U)[] ? U : T
 
-const passwordStrength = {
-    strong: (
-        <span className="strong">
-            <FormattedMessage id="accountandsettings.security.strong" defaultMessage="Strong" />
-        </span>
-    ),
-    medium: (
-        <span className="medium">
-            <FormattedMessage id="accountandsettings.security.medium" defaultMessage="Medium" />
-        </span>
-    ),
-    weak: (
-        <span className="weak">
-            <FormattedMessage id="accountandsettings.security.weak" defaultMessage="Weak" />
-      Weak
-        </span>
-    ),
-};
-
-class SecurityView extends Component {
+class SecurityView extends Component<{
+    currentUser: CurrentUser
+}> {
 
     state = {
-        passwordModal: false
+        passwordModal: false,
+        phoneModal: false,
+        emailModal: false
     }
 
-    getData = () => [
-        {
-            title: formatMessage({ id: 'accountandsettings.security.password' }, {}),
-            description: (
-                <>
-                    {formatMessage({ id: 'accountandsettings.security.password-description' })}：
-                    {passwordStrength.strong}
-                </>
-            ),
-            actions: [
-                <a key="Modify" onClick={() => {
-                    this.setState({
-                        passwordModal: true
-                    })
-                }}>
-                    <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
-                </a>,
-            ],
-        },
-        {
-            title: formatMessage({ id: 'accountandsettings.security.phone' }, {}),
-            description: `${formatMessage(
-                { id: 'accountandsettings.security.phone-description' },
-                {},
-            )}：138****8293`,
-            actions: [
-                <a key="Modify">
-                    <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
-                </a>,
-            ],
-        },
-        {
-            title: formatMessage({ id: 'accountandsettings.security.email' }, {}),
-            description: `${formatMessage(
-                { id: 'accountandsettings.security.email-description' },
-                {},
-            )}：ant***sign.com`,
-            actions: [
-                <a key="Modify">
-                    <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
-                </a>,
-            ],
-        },
-    ];
+    getData = () => {
+        const { currentUser } = this.props
+
+        const phone = currentUser.phonenumber ? currentUser.phonenumber : `未绑定`
+
+        const email = currentUser.email ? currentUser.email : `未绑定`
+
+        return [
+            {
+                title: formatMessage({ id: 'accountandsettings.security.password' }, {}),
+                actions: [
+                    <a key="Modify" onClick={() => {
+                        this.setState({
+                            passwordModal: true
+                        })
+                    }}>
+                        <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
+                    </a>,
+                ],
+            },
+            {
+                title: formatMessage({ id: 'accountandsettings.security.phone' }, {}),
+                description: `${formatMessage(
+                    { id: 'accountandsettings.security.phone-description' },
+                    {},
+                )} ${phone}`,
+                actions: [
+                    <a key="Modify" onClick={() => {
+                        this.setState({
+                            phoneModal: true
+                        })
+                    }}>
+                        <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
+                    </a>,
+                ],
+            },
+            {
+                title: formatMessage({ id: 'accountandsettings.security.email' }, {}),
+                description: `${formatMessage(
+                    { id: 'accountandsettings.security.email-description' },
+                    {},
+                )} ${email}`,
+                actions: [
+                    <a key="Modify" onClick={() => {
+                        this.setState({
+                            emailModal: true
+                        })
+                    }}>
+                        <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
+                    </a>,
+                ],
+            },
+        ]
+    }
 
     render() {
 
-        const { passwordModal } = this.state
+        const { passwordModal, phoneModal, emailModal } = this.state
 
-        const data = this.getData();
+        const data = this.getData()
 
         return (
             <>
@@ -103,9 +101,31 @@ class SecurityView extends Component {
                     }}
                 />
 
+                <Phone
+                    passwordModal={phoneModal}
+                    onCancel={() => {
+                        this.setState({
+                            phoneModal: false
+                        })
+                    }}
+                />
+
+                <Email
+                    passwordModal={emailModal}
+                    onCancel={() => {
+                        this.setState({
+                            emailModal: false
+                        })
+                    }}
+                />
+
             </>
-        );
+        )
     }
 }
 
-export default SecurityView;
+export default connect(
+    ({ accountAndsettings }: { accountAndsettings: { currentUser: CurrentUser } }) => ({
+        currentUser: accountAndsettings.currentUser,
+    }),
+)(SecurityView)

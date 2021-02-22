@@ -25,7 +25,7 @@ public interface ISysUserService {
      * @param userName 用户名
      * @return 用户对象信息
      */
-    SysUser selectUserByUserName(String userName);
+    SysUser selectUserByUserName(String userName, boolean hidden);
 
     /**
      * 通过用户ID查询用户

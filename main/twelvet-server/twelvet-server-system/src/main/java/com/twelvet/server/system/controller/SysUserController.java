@@ -123,7 +123,7 @@ public class SysUserController extends TWTController {
     @AuthIgnore
     @GetMapping("/info/{username}")
     public R<UserInfo> info(@PathVariable("username") String username) {
-        SysUser sysUser = iSysUserService.selectUserByUserName(username);
+        SysUser sysUser = iSysUserService.selectUserByUserName(username, false);
         if (TWTUtils.isEmpty(sysUser)) {
             return R.fail("用户名或密码错误");
         }
@@ -183,7 +183,7 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 新增用户    
+     * 新增用户
      *
      * @param user SysUser
      * @return AjaxResult

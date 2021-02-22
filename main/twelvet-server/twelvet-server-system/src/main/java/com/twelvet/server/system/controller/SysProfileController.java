@@ -45,7 +45,7 @@ public class SysProfileController extends TWTController {
     @GetMapping
     public AjaxResult profile() {
         String username = SecurityUtils.getUsername();
-        SysUser user = userService.selectUserByUserName(username);
+        SysUser user = userService.selectUserByUserName(username, true);
 
         UserInfoVo userInfoVo = new UserInfoVo();
 
@@ -120,7 +120,7 @@ public class SysProfileController extends TWTController {
         }
 
         String username = SecurityUtils.getUsername();
-        SysUser user = userService.selectUserByUserName(username);
+        SysUser user = userService.selectUserByUserName(username, true);
         String password = user.getPassword();
 
         if (!SecurityUtils.matchesPassword(userPassword.getOldPassword(), password)) {
