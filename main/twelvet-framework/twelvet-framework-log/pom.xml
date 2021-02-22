@@ -21,6 +21,12 @@
             <artifactId>twelvet-framework-security</artifactId>
         </dependency>
 
+        <!--kafka-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
