@@ -1,7 +1,7 @@
 export interface CurrentUser {
     name: string
     avatar: string
-    userid: string
+    userId: number
     notice: NoticeType[]
     email: string
     signature: string

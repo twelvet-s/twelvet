@@ -54,7 +54,7 @@ const Index: React.FC<{}> = () => {
 
     return (
         <>
-            <Row gutter={[15, 30]}>
+            <Row gutter={[20, 20]}>
                 <Col md={{ span: 16 }} xs={{ span: 24 }}>
                     <Panel />
                 </Col>
@@ -62,9 +62,7 @@ const Index: React.FC<{}> = () => {
                 <Col md={{ span: 8 }} xs={{ span: 24 }}>
                     <BarChart />
                 </Col>
-            </Row>
 
-            <Row gutter={[15, 30]}>
                 <Col span={24}>
                     <LineChart
                         option={
@@ -75,9 +73,7 @@ const Index: React.FC<{}> = () => {
                         }
                     />
                 </Col>
-            </Row>
 
-            <Row gutter={[15, 30]}>
 
                 <Col xl={{ span: 6 }} xs={{ span: 24 }}>
                     <Card title="官方信息">
