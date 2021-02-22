@@ -1,6 +1,8 @@
 package com.twelvet.api.system.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,8 +11,11 @@ import java.util.List;
  * @Description: 路由配置信息
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RouterVo
+public class RouterVo implements Serializable
 {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * 路由名字
      */

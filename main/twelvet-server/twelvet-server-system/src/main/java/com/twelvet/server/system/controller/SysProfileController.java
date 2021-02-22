@@ -4,6 +4,7 @@ package com.twelvet.server.system.controller;
 import com.twelvet.api.dfs.domain.SysFile;
 import com.twelvet.api.dfs.feign.RemoteFileService;
 import com.twelvet.api.system.domain.SysUser;
+import com.twelvet.api.system.domain.params.UserPassword;
 import com.twelvet.api.system.domain.vo.UserInfoVo;
 import com.twelvet.framework.core.application.controller.TWTController;
 import com.twelvet.framework.core.application.domain.AjaxResult;
@@ -13,6 +14,7 @@ import com.twelvet.framework.log.enums.BusinessType;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.StringUtils;
+import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -106,29 +108,33 @@ public class SysProfileController extends TWTController {
     /**
      * 重置密码
      *
-     * @param oldPassword 旧密码
-     * @param newPassword 新密码
+     * @param userPassword 用户修改密码参数
      * @return 重置结果
      */
     @Log(service = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
-    public AjaxResult updatePwd(String oldPassword, String newPassword) {
+    public AjaxResult updatePwd(@RequestBody UserPassword userPassword) {
+
+        if(!userPassword.getNewPassword().equals(userPassword.getConfirmPassword())){
+            return AjaxResult.error("确认密码不一致");
+        }
+
         String username = SecurityUtils.getUsername();
         SysUser user = userService.selectUserByUserName(username);
         String password = user.getPassword();
 
-        if (!SecurityUtils.matchesPassword(oldPassword, password)) {
+        if (!SecurityUtils.matchesPassword(userPassword.getOldPassword(), password)) {
             return AjaxResult.error("修改密码失败，旧密码错误");
         }
 
-        if (SecurityUtils.matchesPassword(newPassword, password)) {
+        if (SecurityUtils.matchesPassword(userPassword.getNewPassword(), password)) {
             return AjaxResult.error("新密码不能与旧密码相同");
         }
 
-        if (userService.resetUserPwd(username, SecurityUtils.encryptPassword(newPassword)) > 0) {
+        if (userService.resetUserPwd(username, SecurityUtils.encryptPassword(userPassword.getNewPassword())) > 0) {
             return AjaxResult.success();
         }
-        
+
         return AjaxResult.error("修改密码异常，请联系管理员");
     }
 

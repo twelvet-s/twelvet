@@ -168,7 +168,7 @@
 	</update>
 
     <update id="resetUserPwd" parameterType="SysUser">
- 		update sys_user set password = #{password} where username = #{username}
+ 		update sys_user set password = #{password} where username = #{userName}
 	</update>
 
     <delete id="deleteUserById" parameterType="Long">

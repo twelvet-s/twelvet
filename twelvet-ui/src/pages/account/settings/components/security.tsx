@@ -2,7 +2,7 @@ import { FormattedMessage, formatMessage } from 'umi';
 import React, { Component } from 'react';
 
 import { List, Modal } from 'antd';
-import Password from './security/password';
+import Password from './security/password/index';
 
 type Unpacked<T> = T extends (infer U)[] ? U : T;
 
@@ -27,6 +27,10 @@ const passwordStrength = {
 
 class SecurityView extends Component {
 
+    state = {
+        passwordModal: false
+    }
+
     getData = () => [
         {
             title: formatMessage({ id: 'accountandsettings.security.password' }, {}),
@@ -37,7 +41,11 @@ class SecurityView extends Component {
                 </>
             ),
             actions: [
-                <a key="Modify">
+                <a key="Modify" onClick={() => {
+                    this.setState({
+                        passwordModal: true
+                    })
+                }}>
                     <FormattedMessage id="accountandsettings.security.modify" defaultMessage="Modify" />
                 </a>,
             ],
@@ -69,8 +77,11 @@ class SecurityView extends Component {
     ];
 
     render() {
+
+        const { passwordModal } = this.state
+
         const data = this.getData();
-        
+
         return (
             <>
                 <List<Unpacked<typeof data>>
@@ -83,8 +94,15 @@ class SecurityView extends Component {
                     )}
                 />
 
-                <Password />
-                
+                <Password
+                    passwordModal={passwordModal}
+                    onCancel={() => {
+                        this.setState({
+                            passwordModal: false
+                        })
+                    }}
+                />
+
             </>
         );
     }

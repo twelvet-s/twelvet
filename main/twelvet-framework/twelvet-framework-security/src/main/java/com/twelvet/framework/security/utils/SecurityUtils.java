@@ -16,6 +16,7 @@ public class SecurityUtils {
 
     /**
      * 获取Authentication
+     *
      * @return Authentication
      */
     public static Authentication getAuthentication() {
@@ -24,6 +25,7 @@ public class SecurityUtils {
 
     /**
      * 获取用户
+     *
      * @return String
      */
     public static String getUsername() {
@@ -32,6 +34,7 @@ public class SecurityUtils {
 
     /**
      * 获取用户
+     *
      * @param authentication authentication
      * @return LoginUser
      */
@@ -45,6 +48,7 @@ public class SecurityUtils {
 
     /**
      * 获取用户
+     *
      * @return LoginUser
      */
     public static LoginUser getLoginUser() {
