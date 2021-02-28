@@ -18,11 +18,6 @@ interface BaseViewProps {
     currentUser?: CurrentUser
 }
 
-const layout = {
-    labelCol: { span: 2 },
-    wrapperCol: { span: 6 },
-}
-
 class BaseView extends Component<BaseViewProps> {
 
     view: HTMLDivElement | undefined = undefined
@@ -110,7 +105,6 @@ class BaseView extends Component<BaseViewProps> {
                         initialValues={currentUser}
                     >
                         <Form.Item
-                            {...layout}
                             name="avatar"
                             label={<FormattedMessage id='accountandsettings.basic.avatar' />}
                         >

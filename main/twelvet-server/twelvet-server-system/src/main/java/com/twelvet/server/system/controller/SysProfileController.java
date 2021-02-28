@@ -115,7 +115,7 @@ public class SysProfileController extends TWTController {
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(@RequestBody UserPassword userPassword) {
 
-        if(!userPassword.getNewPassword().equals(userPassword.getConfirmPassword())){
+        if (!userPassword.getNewPassword().equals(userPassword.getConfirmPassword())) {
             return AjaxResult.error("确认密码不一致");
         }
 

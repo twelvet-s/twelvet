@@ -7,6 +7,10 @@ import proxy from './proxy';
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
+    history: {
+        // 路由默认
+        type: 'browser'
+    },
     hash: true,
     antd: {},
     dva: {

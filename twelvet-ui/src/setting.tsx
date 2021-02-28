@@ -1,7 +1,7 @@
-const { NODE_ENV } = process.env;
+const { NODE_ENV } = process.env
 
-const isDev: boolean = NODE_ENV == 'development';
-const urlPrefix: String = isDev ? '/api' : '';
+const isDev: boolean = NODE_ENV == 'development'
+const urlPrefix: String = '/api'
 
 const TWT: any = {
     // OAuth2
