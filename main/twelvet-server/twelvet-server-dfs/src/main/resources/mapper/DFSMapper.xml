@@ -54,6 +54,7 @@
                 AND original_file_name like concat('%', #{originalFileName}, '%')
             </if>
         </where>
+        order by file_id desc
     </select>
 
     <select id="selectDfsByFileIds" resultMap="SysDfsResult" parameterType="Long">

@@ -9,5 +9,5 @@ const controller = "/dfs"
  * @param params
  */
 export async function uploadFile(formData: FormData) {
-    return upload(`${controller}/uploads`, formData);
+    return upload(`${controller}/batchUpload`, formData);
 }

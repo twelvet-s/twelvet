@@ -42,8 +42,8 @@ public class DFSController extends TWTController {
      * @return R<SysFile>
      */
     @Log(service = "多文件上传", businessType = BusinessType.IMPORT)
-    @PostMapping("/uploads")
-    public AjaxResult upload(MultipartFile[] files) {
+    @PostMapping("/batchUpload")
+    public AjaxResult batchUpload(MultipartFile[] files) {
         // 上传并返回访问地址
         List<SysDfs> sysDfsList = sysFileService.uploadFiles(files);
 
