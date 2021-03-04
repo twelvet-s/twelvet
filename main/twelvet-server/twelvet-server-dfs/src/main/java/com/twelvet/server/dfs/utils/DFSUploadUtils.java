@@ -31,12 +31,6 @@ public class DFSUploadUtils {
     private static int DEFAULT_FILE_NAME_LENGTH = 100;
 
     /**
-     * 资源映射路径 前缀
-     */
-    @Value("${file.prefix}")
-    public String localFilePrefix;
-
-    /**
      * 根据文件路径上传
      *
      * @param baseDir 相对应用的基目录
