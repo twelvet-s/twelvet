@@ -1,19 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : twelvet
- Source Server Type    : MySQL
- Source Server Version : 50728
- Source Host           : rm-twelvet.mysql.rds.aliyuncs.com:3306
- Source Schema         : nacos
-
- Target Server Type    : MySQL
- Target Server Version : 50728
- File Encoding         : 65001
-
- Date: 04/03/2021 15:11:37
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
