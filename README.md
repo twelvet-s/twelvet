@@ -19,24 +19,24 @@
 ~~~
 com.twelvet     
 ├── twelvet-ui              // 前端框架 [80]
-├── twelvet-gateway         // 网关模块 [8080]
-├── twelvet-auth            // 认证中心 [9200]
+├── twelvet-gateway         // 网关模块 [88]
+├── twelvet-auth            // 认证中心 [8888]
 ├── twelvet-api             // 接口模块
 │       └── twelvet-api-system                          // 系统接口
-├── twelvet-common          // 通用模块
-│       └── twelvet-common-core                         // 核心模块
-│       └── twelvet-common-datascope                    // 权限范围
-│       └── twelvet-common-log                          // 日志记录
-│       └── twelvet-common-redis                        // 缓存服务
-│       └── twelvet-common-security                     // 安全模块
-│       └── twelvet-common-swagger                      // 系统接口
-├── twelvet-modules         // 业务模块
-│       └── twelvet-system                              // 系统模块 [9201]
-│       └── twelvet-gen                                 // 代码生成 [9202]
-│       └── twelvet-job                                 // 定时任务 [9203]
-│       └── twelvet-file                                // 文件服务 [9300]
+│       └── twelvet-api-dfs                             // DFS接口
+│       └── twelvet-api-job                             // 定时任务接口
+├── twelvet-framework          // 核心模块
+│       └── twelvet-framework-core                         // 核心模块
+│       └── twelvet-framework-log                          // 日志记录
+│       └── twelvet-framework-redis                        // 缓存服务
+│       └── twelvet-framework-security                     // 安全模块
+│       └── twelvet-framework-utils                        // 工具模块
+├── twelvet-server         // 业务模块
+│       └── twelvet-server-system                          // 系统模块 [8081]
+│       └── twelvet-server-job                            // 定时任务 [8082]
+│       └── twelvet-server-dfs                            //  DFS服务 [8083]
 ├── twelvet-visual          // 图形化管理模块
-│       └── twelvet-visual-monitor                      // 监控中心 [9100]
+│       └── twelvet-visual-monitor                         // 监控中心 [8100]
 ├──pom.xml                // 公共依赖
 ~~~
 
@@ -54,9 +54,8 @@ com.twelvet
 10. 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。
 11. 系统接口：根据业务代码自动生成相关的api接口文档。
 12. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-13. 在线构建器：拖动表单元素生成相应的HTML代码。
-14. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
-15. 分布式文件储存。
+13. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
+14. 分布式文件储存。
 
 ## 演示图
 
