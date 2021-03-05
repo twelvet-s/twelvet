@@ -68,6 +68,7 @@ const DrawerInfo: React.FC<{
         },
         {
             title: '状态',
+            width: 200,
             ellipsis: false,
             dataIndex: 'status',
             valueEnum: {

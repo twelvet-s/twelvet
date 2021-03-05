@@ -1,5 +1,5 @@
 import { GithubOutlined, HomeOutlined } from '@ant-design/icons'
-import { Button, Card, Col, Divider, Row } from 'antd'
+import { Button, Card, Col, Divider, Row, Tag } from 'antd'
 import React from 'react'
 import styles from './styles.less'
 
@@ -8,7 +8,7 @@ import styles from './styles.less'
  */
 const Panel = () => {
     return (
-        <Card title="TwelveT">
+        <Card title="公告">
             <div>
                 领取阿里云通用云产品1888优惠券：
                 ☛☛
@@ -35,8 +35,16 @@ const Panel = () => {
                 ☚☚
             </div>
             <Divider />
-            <h1>TwelveT 微服务</h1>
-            
+            <h1>
+                TwelveT 微服务
+                <Divider type="vertical" />
+                <a target='_blank' href="https://github.com/twelvet-s/twelvet/">
+                    <Tag icon={<GithubOutlined />} color='success'>
+                        免费开源 
+                    </Tag>
+                </a>
+            </h1>
+
             <Row gutter={[15, 30]}>
                 <Col md={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
                     <p> 一套以微服务架构的脚手架,使用Spring Boot Alibaba系列进行架构,学习并了解它将能快速掌握微服务核心基础。</p>
