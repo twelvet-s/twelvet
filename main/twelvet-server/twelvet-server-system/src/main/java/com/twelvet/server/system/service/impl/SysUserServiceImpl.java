@@ -45,9 +45,6 @@ public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     private SysUserPostMapper sysUserPostMapper;
 
-    @Autowired
-    private ISysConfigService iSysConfigService;
-
     /**
      * 根据条件分页查询用户列表
      *
@@ -382,13 +379,13 @@ public class SysUserServiceImpl implements ISysUserService {
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
-        String password = iSysConfigService.selectConfigByKey("sys.user.initPassword");
         for (SysUser user : userList) {
             try {
                 // 验证是否存在这个用户
                 SysUser u = sysUserMapper.selectUserByUserName(user.getUsername());
                 if (TWTUtils.isEmpty(u)) {
-                    user.setPassword(SecurityUtils.encryptPassword(password));
+                    // 初始化密码为123456
+                    user.setPassword(SecurityUtils.encryptPassword("123456"));
                     user.setCreateBy(operName);
                     this.insertUser(user);
                     successNum++;

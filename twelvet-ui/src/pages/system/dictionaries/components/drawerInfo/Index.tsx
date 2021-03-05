@@ -83,26 +83,28 @@ const DrawerInfo: React.FC<{
         },
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
-                return [
-                    <a onClick={() => refPut(row)}>
-                        <Space>
-                            <EditOutlined />
-                            修改
-                        </Space>
-                    </a>,
-                    <Divider type="vertical" />,
-                    <Popconfirm
-                        onConfirm={() => refRemove(row.dictCode)}
-                        title="确定删除吗"
-                    >
-                        <a href='#'>
+                return (
+                    <>
+                        <a onClick={() => refPut(row)}>
                             <Space>
-                                <CloseOutlined />
-                                删除
+                                <EditOutlined />
+                                修改
                             </Space>
                         </a>
-                    </Popconfirm>
-                ]
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.dictCode)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
+                )
             }
         },
     ]

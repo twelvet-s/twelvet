@@ -46,8 +46,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public List<SysDept> buildDeptTree(List<SysDept> depts) {
-        List<SysDept> returnList = new ArrayList<SysDept>();
-        List<Long> tempList = new ArrayList<Long>();
+        List<SysDept> returnList = new ArrayList<>();
+        List<Long> tempList = new ArrayList<>();
         for (SysDept dept : depts) {
             tempList.add(dept.getDeptId());
         }

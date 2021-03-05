@@ -73,38 +73,44 @@ const Dictionaries: React.FC<{}> = () => {
         },
         {
             title: '操作', fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
-                return [
-                    <a onClick={() => refPut(row)}>
-                        <Space>
-                            <EditOutlined />
-                            修改
-                        </Space>
-                    </a>,
-                    <Divider type="vertical" />,
-                    <a onClick={() => {
-                        setDrawerInfo({
-                            drawerInfoKey: row.dictType,
-                            visible: true
-                        })
-                    }}>
-                        <Space>
-                            <SettingOutlined />
-                            数据管理
-                        </Space>
-                    </a>,
-                    <Divider type="vertical" />,
-                    <Popconfirm
-                        onConfirm={() => refRemove(row.dictId)}
-                        title="确定删除吗"
-                    >
-                        <a href='#'>
+                return (
+                    <>
+                        <a onClick={() => refPut(row)}>
                             <Space>
-                                <CloseOutlined />
-                                删除
+                                <EditOutlined />
+                                修改
                             </Space>
                         </a>
-                    </Popconfirm>
-                ]
+
+                        <Divider type="vertical" />
+
+                        <a onClick={() => {
+                            setDrawerInfo({
+                                drawerInfoKey: row.dictType,
+                                visible: true
+                            })
+                        }}>
+                            <Space>
+                                <SettingOutlined />
+                                数据管理
+                            </Space>
+                        </a>
+
+                        <Divider type="vertical" />
+                        
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.dictId)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
+                )
             }
         },
     ]

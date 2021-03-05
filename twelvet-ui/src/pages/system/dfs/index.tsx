@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { CloseOutlined, DeleteOutlined, DownloadOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, message, Popconfirm, Space } from 'antd'
+import { Button, Divider, message, Popconfirm, Space } from 'antd'
 import { downloadFile, pageQuery, remove } from './service'
 import ImportDFS from './components/importDFS/Index'
 import { FormInstance } from 'antd/lib/form'
@@ -43,25 +43,28 @@ const DFS: React.FC<{}> = () => {
         },
         {
             title: '操作', fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
-                return [
-                    <a onClick={() => downloadFile(row.fileId)}>
-                        <Space>
-                            <DownloadOutlined />
-                            下载文件
-                        </Space>
-                    </a>,
-                    <Popconfirm
-                        onConfirm={() => refRemove(row.fileId)}
-                        title="确定删除吗"
-                    >
-                        <a href='#'>
+                return (
+                    <>
+                        <a onClick={() => downloadFile(row.fileId)}>
                             <Space>
-                                <CloseOutlined />
-                                删除
+                                <DownloadOutlined />
+                                下载文件
                             </Space>
                         </a>
-                    </Popconfirm>
-                ]
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.fileId)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
+                )
             }
         },
     ]

@@ -6,7 +6,7 @@ import { system } from '@/utils/twelvet'
 const DeptSearch: React.FC<{}> = props => {
 
     // 部门数据
-    const [DEPTS, setDEPTS] = useState<Array<{ [key: string]: any }>>([])
+    const [DEPTS, setDEPTS] = useState<Array<{ [key: string]: any }>>([{}])
 
     useEffect(() => {
         makeDept()
@@ -35,6 +35,7 @@ const DeptSearch: React.FC<{}> = props => {
                 showSearch
                 treeLine
                 treeNodeFilterProp="title"
+                treeNodeLabelProp='title'
                 treeData={DEPTS}
             />
         </>

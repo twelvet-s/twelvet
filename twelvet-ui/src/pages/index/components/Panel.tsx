@@ -9,7 +9,7 @@ import styles from './styles.less'
 const Panel = () => {
     return (
         <Card title="TwelveT">
-            <p>
+            <div>
                 领取阿里云通用云产品1888优惠券：
                 ☛☛
                 <a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=jcjwnfv3" target='_blank'>
@@ -20,9 +20,9 @@ const Panel = () => {
                     服务器秒杀
                 </a>
                 ☚☚
-            </p>
+            </div>
             <Divider />
-            <p>
+            <div>
                 腾讯云服务器秒杀区：
                 ☛☛
                 <a href="https://curl.qcloud.com/cAvXfLWI" target='_blank'>
@@ -33,7 +33,7 @@ const Panel = () => {
                     服务器秒杀
                 </a>
                 ☚☚
-            </p>
+            </div>
             <Divider />
             <h1>TwelveT 微服务</h1>
             

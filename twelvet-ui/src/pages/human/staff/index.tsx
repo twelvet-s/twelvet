@@ -85,9 +85,9 @@ const Staff: React.FC<{}> = () => {
             ellipsis: false,
             width: 80,
             dataIndex: 'status',
-            render: (_: string, row: { [key: string]: string }) => [
+            render: (_: string, row: { [key: string]: string }) => (
                 <StaffStatusSwitch row={row} />
-            ]
+            )
         },
         {
             title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
@@ -106,26 +106,28 @@ const Staff: React.FC<{}> = () => {
         },
         {
             title: '操作', fixed: 'right', width: 200, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
-                return [
-                    <a onClick={() => refPut(row)}>
-                        <Space>
-                            <EditOutlined />
-                            修改
-                        </Space>
-                    </a>,
-                    <Divider type="vertical" />,
-                    <Popconfirm
-                        onConfirm={() => refRemove(row.userId)}
-                        title="确定删除吗"
-                    >
-                        <a href='#'>
+                return (
+                    <>
+                        <a onClick={() => refPut(row)}>
                             <Space>
-                                <CloseOutlined />
-                                删除
+                                <EditOutlined />
+                                修改
                             </Space>
                         </a>
-                    </Popconfirm>
-                ]
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.userId)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
+                )
             }
         },
     ]

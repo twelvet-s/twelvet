@@ -77,7 +77,7 @@ public class SysDept extends BaseEntity {
     /**
      * 子部门
      */
-    private List<SysDept> children = new ArrayList<SysDept>();
+    private List<SysDept> children = new ArrayList<>();
 
     public Long getDeptId() {
         return deptId;

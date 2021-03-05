@@ -41,10 +41,10 @@ const Menu: React.FC<{}> = () => {
     // Form参数
     const columns: ProColumns = [
         {
-            title: '菜单名称', fixed: 'left', width: 200, ellipsis: true, width: 200, valueType: "text", dataIndex: 'menuName',
+            title: '菜单名称', fixed: 'left', width: 200, ellipsis: true, valueType: "text", dataIndex: 'menuName',
         },
         {
-            title: 'Icon', width: 50, ellipsis: false, width: 200, valueType: "text", search: false, dataIndex: 'icon', render: (item: string) => {
+            title: 'Icon', width: 50, ellipsis: false, valueType: "text", search: false, dataIndex: 'icon', render: (item: string) => {
                 return < IconFont type={item} />
             }
         },
