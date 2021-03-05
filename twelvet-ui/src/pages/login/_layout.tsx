@@ -4,7 +4,7 @@ import { Link, SelectLang, useIntl, ConnectProps, connect } from 'umi'
 import React from 'react'
 import { ConnectState } from '@/models/connect'
 import Footer from '@/components/TwelveT/Footer'
-import logo from '@/assets/logo.jpg'
+import logo from '@/assets/logo.png'
 import styles from './Login.less'
 
 export interface UserLayoutProps extends Partial<ConnectProps> {
