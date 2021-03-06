@@ -30,15 +30,6 @@ const Login: React.FC<{}> = () => {
             title: 'IP', width: 200, valueType: "text", dataIndex: 'ipaddr'
         },
         {
-            title: '登录地区', width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
-        },
-        {
-            title: '终端', search: false, width: 200, valueType: "text", dataIndex: 'perms'
-        },
-        {
-            title: '操作系统', search: false, dataIndex: 'component'
-        },
-        {
             title: '状态',
             ellipsis: false,
             dataIndex: 'status',

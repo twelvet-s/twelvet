@@ -82,12 +82,14 @@ public class SysLoginInfoController extends TWTController {
             @RequestParam("status") String status,
             @RequestParam("message") String message
     ) {
-
+        // 获取IP
         String ip = IpUtils.getIpAddr();
+
 
         SysLoginInfo loginInfo = new SysLoginInfo();
         loginInfo.setUserName(username);
         loginInfo.setIpaddr(ip);
+
         // TODO 处理状态
         // loginInfo.setStatus(status);
         loginInfo.setMsg(message);
