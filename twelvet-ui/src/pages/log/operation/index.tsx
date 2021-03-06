@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, EyeOutlined } from '@ant-design/icons'
 import ProDescriptions from '@ant-design/pro-descriptions'
-import { Popconfirm, Button, message, Modal, DatePicker, Descriptions, Space } from 'antd'
+import { Popconfirm, Button, message, Modal, DatePicker, Space, FormInstance } from 'antd'
 import moment, { Moment } from 'moment'
-import { pageQuery, remove, exportExcel } from './service'
+import { pageQuery, remove, exportExcel, getDictionariesType } from './service'
 import { system } from '@/utils/twelvet'
 
 /**
@@ -24,6 +24,45 @@ const Operation: React.FC<{}> = () => {
 
     const { RangePicker } = DatePicker
 
+    const [operType, setOperType] = useState<{
+        key: string
+    }>()
+
+    /**
+     * 初始化数据
+     */
+    useEffect(() => {
+
+        getOperType()
+    }, [])
+
+    /**
+     * 获取操作类型数据
+     */
+    const getOperType = async () => {
+        try {
+
+            const { code, msg, data } = await getDictionariesType()
+
+            if (code != 200) {
+                message.error(msg)
+            }
+
+            let res: { key: string } = {}
+
+            data.map((item: {
+                dictValue: string
+                dictLabel: string
+            }) => {
+                res[item.dictValue] = item.dictLabel
+            })
+
+            setOperType(res)
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
     // Form参数
     const columns: ProColumns = [
         {
@@ -33,7 +72,9 @@ const Operation: React.FC<{}> = () => {
             title: '请求方式', search: false, width: 200, valueType: "text", dataIndex: 'requestMethod'
         },
         {
-            title: '操作类型', width: 200, valueType: "text", search: false, dataIndex: 'orderNum'
+            title: '操作类型', ellipsis: false, width: 200, valueType: "text", search: false, dataIndex: 'businessType', render: (businessType: string) => {
+                return operType && operType[businessType]
+            }
         },
         {
             title: '操作人员', width: 200, valueType: "text", dataIndex: 'operName'

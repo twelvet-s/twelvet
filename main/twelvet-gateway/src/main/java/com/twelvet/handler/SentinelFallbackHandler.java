@@ -16,10 +16,8 @@ import java.nio.charset.StandardCharsets;
  * @WebSite www.twelvet.cn
  * @Description: 自定义限流异常处理
  */
-public class SentinelFallbackHandler implements WebExceptionHandler
-{
-    private Mono<Void> writeResponse(ServerResponse response, ServerWebExchange exchange)
-    {
+public class SentinelFallbackHandler implements WebExceptionHandler {
+    private Mono<Void> writeResponse(ServerResponse response, ServerWebExchange exchange) {
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         serverHttpResponse.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         byte[] datas = "{\"status\":429,\"message\":\"请求超过最大数，请稍后再试\"}".getBytes(StandardCharsets.UTF_8);
@@ -28,21 +26,17 @@ public class SentinelFallbackHandler implements WebExceptionHandler
     }
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex)
-    {
-        if (exchange.getResponse().isCommitted())
-        {
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+        if (exchange.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
-        if (!BlockException.isBlockException(ex))
-        {
+        if (!BlockException.isBlockException(ex)) {
             return Mono.error(ex);
         }
         return handleBlockedRequest(exchange, ex).flatMap(response -> writeResponse(response, exchange));
     }
 
-    private Mono<ServerResponse> handleBlockedRequest(ServerWebExchange exchange, Throwable throwable)
-    {
+    private Mono<ServerResponse> handleBlockedRequest(ServerWebExchange exchange, Throwable throwable) {
         return GatewayCallbackManager.getBlockHandler().handleRequest(exchange, throwable);
     }
 }

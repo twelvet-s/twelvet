@@ -4,6 +4,16 @@ import request, { download } from '@/utils/request'
 const controller = "/system/operationLog";
 
 /**
+ * 获取字典信息
+ * @param params 搜索参数
+ */
+export async function getDictionariesType() {
+    return request(`/system/dictionaries/data/type/sys_oper_type`, {
+        method: 'GET'
+    });
+}
+
+/**
  * 获取分页 Data
  * @param params 搜索参数
  */

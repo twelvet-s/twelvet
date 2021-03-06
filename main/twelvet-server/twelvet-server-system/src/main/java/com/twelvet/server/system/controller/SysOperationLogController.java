@@ -35,7 +35,6 @@ public class SysOperationLogController extends TWTController {
      */
     @AuthIgnore
     @PostMapping
-    @PreAuthorize("@role.hasPermi('system:operlog:insert')")
     public AjaxResult insert(@RequestBody SysOperationLog operationLog) {
         return json(iSysOperationLogService.insertOperationLog(operationLog));
     }

@@ -5,7 +5,7 @@ import { MenuDataItem } from '@ant-design/pro-layout'
 import { setAuthority } from '@/utils/authority'
 import { logout } from '@/utils/twelvet'
 import request from '@/utils/request'
-import { notification } from 'antd'
+import { message, notification } from 'antd'
 
 export interface CurrentUser {
     sysUser?: {
@@ -69,7 +69,10 @@ const UserModel: UserModelType = {
          * @param param1 
          */
         *getCurrentUser(_, { call, put }) {
-            const { user, menus, role, permissions } = yield call(currentUser)
+            const { user, menus, role, permissions, code, msg } = yield call(currentUser)
+            if (code != 200) {
+                message.error(msg)
+            }
             yield put({
                 type: 'setCurrentUser',
                 payload: {

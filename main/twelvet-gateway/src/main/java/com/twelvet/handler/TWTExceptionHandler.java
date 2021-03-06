@@ -50,7 +50,8 @@ public class TWTExceptionHandler implements ErrorWebExceptionHandler {
         String msg;
         if (throwable instanceof NotFoundException) {
             code = HttpStatus.SERVICE_UNAVAILABLE.value();
-            msg = HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase();
+            // HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()
+            msg = "服务未开启";
         } else if (throwable instanceof ResponseStatusException) {
             ResponseStatusException responseStatusException = (ResponseStatusException) throwable;
             code = responseStatusException.getStatus().value();
