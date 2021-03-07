@@ -79,7 +79,7 @@ public class SysLoginInfoController extends TWTController {
     @PostMapping
     public AjaxResult add(
             @RequestParam("username") String username,
-            @RequestParam("status") String status,
+            @RequestParam("status") Integer status,
             @RequestParam("message") String message
     ) {
         // 获取IP
@@ -89,9 +89,7 @@ public class SysLoginInfoController extends TWTController {
         SysLoginInfo loginInfo = new SysLoginInfo();
         loginInfo.setUserName(username);
         loginInfo.setIpaddr(ip);
-
-        // TODO 处理状态
-        // loginInfo.setStatus(status);
+        loginInfo.setStatus(status);
         loginInfo.setMsg(message);
 
         return json(iSysLoginInfoService.insertLoginInfo(loginInfo));

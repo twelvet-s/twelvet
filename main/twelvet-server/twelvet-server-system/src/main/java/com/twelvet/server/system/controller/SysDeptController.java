@@ -40,7 +40,6 @@ public class SysDeptController extends TWTController {
     @GetMapping("/list")
     @PreAuthorize("@role.hasPermi('system:dept:list')")
     public AjaxResult list(SysDept dept) {
-        // TODO 修改字段orderNum排序
         List<SysDept> depts = deptService.selectDeptList(dept);
         return AjaxResult.success(depts);
     }

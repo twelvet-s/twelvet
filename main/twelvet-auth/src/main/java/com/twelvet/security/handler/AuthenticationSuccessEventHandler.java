@@ -29,7 +29,7 @@ public class AuthenticationSuccessEventHandler implements ApplicationListener<Au
             String username = user.getUsername();
 
             // 记录用户登录日志
-            remoteLogService.saveLoginInfo(username, "success", "登录成功");
+            remoteLogService.saveLoginInfo(username, 1, "登录成功");
         }
     }
 }

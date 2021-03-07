@@ -124,9 +124,8 @@ public class LogAspect {
      *
      * @param log          日志
      * @param operationLog 操作日志
-     * @throws Exception Exception
      */
-    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperationLog operationLog) throws Exception {
+    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperationLog operationLog) {
         // 设置action动作
         operationLog.setBusinessType(log.businessType().ordinal());
         // 设置标题
@@ -161,9 +160,8 @@ public class LogAspect {
      *
      * @param joinPoint JoinPoint
      * @return Log
-     * @throws Exception Exception
      */
-    private Log getAnnotationLog(JoinPoint joinPoint) throws Exception {
+    private Log getAnnotationLog(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();

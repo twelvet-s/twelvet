@@ -42,7 +42,7 @@ public interface RemoteLogService {
     @PostMapping("/loginInfo")
     R<Boolean> saveLoginInfo(
             @RequestParam("username") String username,
-            @RequestParam("status") String status,
+            @RequestParam("status") Integer status,
             @RequestParam("message") String message
     );
 

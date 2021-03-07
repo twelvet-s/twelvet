@@ -1,4 +1,4 @@
-package com.twelvet.framework.security.feign;
+package com.twelvet.framework.core.feign;
 
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;

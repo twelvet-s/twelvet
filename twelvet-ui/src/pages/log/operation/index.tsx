@@ -80,10 +80,10 @@ const Operation: React.FC<{}> = () => {
             title: '操作人员', width: 200, valueType: "text", dataIndex: 'operName'
         },
         {
-            title: '操作地点', search: false, dataIndex: 'component'
+            title: '操作IP', width: 200, search: false, dataIndex: 'operIp'
         },
         {
-            title: '操作状态', search: false, dataIndex: 'status', valueEnum: {
+            title: '操作状态', width: 200, search: false, dataIndex: 'status', valueEnum: {
                 0: { text: '失败', status: 'error' },
                 1: { text: '成功', status: 'success' },
             },

@@ -1,7 +1,6 @@
 package com.twelvet.framework.core.constant;
 
-public class Constants
-{
+public class Constants {
     /**
      * UTF-8 字符集
      */
