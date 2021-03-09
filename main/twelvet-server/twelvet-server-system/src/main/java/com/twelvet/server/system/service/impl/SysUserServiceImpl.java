@@ -153,7 +153,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * 校验用户名称是否唯一
      *
      * @param user 用户信息
-     * @return
+     * @return String
      */
     @Override
     public String checkPhoneUnique(SysUser user) {
@@ -169,7 +169,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * 校验email是否唯一
      *
      * @param user 用户信息
-     * @return
+     * @return String
      */
     @Override
     public String checkEmailUnique(SysUser user) {

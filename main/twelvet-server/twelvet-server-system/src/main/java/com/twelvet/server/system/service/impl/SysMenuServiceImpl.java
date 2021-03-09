@@ -289,12 +289,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
     private String getRouterPath(SysMenu menu) {
         String routerPath = menu.getPath();
         // 非外链并且是一级目录（类型为目录）
-        if (0 == menu.getParentId().intValue() && UserConstants.TYPE_DIR.equals(menu.getMenuType())
-                && UserConstants.NO_FRAME.equals(menu.getIsFrame())) {
-            routerPath = "/" + menu.getPath();
-        }
-        // 非外链并且是一级目录（类型为菜单）
-        else if (isMeunFrame(menu)) {
+        if (isMeunFrame(menu)) {
             routerPath = "/";
         }
         return routerPath;
@@ -347,8 +342,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
     /**
      * 递归列表
      *
-     * @param list
-     * @param t
+     * @param list List<SysMenu>
+     * @param t SysMenu
      */
     private void recursionFn(List<SysMenu> list, SysMenu t) {
         // 得到子节点列表

@@ -139,9 +139,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public void checkRoleAllowed(SysRole role) {
-        /*if (TWTUtils.isNotEmpty(role.getRoleId()) && role.isAdmin()) {
+        if (TWTUtils.isNotEmpty(role.getRoleId()) && role.isAdmin()) {
             throw new TWTException("不允许操作超级管理员角色");
-        }*/
+        }
     }
 
     /**
