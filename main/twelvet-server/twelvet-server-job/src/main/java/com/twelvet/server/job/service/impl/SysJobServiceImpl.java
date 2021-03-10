@@ -122,7 +122,6 @@ public class SysJobServiceImpl implements ISysJobService {
      * 批量删除调度信息
      *
      * @param jobIds 需要删除的任务ID
-     * @return 结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

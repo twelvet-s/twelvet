@@ -1,3 +1,19 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50726
+ Source Host           : localhost:3306
+ Source Schema         : twelvet_nacos
+
+ Target Server Type    : MySQL
+ Target Server Version : 50726
+ File Encoding         : 65001
+
+ Date: 10/03/2021 18:26:41
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -24,7 +40,7 @@ CREATE TABLE `config_info`  (
   `c_schema` text CHARACTER SET utf8 COLLATE utf8_bin NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_configinfo_datagrouptenant`(`data_id`, `group_id`, `tenant_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 194 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = 'config_info' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 209 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = 'config_info' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of config_info
@@ -37,6 +53,16 @@ INSERT INTO `config_info` VALUES (105, 'twelvet-monitor-dev.yml', 'DEFAULT_GROUP
 INSERT INTO `config_info` VALUES (109, 'sentinel-twelvet-gateway', 'DEFAULT_GROUP', '[\r\n    {\r\n        \"resource\": \"twelvet-auth\",\r\n        \"count\": 1000,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    },\r\n	{\r\n        \"resource\": \"twelvet-system\",\r\n        \"count\": 5,\r\n        \"grade\": 1,\r\n        \"limitApp\": \"default\",\r\n        \"strategy\": 0,\r\n        \"controlBehavior\": 0\r\n    }\r\n]', '796032fef0c8185fdae015684ee42e5e', '2020-09-07 20:50:09', '2020-09-26 11:01:38', NULL, '61.140.239.30', '', 'eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e', '流量控制', 'null', 'null', 'json', 'null');
 INSERT INTO `config_info` VALUES (130, 'twelvet-job-dev.yml', 'DEFAULT_GROUP', 'server:\r\n    port: 8082\r\n# Spring\r\nspring: \r\n  datasource:\r\n    driver-class-name: com.mysql.cj.jdbc.Driver\r\n    url: jdbc:mysql://127.0.0.1:3306/twelvet_job?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8\r\n    username: root\r\n    password: 123456\r\n  ', '3c2ddd61a82a210951d31f9a431d193c', '2020-11-03 15:47:23', '2021-03-04 15:06:34', NULL, '117.136.40.131', '', 'eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e', '分布式定时任务配置', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` VALUES (155, 'twelvet-dfs-dev.yml', 'DEFAULT_GROUP', 'server:\r\n    port: 8083\r\n\r\nspring: \r\n  datasource:\r\n    type: com.alibaba.druid.pool.DruidDataSource\r\n    driverClassName: com.mysql.cj.jdbc.Driver\r\n    url: jdbc:mysql://127.0.0.1:3306/twelvet?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8\r\n    username: root\r\n    password: 123456\r\n\r\n# FastDFS配置\r\nfdfs:\r\n  domain: http://cloud.twelvet.cn\r\n  soTimeout: 3000\r\n  connectTimeout: 2000\r\n  trackerList: 127.0.0.1:22122\r\n\r\n', '482baeab31ff2931170e2c49701bc93a', '2020-12-13 18:42:02', '2021-03-04 15:07:06', NULL, '117.136.40.131', '', 'eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e', '分布式文件系统', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` VALUES (194, 'store.mode', 'DEFAULT_GROUP', 'db', 'd77d5e503ad1439f585ac494268b351b', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (195, 'store.db.datasource', 'DEFAULT_GROUP', 'druid', '3d650fb8a5df01600281d48c47c9fa60', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (196, 'store.db.dbType', 'DEFAULT_GROUP', 'mysql', '81c3b080dad537de7e10e0987a4bf52e', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (197, 'store.db.driverClassName', 'DEFAULT_GROUP', 'com.mysql.jdbc.Driver', '683cf0c3a5a56cec94dfac94ca16d760', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (198, 'store.db.url', 'DEFAULT_GROUP', 'jdbc:mysql://localhost:3306/twelvet_seata?useUnicode=true', 'c6b0233c050e6495a0d9b246e0b1a5d9', '2021-03-10 18:21:21', '2021-03-10 18:22:43', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', '', '', '', 'text', '');
+INSERT INTO `config_info` VALUES (199, 'store.db.user', 'DEFAULT_GROUP', 'root', '63a9f0ea7bb98050796b649e85481845', '2021-03-10 18:21:21', '2021-03-10 18:22:26', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', '', '', '', 'text', '');
+INSERT INTO `config_info` VALUES (200, 'store.db.password', 'DEFAULT_GROUP', '123456', 'e10adc3949ba59abbe56e057f20f883e', '2021-03-10 18:21:21', '2021-03-10 18:24:45', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', '', '', '', 'text', '');
+INSERT INTO `config_info` VALUES (201, 'store.db.minConn', 'DEFAULT_GROUP', '5', 'e4da3b7fbbce2345d7772b0674a318d5', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (202, 'store.db.maxConn', 'DEFAULT_GROUP', '30', '34173cb38f07f89ddbebc2ac9128303f', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
+INSERT INTO `config_info` VALUES (203, 'store.db.globalTable', 'DEFAULT_GROUP', 'global_table', '8b28fb6bb4c4f984df2709381f8eba2b', '2021-03-10 18:21:21', '2021-03-10 18:21:21', NULL, '127.0.0.1', '', '60ca01e2-221e-47af-b7e5-64f2a7336973', NULL, NULL, NULL, 'text', NULL);
 
 -- ----------------------------
 -- Table structure for config_info_aggr
@@ -188,7 +214,7 @@ DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles`  (
   `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `role` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of roles
@@ -234,7 +260,7 @@ CREATE TABLE `tenant_info`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_tenant_info_kptenantid`(`kp`, `tenant_id`) USING BTREE,
   INDEX `idx_tenant_id`(`tenant_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = 'tenant_info' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = 'tenant_info' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tenant_info
@@ -243,6 +269,7 @@ INSERT INTO `tenant_info` VALUES (1, '1', 'eeb43899-8a88-4f5b-b0e0-d7c8fd09b86e'
 INSERT INTO `tenant_info` VALUES (2, '1', '1edbee6b-43a7-4b97-a0f7-2804a8bb1bf9', 'test', '测试环境', 'nacos', 1598779661839, 1598779661839);
 INSERT INTO `tenant_info` VALUES (4, '1', 'c4d16870-3d8d-40a8-b396-6737705dbde8', 'pre', '灰度环境', 'nacos', 1598779690682, 1598779690682);
 INSERT INTO `tenant_info` VALUES (5, '1', '94664454-62b0-415a-9392-7c0ce2d11b2f', 'pro', '生产环境', 'nacos', 1598779700041, 1598779700041);
+INSERT INTO `tenant_info` VALUES (6, '1', '60ca01e2-221e-47af-b7e5-64f2a7336973', 'seata', '分布式事务', 'nacos', 1615359228918, 1615359228918);
 
 -- ----------------------------
 -- Table structure for users
