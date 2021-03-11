@@ -58,7 +58,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!-- SpringBoot Seata -->
+        <!-- Seata 分布式事务 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-seata</artifactId>

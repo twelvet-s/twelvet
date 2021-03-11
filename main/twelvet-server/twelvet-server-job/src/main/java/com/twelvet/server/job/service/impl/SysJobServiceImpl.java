@@ -138,7 +138,7 @@ public class SysJobServiceImpl implements ISysJobService {
      * @param job 调度信息
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int changeStatus(SysJob job) throws SchedulerException {
         int rows = 0;
         int status = job.getStatus();
