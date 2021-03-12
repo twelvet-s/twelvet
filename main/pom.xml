@@ -49,6 +49,7 @@
         <spring-boot.mybatis>2.1.4</spring-boot.mybatis>
 
         <druid.version>1.1.22</druid.version>
+        <dynamic-datasource.version>3.2.1</dynamic-datasource.version>
         <fastjson.version>1.2.47</fastjson.version>
         <pagehelper.boot.version>1.2.12</pagehelper.boot.version>
         <poi.version>3.17</poi.version>
@@ -104,6 +105,13 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!-- Dynamic DataSource -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+
             <!-- 阿里JSON解析器 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -144,6 +152,13 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+
+            <!--多数据源-->
+            <dependency>
+                <groupId>com.twelvet</groupId>
+                <artifactId>twelvet-framework-datasource</artifactId>
+                <version>${twelvet.version}</version>
             </dependency>
 
             <!--公共安全配置模块-->
