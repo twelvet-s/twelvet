@@ -9,7 +9,6 @@ import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.file.FileUtils;
 import com.twelvet.framework.utils.http.ServletUtils;
-import com.twelvet.server.dfs.exception.FileException;
 import com.twelvet.server.dfs.mapper.DFSMapper;
 import com.twelvet.server.dfs.service.IDFSService;
 import org.apache.commons.io.FilenameUtils;

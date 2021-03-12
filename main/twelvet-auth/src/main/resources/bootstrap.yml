@@ -3,8 +3,6 @@ twelvet:
   version: 1.0.0
 
 spring:
-  autoconfigure:
-    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
   application:
     # 应用名称
     name: ${twelvet.name}
