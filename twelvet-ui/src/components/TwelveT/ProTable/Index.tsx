@@ -17,14 +17,14 @@ export interface ActionType {
 }
 
 let searchConfig: { [key: string]: any } | false = {
-    span: {
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 8,
-        xl: 4,
-        xxl: 4,
-    }
+    // span: {
+    //     xs: 24,
+    //     sm: 12,
+    //     md: 8,
+    //     lg: 8,
+    //     xl: 4,
+    //     xxl: 4,
+    // }
 
 }
 
@@ -198,9 +198,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                 columns[index]['fieldProps'] = { "placeholder": columns[index]['title'] }
             }
             // 处理columns数据的标题渲染(搜索框不显示标题，由placeholder代替)
-            if (item.search === undefined || item.search == true) {
-                columns[index]['title'] = (config, type) => { type == 'table' && columns[index]['title'] }
-            }
+            // columns[index]['title'] = (config, type) => { type == 'table' && columns[index]['title'] }
         })
     }, [columns])
 
