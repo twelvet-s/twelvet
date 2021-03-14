@@ -49,9 +49,9 @@ public class SysMenu extends BaseEntity {
     private String component;
 
     /**
-     * 是否为外链（0是 1否）
+     * 是否为外链（1是 0否）
      */
-    private Boolean isFrame;
+    private Integer isFrame;
 
     /**
      * 类型（M目录 C菜单 F按钮）
@@ -139,11 +139,11 @@ public class SysMenu extends BaseEntity {
         this.component = component;
     }
 
-    public Boolean getIsFrame() {
+    public Integer getIsFrame() {
         return isFrame;
     }
 
-    public void setIsFrame(Boolean isFrame) {
+    public void setIsFrame(Integer isFrame) {
         this.isFrame = isFrame;
     }
 
