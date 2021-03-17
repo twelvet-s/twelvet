@@ -1,18 +1,19 @@
 package com.twelvet.framework.security.config;
 
-import java.util.*;
-
 import com.twelvet.framework.security.annotation.AuthIgnore;
+import com.twelvet.framework.security.config.properties.IgnoreUrlsProperties;
 import com.twelvet.framework.utils.TWTUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -21,12 +22,12 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @Description: 忽略服务间的认证
  */
 @Configurable
-@ConfigurationProperties(prefix = "security.oauth2.ignore")
 public class AuthIgnoreConfig implements InitializingBean {
     /**
      * 注解urls
      */
-    private List<String> urls = new ArrayList<>();
+    @Autowired
+    private IgnoreUrlsProperties ignoreUrlsProperties;
 
     @Autowired
     private WebApplicationContext applicationContext;
@@ -66,6 +67,6 @@ public class AuthIgnoreConfig implements InitializingBean {
         });
 
         // 合并放行路径
-        ignoreUrls.addAll(urls);
+        ignoreUrls.addAll(ignoreUrlsProperties.getUrls());
     }
 }

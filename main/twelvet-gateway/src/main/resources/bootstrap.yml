@@ -27,11 +27,6 @@ spring:
         # 共享配置
         shared-configs: twelvet-app-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
     sentinel:
-      # 取消控制台懒加载
-      eager: true
-      transport:
-        # 控制台地址：Port端口
-        dashboard: 127.0.0.1:8718
       # 规则持久化配置
       datasource:
         ds:
