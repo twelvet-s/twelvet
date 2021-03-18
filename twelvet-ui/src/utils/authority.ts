@@ -30,10 +30,12 @@ export function getAuthority(str?: string): string | string[] {
  * @param authority 
  */
 export function setAuthority(authority: { [key: string]: any }): void {
+    const date = new Date()
+
     // 设置access_token
-    localStorage.setItem(TWT.accessToken, authority.access_token);
+    localStorage.setItem(TWT.accessToken, JSON.stringify({access_token: authority.access_token, expires_in: date.getTime() + authority.expires_in}));
     // 设置refresh_token
-    localStorage.setItem(TWT.refreshToken, authority.refresh_token);
+    localStorage.setItem(TWT.refreshToken, authority.refresh_token)
     // auto reload
     reloadAuthorized();
 }

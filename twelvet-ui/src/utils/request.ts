@@ -69,34 +69,41 @@ const request = extend({
 // 请求前的处理
 request.use(
     async (ctx, next) => {
-        const { req } = ctx
-        const { url, options } = req
+        try {
+            const { req } = ctx
+            const { url, options } = req
 
-        if (url.indexOf('http') && (url.indexOf('/api') !== 0)) {
-            // 给url添加前缀
-            ctx.req.url = `${TWT.urlPrefix}${url}`
-        }
-
-        // 统一传递的参数名称【get请求时参数传递需要放到params下】
-        const _method: string = options.method?.toLocaleUpperCase()
-        if (_method == 'GET' && options.data) {
-            options.params = {
-                ...options.data
+            if (url.indexOf('http') && (url.indexOf('/api') !== 0)) {
+                // 给url添加前缀
+                ctx.req.url = `${TWT.urlPrefix}${url}`
             }
-        }
 
-        // 附加参数
-        ctx.req.options = {
-            ...options,
-            requestPath: url,
-            headers: {
-                ...options.headers,
-                // 加入认证信息
-                'Authorization': `Bearer ${localStorage.getItem(TWT.accessToken)}`
+            // 统一传递的参数名称【get请求时参数传递需要放到params下】
+            const _method: string = options.method?.toLocaleUpperCase()
+            if (_method == 'GET' && options.data) {
+                options.params = {
+                    ...options.data
+                }
             }
-        }
 
-        await next()
+            const local = localStorage.getItem(TWT.accessToken)
+            const { access_token, expires_in } = local ? JSON.parse(local) : { access_token: '', expires_in: 0 }
+
+            // 附加参数
+            ctx.req.options = {
+                ...options,
+                requestPath: url,
+                headers: {
+                    ...options.headers,
+                    // 加入认证信息
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }
+
+            await next()
+        } catch (e) {
+            system.error(e)
+        }
     }
 )
 
@@ -117,7 +124,6 @@ request.interceptors.response.use(async (httpResponse, httpRequest) => {
     // 处理401状态
     if (data.code === 401) {
         const { params, method, requestPath } = httpRequest
-
         // 执行刷新token
         const res = await getDvaApp()._store.dispatch({
             type: 'user/refreshToken',

@@ -168,10 +168,12 @@ class Upload extends Component<UploadType> {
 
         const { maxCount, action, listType, title, name, accept, imgCrop = false } = this.props
 
+        const token = JSON.parse(localStorage.getItem(TWT.accessToken))
+
         const upload = (
             <UploadAntd
                 headers={{
-                    Authorization: `Bearer ${localStorage.getItem(TWT.accessToken)}`
+                    Authorization: `Bearer ${token.access_token}`
                 }}
                 accept={accept}
                 method='POST'

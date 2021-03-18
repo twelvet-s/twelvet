@@ -3,7 +3,7 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import ProLayout, { BasicLayoutProps as ProLayoutProps, Settings, MenuDataItem } from '@ant-design/pro-layout'
+import ProLayout, { PageHeaderWrapper, BasicLayoutProps as ProLayoutProps, Settings, MenuDataItem, PageLoading, SettingDrawer } from '@ant-design/pro-layout'
 import { createFromIconfontCN } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { Link, useIntl, connect, Dispatch, history, Redirect } from 'umi'
@@ -13,7 +13,6 @@ import RightContent from '@/components/GlobalHeader/RightContent'
 import { ConnectState } from '@/models/connect'
 import { getAuthorityFromRouter } from '@/utils/utils'
 import logo from '@/assets/logo.png'
-import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import Footer from '@/components/TwelveT/Footer'
 import { CurrentUser } from '@/models/user'
 import TWT from '../setting'
@@ -71,15 +70,15 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     // 不存在token需要求登录
-    if(props.location.pathname !== '/login' && !localStorage.getItem(TWT.accessToken)){
+    if (props.location.pathname !== '/login' && !localStorage.getItem(TWT.accessToken)) {
 
         let queryString = stringify({
             redirect: window.location.href,
-          });
-          
-          if (window.location.href.indexOf("login") > 0) {
+        });
+
+        if (window.location.href.indexOf("login") > 0) {
             queryString = "";
-          }
+        }
 
         return <Redirect to={`/login?${queryString}`} />
     }
@@ -157,8 +156,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     }
     const { formatMessage } = useIntl()
 
-    return (
+    // 全局加载页面
+    if (currentUser.menuData.loading) {
+        return <PageLoading />
+    }
 
+    return [
         <ProLayout
             navTheme='light'
             // 拂晓蓝
@@ -219,10 +222,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                                 {DOM}
                             </a>
                         ) : (
-                                <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
-                                    {DOM}
-                                </Link>
-                            )
+                            <Link target={TWTProps.isUrl ? '_blank' : '_self'} to={TWTProps.path ? TWTProps.path : '#'}>
+                                {DOM}
+                            </Link>
+                        )
 
                         }
                     </span>
@@ -257,8 +260,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 return first ? (
                     <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
                 ) : (
-                        <span>{route.breadcrumbName}</span>
-                    )
+                    <span>{route.breadcrumbName}</span>
+                )
             }}
             footerRender={() => <Footer />}
             rightContentRender={() => <RightContent />}
@@ -272,8 +275,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     {children}
                 </PageHeaderWrapper>
             </Authorized>
-        </ProLayout >
-    )
+        </ProLayout >,
+    
+        <SettingDrawer />
+    ]
 }
 
 export default connect(({ user, global, settings }: ConnectState) => ({
