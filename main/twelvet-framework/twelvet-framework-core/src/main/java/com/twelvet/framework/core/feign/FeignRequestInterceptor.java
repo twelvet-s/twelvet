@@ -2,6 +2,7 @@ package com.twelvet.framework.core.feign;
 
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.http.IpUtils;
+import com.twelvet.framework.utils.http.ServletUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.http.HttpHeaders;

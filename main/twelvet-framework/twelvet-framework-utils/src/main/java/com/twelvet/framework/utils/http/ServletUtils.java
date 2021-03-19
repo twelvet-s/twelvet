@@ -57,7 +57,11 @@ public class ServletUtils {
      * @return HttpServletRequest
      */
     public static HttpServletRequest getRequest() {
-        return getRequestAttributes().getRequest();
+        try {
+            return getRequestAttributes().getRequest();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -184,7 +188,7 @@ public class ServletUtils {
             outputStream.write(file);
 
         } catch (IOException e) {
-           throw new TWTUtilsException("文件导出出错");
+            throw new TWTUtilsException("文件导出出错");
         }
 
     }

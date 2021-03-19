@@ -275,9 +275,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     {children}
                 </PageHeaderWrapper>
             </Authorized>
-        </ProLayout >,
-    
-        <SettingDrawer />
+        </ProLayout >
     ]
 }
 
