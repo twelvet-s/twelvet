@@ -18,6 +18,7 @@
         <module>twelvet-server-system</module>
         <module>twelvet-server-job</module>
         <module>twelvet-server-dfs</module>
+        <module>twelvet-server-gen</module>
     </modules>
 
     <dependencies>

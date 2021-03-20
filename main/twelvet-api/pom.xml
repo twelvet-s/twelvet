@@ -18,6 +18,7 @@
         <module>twelvet-api-system</module>
         <module>twelvet-api-job</module>
         <module>twelvet-api-dfs</module>
+        <module>twelvet-api-gen</module>
     </modules>
 
     <dependencies>

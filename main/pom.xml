@@ -55,6 +55,7 @@
         <poi.version>3.17</poi.version>
         <fast-dfs.version>1.26.5</fast-dfs.version>
         <commons.io.version>2.5</commons.io.version>
+        <velocity.version>1.7</velocity.version>
 
         <docker.image.prefix>springboot</docker.image.prefix>
         <docker.plugin.version>0.32.0</docker.plugin.version>
@@ -124,6 +125,13 @@
                 <groupId>com.github.tobato</groupId>
                 <artifactId>fastdfs-client</artifactId>
                 <version>${fast-dfs.version}</version>
+            </dependency>
+
+            <!-- 代码生成使用模板 -->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
             </dependency>
 
             <!-- Mybatis 依赖配置 -->
@@ -214,6 +222,13 @@
             <dependency>
                 <groupId>com.twelvet</groupId>
                 <artifactId>twelvet-api-dfs</artifactId>
+                <version>${twelvet.version}</version>
+            </dependency>
+
+            <!--Gen API-->
+            <dependency>
+                <groupId>com.twelvet</groupId>
+                <artifactId>twelvet-api-gen</artifactId>
                 <version>${twelvet.version}</version>
             </dependency>
 
