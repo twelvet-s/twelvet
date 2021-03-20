@@ -1,12 +1,8 @@
-twelvet:
-  name: twelvet-monitor
-  version: 1.0.0
-
 # Spring
 spring:
   application:
     # 应用名称
-    name: ${twelvet.name}
+    name: @artifactId@
   profiles:
     # 环境配置
     active: dev

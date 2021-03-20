@@ -4,5 +4,5 @@
  / /  | |/ |/ /  __/ /| |/ /  __/ /    / /_/ / /_/ / /_/ /
 /_/   |__/|__/\___/_/ |___/\___/_/     \____/\____/_.___/
 
-${AnsiColor.GREEN} :: ${twelvet.name} :: ${AnsiColor.BRIGHT_WHITE} ${twelvet.version}
+${AnsiColor.GREEN} :: ${spring.application.name} :: ${AnsiColor.BRIGHT_WHITE} ${twelvet.version}
 ${AnsiColor.GREEN} :: Spring Boot :: ${AnsiColor.BRIGHT_WHITE} ${spring-boot.version}
