@@ -5,7 +5,7 @@ spring:
     name: @artifactId@
   profiles:
     # 环境配置
-    active: dev
+    active: @profiles.active@
   cloud:
     nacos:
       discovery:

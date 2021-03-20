@@ -13,8 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableTwelveTConfig
 @EnableTWTFeignClients
 @SpringBootApplication
-public class TWTGenApplication {
+public class TWTGenApp {
     public static void main(String[] args) {
-        SpringApplication.run(TWTGenApplication.class, args);
+        SpringApplication.run(TWTGenApp.class, args);
     }
 }
