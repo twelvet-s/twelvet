@@ -1,6 +1,6 @@
 package com.twelvet.server.gen.utils;
 
-import com.twelvet.framework.core.constant.Constants;
+import com.twelvet.framework.core.constants.Constants;
 import org.apache.velocity.app.Velocity;
 
 import java.util.Properties;

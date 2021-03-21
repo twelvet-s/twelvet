@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.twelvet.api.gen.domain.GenTable;
 import com.twelvet.api.gen.domain.GenTableColumn;
-import com.twelvet.framework.core.constant.Constants;
+import com.twelvet.framework.core.constants.Constants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.CharsetKit;

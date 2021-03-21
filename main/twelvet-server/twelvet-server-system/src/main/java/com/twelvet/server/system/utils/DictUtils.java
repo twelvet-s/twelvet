@@ -1,7 +1,7 @@
 package com.twelvet.server.system.utils;
 
 import com.twelvet.api.system.domain.SysDictData;
-import com.twelvet.framework.core.constant.Constants;
+import com.twelvet.framework.core.constants.Constants;
 import com.twelvet.framework.redis.service.RedisService;
 import com.twelvet.framework.utils.SpringUtils;
 import com.twelvet.framework.utils.StringUtils;

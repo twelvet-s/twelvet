@@ -1,13 +1,12 @@
 package com.twelvet.server.system.service.impl;
 
 import com.twelvet.api.system.domain.*;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.*;
-import com.twelvet.server.system.service.ISysConfigService;
 import com.twelvet.server.system.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -28,9 +28,10 @@ import java.util.Map;
  * @WebSite www.twelvet.cn
  * @Description: 代码生成 操作处理
  */
-@RequestMapping("/gen")
+@RequestMapping
 @RestController
 public class GenController extends TWTController {
+
     @Autowired
     private IGenTableService genTableService;
 
@@ -39,24 +40,30 @@ public class GenController extends TWTController {
 
     /**
      * 查询代码生成列表
+     *
+     * @param genTable GenTable
+     * @return AjaxResult
      */
+    @GetMapping("/pageQuery")
     @PreAuthorize("@role.hasPermi('tool:gen:list')")
-    @GetMapping("/list")
-    public TableDataInfo genList(GenTable genTable) {
+    public AjaxResult pageQuery(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectGenTableList(genTable);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**
      * 修改代码生成业务
+     *
+     * @param tableId Long
+     * @return AjaxResult
      */
+    @GetMapping(value = "/{tableId}")
     @PreAuthorize("@role.hasPermi('tool:gen:query')")
-    @GetMapping(value = "/{talbleId}")
-    public AjaxResult getInfo(@PathVariable Long talbleId) {
-        GenTable table = genTableService.selectGenTableById(talbleId);
+    public AjaxResult getInfo(@PathVariable Long tableId) {
+        GenTable table = genTableService.selectGenTableById(tableId);
         List<GenTable> tables = genTableService.selectGenTableAll();
-        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(talbleId);
+        List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
         Map<String, Object> map = new HashMap<>(4);
         map.put("info", table);
         map.put("rows", list);
@@ -66,29 +73,37 @@ public class GenController extends TWTController {
 
     /**
      * 查询数据库列表
+     *
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:list')")
     @GetMapping("/db/list")
-    public TableDataInfo dataList(GenTable genTable) {
+    public AjaxResult dataList(GenTable genTable) {
         startPage();
         List<GenTable> list = genTableService.selectDbTableList(genTable);
-        return getDataTable(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     /**
      * 查询数据表字段列表
+     *
+     * @param tableId Long
+     * @return AjaxResult
      */
     @GetMapping(value = "/column/{tableId}")
-    public TableDataInfo columnList(@PathVariable Long tableId) {
+    public AjaxResult columnList(@PathVariable Long tableId) {
         TableDataInfo dataInfo = new TableDataInfo();
         List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
         dataInfo.setRecords(list);
         dataInfo.setTotal(list.size());
-        return dataInfo;
+        return AjaxResult.success(dataInfo);
     }
 
     /**
      * 导入表结构（保存）
+     *
+     * @param tables String
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:list')")
     @Log(service = "代码生成", businessType = BusinessType.IMPORT)
@@ -103,6 +118,9 @@ public class GenController extends TWTController {
 
     /**
      * 修改保存代码生成业务
+     *
+     * @param genTable GenTable
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:edit')")
     @Log(service = "代码生成", businessType = BusinessType.UPDATE)
@@ -115,6 +133,9 @@ public class GenController extends TWTController {
 
     /**
      * 删除代码生成
+     *
+     * @param tableIds Long[]
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:remove')")
     @Log(service = "代码生成", businessType = BusinessType.DELETE)
@@ -126,6 +147,9 @@ public class GenController extends TWTController {
 
     /**
      * 预览代码
+     *
+     * @param tableId Long
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:preview')")
     @GetMapping("/preview/{tableId}")
@@ -136,6 +160,10 @@ public class GenController extends TWTController {
 
     /**
      * 生成代码（下载方式）
+     *
+     * @param response  HttpServletResponse
+     * @param tableName String
+     * @throws IOException IOException
      */
     @PreAuthorize("@role.hasPermi('tool:gen:code')")
     @Log(service = "代码生成", businessType = BusinessType.GENCODE)
@@ -147,6 +175,9 @@ public class GenController extends TWTController {
 
     /**
      * 生成代码（自定义路径）
+     *
+     * @param tableName String
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:code')")
     @Log(service = "代码生成", businessType = BusinessType.GENCODE)
@@ -158,6 +189,9 @@ public class GenController extends TWTController {
 
     /**
      * 同步数据库
+     *
+     * @param tableName String
+     * @return AjaxResult
      */
     @PreAuthorize("@role.hasPermi('tool:gen:edit')")
     @Log(service = "代码生成", businessType = BusinessType.UPDATE)
@@ -169,10 +203,14 @@ public class GenController extends TWTController {
 
     /**
      * 批量生成代码
+     *
+     * @param response HttpServletResponse
+     * @param tables   String
+     * @throws IOException IOException
      */
     @PreAuthorize("@role.hasPermi('tool:gen:code')")
     @Log(service = "代码生成", businessType = BusinessType.GENCODE)
-    @GetMapping("/batchGenCode")
+    @PostMapping("/batchGenCode")
     public void batchGenCode(HttpServletResponse response, String tables) throws IOException {
         String[] tableNames = Convert.toStrArray(tables);
         byte[] data = genTableService.downloadCode(tableNames);
@@ -181,6 +219,10 @@ public class GenController extends TWTController {
 
     /**
      * 生成zip文件
+     *
+     * @param response HttpServletResponse
+     * @param data     数据
+     * @throws IOException IOException
      */
     private void genCode(HttpServletResponse response, byte[] data) throws IOException {
         response.reset();

@@ -5,7 +5,7 @@ import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.api.system.domain.vo.MetaVo;
 import com.twelvet.api.system.domain.vo.RouterVo;
 import com.twelvet.api.system.domain.vo.TreeSelect;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;

@@ -3,7 +3,7 @@ package com.twelvet.server.system.service.impl;
 import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.api.system.domain.SysRoleDept;
 import com.twelvet.api.system.domain.SysRoleMenu;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.SpringUtils;
 import com.twelvet.framework.utils.TWTUtils;

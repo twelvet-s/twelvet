@@ -1,4 +1,4 @@
-package com.twelvet.framework.core.constant;
+package com.twelvet.framework.core.constants;
 
 public class Constants {
     /**

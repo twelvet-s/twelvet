@@ -1,7 +1,7 @@
 package com.twelvet.server.job.util;
 
 import com.twelvet.api.job.domain.SysJob;
-import com.twelvet.framework.core.constant.ScheduleConstants;
+import com.twelvet.framework.core.constants.ScheduleConstants;
 import com.twelvet.server.job.exception.TaskException;
 import com.twelvet.server.job.exception.TaskException.Code;
 import org.quartz.CronScheduleBuilder;

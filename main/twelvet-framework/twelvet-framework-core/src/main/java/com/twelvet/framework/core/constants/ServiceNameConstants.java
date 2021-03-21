@@ -10,7 +10,7 @@ public interface ServiceNameConstants {
     /**
      * 认证服务
      */
-    String AUTH_SERVICE = "twelvet-server-auth";
+    String AUTH_SERVICE = "twelvet-auth";
 
     /**
      * 系统服务

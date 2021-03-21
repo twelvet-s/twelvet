@@ -1,4 +1,4 @@
-import request, { download } from '@/utils/request'
+import request, {download} from '@/utils/request'
 
 // 请求的控制器名称
 const controller = "/gen";
@@ -17,32 +17,29 @@ export async function pageQuery(params: { [key: string]: any }) {
 }
 
 /**
- * 删除数据
- * @param params 删除id [1,2,3]
+ * 删除表数据
+ * @param params 表ID
  */
-export async function remove(jobLogIds: string) {
-    return request(`${controller}/${jobLogIds}`, {
+ export async function remove(tableIds: []) {
+    return request(`${controller}/${tableIds}`, {
         method: 'DELETE',
     });
 }
 
 /**
- * 导出Excel
- * @param params
+ * 同步表结构
+ * @param tableName 表ID
  */
-export async function exportExcel(params?: { [key: string]: any }) {
-    return download(`${controller}/export`, params);
+ export async function synchDb(tableName: string) {
+    return request(`${controller}/synchDb/${tableName}`, {
+        method: 'GET',
+    });
 }
 
 /**
- * 更改状态
- * @param params
+ * 生成代码
+ * @param tableNames 表名称
  */
-export async function changeStatus(params?: { [key: string]: any }) {
-    return request(`${controller}/changeStatus`, {
-        method: 'PUT',
-        data: {
-            ...params
-        }
-    })
+ export async function batchGenCode(tableNames: string[]) {
+    return download(`${controller}/batchGenCode?tables=${tableNames}`);
 }

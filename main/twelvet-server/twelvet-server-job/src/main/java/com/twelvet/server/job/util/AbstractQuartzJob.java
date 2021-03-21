@@ -2,7 +2,7 @@ package com.twelvet.server.job.util;
 
 import com.twelvet.api.job.domain.SysJob;
 import com.twelvet.api.job.domain.SysJobLog;
-import com.twelvet.framework.core.constant.ScheduleConstants;
+import com.twelvet.framework.core.constants.ScheduleConstants;
 import com.twelvet.framework.utils.SpringUtils;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.framework.utils.TWTUtils;

@@ -1,7 +1,7 @@
 package com.twelvet.server.system.service.impl;
 
 import com.twelvet.api.system.domain.SysPost;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysPostMapper;

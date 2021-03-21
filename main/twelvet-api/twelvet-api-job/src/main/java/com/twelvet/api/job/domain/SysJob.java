@@ -2,7 +2,7 @@ package com.twelvet.api.job.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.twelvet.framework.core.application.domain.BaseEntity;
-import com.twelvet.framework.core.constant.ScheduleConstants;
+import com.twelvet.framework.core.constants.ScheduleConstants;
 import com.twelvet.framework.utils.CronUtils;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.annotation.excel.Excel;

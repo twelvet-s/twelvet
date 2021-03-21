@@ -1,7 +1,7 @@
 package com.twelvet.api.system.domain;
 
 import com.twelvet.framework.core.application.domain.BaseEntity;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.utils.annotation.excel.Excel;
 import com.twelvet.framework.utils.annotation.excel.Excel.ColumnType;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -2,7 +2,7 @@ package com.twelvet.server.system.service.impl;
 
 import com.twelvet.api.system.domain.SysDictData;
 import com.twelvet.api.system.domain.SysDictType;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.StringUtils;
 import com.twelvet.server.system.mapper.SysDictDataMapper;

@@ -2,7 +2,7 @@ package com.twelvet.server.system.service.impl;
 
 import com.twelvet.api.system.domain.SysDept;
 import com.twelvet.api.system.domain.vo.TreeSelect;
-import com.twelvet.framework.core.constant.UserConstants;
+import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.server.system.mapper.SysDeptMapper;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 

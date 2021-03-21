@@ -1,73 +1,97 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { DeleteOutlined, EyeOutlined, FundProjectionScreenOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker, Space } from 'antd'
-import { pageQuery, remove, exportExcel } from './service'
+import { CloseOutlined, CloudSyncOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FileZipOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, DatePicker, Space, Divider, FormInstance } from 'antd'
+import { batchGenCode, pageQuery, remove, synchDb } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
-import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
-import moment, { Moment } from 'moment'
+import row from 'antd/lib/row'
+import DrawerInfo from './components/drawerInfo/Index'
+import { UseFetchDataAction } from '@ant-design/pro-table/lib/typing'
 
 /**
  * 代码生成器
  */
-const Login: React.FC<{}> = () => {
+const Gen: React.FC<{}> = () => {
 
     const acForm = useRef<ActionType>()
 
     const formRef = useRef<FormInstance>()
 
-    const { RangePicker } = DatePicker
+    const [drawerInfoVisible, setdrawerInfoVisible] = useState<boolean>(false)
 
     // Form参数
     const columns: ProColumns = [
         {
-            title: '任务名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'jobName',
+            title: '表名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'tableName',
         },
         {
-            title: '任务组名', width: 200, valueType: "text", dataIndex: 'jobGroup'
+            title: '表描述', width: 200, valueType: "text", dataIndex: 'tableComment'
         },
         {
-            title: '调用目标方法', width: 200, valueType: "text", search: false, dataIndex: 'invokeTarget'
+            title: '实体', width: 200, valueType: "text", search: false, dataIndex: 'className'
         },
         {
-            title: '日志信息', width: 200, valueType: "text", search: false, dataIndex: 'jobMessage'
+            title: '创建时间', width: 200, valueType: "text", search: false, dataIndex: 'createTime'
         },
         {
-            title: '执行状态',
-            ellipsis: false,
-            width: 200,
-            dataIndex: 'status',
-            valueEnum: {
-                0: { text: '失败', status: 'error' },
-                1: { text: '成功', status: 'success' },
-            },
+            title: '更新时间', width: 200, valueType: "text", search: false, dataIndex: 'updateTime'
         },
         {
-            title: '执行时间', width: 200, valueType: "text", search: false, dataIndex: 'createTime'
-        },
-        {
-            title: '执行时间',
-            key: 'between',
-            hideInTable: true,
-            dataIndex: 'between',
-            renderFormItem: () => (
-                <RangePicker format="YYYY-MM-DD" disabledDate={(currentDate: Moment) => {
-                    // 不允许选择大于今天的日期
-                    return moment(new Date(), 'YYYY-MM-DD') < currentDate
-                }} />
-            )
-        },
-        {
-            title: '操作', fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
+            title: '操作', fixed: 'right', width: 400, valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row) => {
                 return (
-                    <a href='#'>
-                        <Space>
-                            <EyeOutlined />
-                            详情
-                        </Space>
-                    </a>
+                    <>
+                        <a onClick={() => refPut(row)}>
+                            <Space>
+                                <EyeOutlined />
+                                预览
+                            </Space>
+                        </a >
+                        <Divider type="vertical" />
+                        <a href='#'>
+                            <Space>
+                                <EditOutlined />
+                                编辑
+                            </Space>
+                        </a>
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.tableId)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => {refSynchDb(row.tableName) }}
+                            title="确定强制同步结构吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <SyncOutlined spin />
+                                    同步
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                        <Divider type="vertical" />
+                        <Popconfirm
+                            onConfirm={() => {batchGenCode(row.tableName) }}
+                            title="确定生成吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <FileZipOutlined />
+                                    生成代码
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
                 )
             }
         },
@@ -75,21 +99,21 @@ const Login: React.FC<{}> = () => {
 
     /**
      * 移除
-     * @param row jobLogIds
+     * @param row tableIds
      */
-    const refRemove = async (jobLogIds: (string | number)[] | undefined, action: UseFetchDataAction<RequestData<string>>) => {
+    const refRemove = async (tableIds: number[] | undefined) => {
         try {
-            if (!jobLogIds) {
+            if (!tableIds) {
                 return true
             }
-            const { code, msg } = await remove(jobLogIds.join(","))
+            const { code, msg } = await remove(tableIds)
             if (code != 200) {
                 return message.error(msg)
             }
 
             message.success(msg)
 
-            action.reload()
+            acForm.current && acForm.current.reload()
 
         } catch (e) {
             system.error(e)
@@ -97,12 +121,30 @@ const Login: React.FC<{}> = () => {
 
     }
 
+    /**
+     * 
+     * @param tableName 同步表结构域
+     */
+    const refSynchDb = async(tableName: string) => {
+        try {
+            const { code, msg } = await synchDb(tableName)
+            if (code != 200) {
+                return message.error(msg)
+            }
+
+            message.success(msg)
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
     return (
         <>
             <TWTProTable
                 actionRef={acForm}
                 formRef={formRef}
-                rowKey="jobLogId"
+                rowKey="tableId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -120,9 +162,28 @@ const Login: React.FC<{}> = () => {
                     return params
                 }}
                 toolBarRender={(action, { selectedRowKeys }) => [
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            setdrawerInfoVisible(true)
+                        }}
+                    >
+                        <CloudSyncOutlined />
+                        导入数据
+                    </Button>,
+                    <Popconfirm
+                        onConfirm={() => {
+                        }}
+                        title="是否批量生成"
+                    >
+                        <Button type="default">
+                            <FileZipOutlined />
+                            批量生成
+                        </Button>
+                    </Popconfirm>,
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
-                        onConfirm={() => refRemove(selectedRowKeys, action)}
+                        onConfirm={() => refRemove(selectedRowKeys)}
                         title="是否删除选中数据"
                     >
                         <Button
@@ -131,38 +192,21 @@ const Login: React.FC<{}> = () => {
                         >
                             <DeleteOutlined />
                             批量删除
-                        </Button>
+                    </Button>
                     </Popconfirm>,
-                    <Popconfirm
-                        onConfirm={() => {
-                            exportExcel({
-                                ...formRef.current?.getFieldsValue()
-                            })
-                        }}
-                        title="是否导出数据"
-                    >
-                        <Button type="default">
-                            <FundProjectionScreenOutlined />
-                            导出数据
-                        </Button>
-                    </Popconfirm>,
-                    <Popconfirm
-                        onConfirm={() => refRemove(selectedRowKeys, action)}
-                        title="是否清空"
-                    >
-                        <Button
-                            type="primary" danger
-                        >
-                            <DeleteOutlined />
-                            清空
-                        </Button>
-                    </Popconfirm>
                 ]}
 
+            />
+
+            <DrawerInfo
+                onClose={() => {
+                    setdrawerInfoVisible(false)
+                }}
+                visible={drawerInfoVisible}
             />
         </>
     )
 
 }
 
-export default Login
+export default Gen
