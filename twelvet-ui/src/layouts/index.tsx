@@ -161,7 +161,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         return <PageLoading />
     }
 
-    return [
+    return (
         <ProLayout
             navTheme='light'
             // 拂晓蓝
@@ -276,7 +276,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 </PageHeaderWrapper>
             </Authorized>
         </ProLayout >
-    ]
+    )
 }
 
 export default connect(({ user, global, settings }: ConnectState) => ({

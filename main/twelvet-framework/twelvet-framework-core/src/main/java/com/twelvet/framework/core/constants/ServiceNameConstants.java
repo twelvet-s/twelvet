@@ -10,16 +10,16 @@ public interface ServiceNameConstants {
     /**
      * 认证服务
      */
-    String AUTH_SERVICE = "twelvet-auth";
+    String AUTH_SERVICE = "twelvet-server-auth";
 
     /**
      * 系统服务
      */
-    String SYSTEM_SERVICE = "twelvet-system";
+    String SYSTEM_SERVICE = "twelvet-server-system";
 
     /**
      * 文件服务的serviceid
      */
-    public static final String FILE_SERVICE = "twelvet-dfs";
+    String FILE_SERVICE = "twelvet-server-dfs";
 
 }

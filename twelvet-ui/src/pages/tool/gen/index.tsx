@@ -10,7 +10,7 @@ import { UseFetchDataAction } from '@ant-design/pro-table/lib/useFetchData'
 import moment, { Moment } from 'moment'
 
 /**
- * 登录日志
+ * 代码生成器
  */
 const Login: React.FC<{}> = () => {
 
@@ -32,7 +32,7 @@ const Login: React.FC<{}> = () => {
             title: '调用目标方法', width: 200, valueType: "text", search: false, dataIndex: 'invokeTarget'
         },
         {
-            title: '日志信息', width: 250, valueType: "text", search: false, dataIndex: 'jobMessage'
+            title: '日志信息', width: 200, valueType: "text", search: false, dataIndex: 'jobMessage'
         },
         {
             title: '执行状态',
@@ -58,7 +58,19 @@ const Login: React.FC<{}> = () => {
                     return moment(new Date(), 'YYYY-MM-DD') < currentDate
                 }} />
             )
-        }
+        },
+        {
+            title: '操作', fixed: 'right', width: 200, valueType: "option", search: false, dataIndex: 'operation', render: (_: string) => {
+                return (
+                    <a href='#'>
+                        <Space>
+                            <EyeOutlined />
+                            详情
+                        </Space>
+                    </a>
+                )
+            }
+        },
     ]
 
     /**
