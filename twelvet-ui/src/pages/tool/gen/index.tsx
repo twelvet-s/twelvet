@@ -69,7 +69,7 @@ const Gen: React.FC<{}> = () => {
                         </Popconfirm>
                         <Divider type="vertical" />
                         <Popconfirm
-                            onConfirm={() => {refSynchDb(row.tableName) }}
+                            onConfirm={() => { refSynchDb(row.tableName) }}
                             title="确定强制同步结构吗"
                         >
                             <a href='#'>
@@ -81,7 +81,7 @@ const Gen: React.FC<{}> = () => {
                         </Popconfirm>
                         <Divider type="vertical" />
                         <Popconfirm
-                            onConfirm={() => {batchGenCode(row.tableName) }}
+                            onConfirm={() => { batchGenCode(row.tableName) }}
                             title="确定生成吗"
                         >
                             <a href='#'>
@@ -125,7 +125,7 @@ const Gen: React.FC<{}> = () => {
      * 
      * @param tableName 同步表结构域
      */
-    const refSynchDb = async(tableName: string) => {
+    const refSynchDb = async (tableName: string) => {
         try {
             const { code, msg } = await synchDb(tableName)
             if (code != 200) {
@@ -144,7 +144,7 @@ const Gen: React.FC<{}> = () => {
             <TWTProTable
                 actionRef={acForm}
                 formRef={formRef}
-                rowKey="tableId"
+                rowKey="tableName"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -172,11 +172,16 @@ const Gen: React.FC<{}> = () => {
                         导入数据
                     </Button>,
                     <Popconfirm
+                        disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
                         onConfirm={() => {
+                            batchGenCode(selectedRowKeys)
                         }}
                         title="是否批量生成"
                     >
-                        <Button type="default">
+                        <Button
+                            disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
+                            type="default"
+                        >
                             <FileZipOutlined />
                             批量生成
                         </Button>
@@ -204,6 +209,9 @@ const Gen: React.FC<{}> = () => {
                 }}
                 visible={drawerInfoVisible}
             />
+
+                
+
         </>
     )
 

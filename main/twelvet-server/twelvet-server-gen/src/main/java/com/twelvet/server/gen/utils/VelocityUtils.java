@@ -130,13 +130,13 @@ public class VelocityUtils {
         templates.add("vm/java/controller.java.vm");
         templates.add("vm/xml/mapper.xml.vm");
         templates.add("vm/sql/sql.vm");
-        templates.add("vm/js/api.js.vm");
+        templates.add("vm/js/api.ts.vm");
         if (GenConstants.TPL_CRUD.equals(tplCategory)) {
-            templates.add("vm/vue/index.vue.vm");
+            templates.add("vm/react/index.tsx.vm");
         } else if (GenConstants.TPL_TREE.equals(tplCategory)) {
-            templates.add("vm/vue/index-tree.vue.vm");
+            templates.add("vm/react/index-tree.tsx.vm");
         } else if (GenConstants.TPL_SUB.equals(tplCategory)) {
-            templates.add("vm/vue/index.vue.vm");
+            templates.add("vm/react/index.tsx.vm");
             templates.add("vm/java/sub-domain.java.vm");
         }
         return templates;
@@ -159,7 +159,7 @@ public class VelocityUtils {
 
         String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
-        String vuePath = "vue";
+        String reactPath = "react";
 
         if (template.contains("domain.java.vm")) {
             fileName = StringUtils.format("{}/domain/{}.java", javaPath, className);
@@ -178,12 +178,12 @@ public class VelocityUtils {
             fileName = StringUtils.format("{}/{}Mapper.xml", mybatisPath, className);
         } else if (template.contains("sql.vm")) {
             fileName = businessName + "Menu.sql";
-        } else if (template.contains("api.js.vm")) {
-            fileName = StringUtils.format("{}/api/{}/{}.js", vuePath, moduleName, businessName);
-        } else if (template.contains("index.vue.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
-        } else if (template.contains("index-tree.vue.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
+        } else if (template.contains("api.ts.vm")) {
+            fileName = StringUtils.format("{}/api/{}/{}.ts", reactPath, moduleName, businessName);
+        } else if (template.contains("index.tsx.vm")) {
+            fileName = StringUtils.format("{}/views/{}/{}/index.tsx", reactPath, moduleName, businessName);
+        } else if (template.contains("index-tree.tsx.vm")) {
+            fileName = StringUtils.format("{}/views/{}/{}/index.tsx", reactPath, moduleName, businessName);
         }
         return fileName;
     }

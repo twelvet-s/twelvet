@@ -1,6 +1,5 @@
 package com.twelvet.server.gen.controller;
 
-
 import com.twelvet.api.gen.domain.GenTable;
 import com.twelvet.api.gen.domain.GenTableColumn;
 import com.twelvet.framework.core.application.controller.TWTController;

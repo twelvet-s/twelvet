@@ -5,17 +5,18 @@ import ${import};
 #end
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.twelvet.common.core.annotation.Excel;
+import com.twelvet.framework.utils.annotation.excel.Excel;
 #if($table.crud || $table.sub)
-import com.twelvet.common.core.web.domain.BaseEntity;
+import com.twelvet.framework.core.application.domain.BaseEntity;
 #elseif($table.tree)
-import com.twelvet.common.core.web.domain.TreeEntity;
+import com.twelvet.framework.core.web.domain.TreeEntity;
 #end
 
 /**
  * ${functionName}对象 ${tableName}
- * 
+ *
  * @author ${author}
+ * @WebSite www.twelvet.cn
  * @date ${datetime}
  */
 #if($table.crud || $table.sub)
@@ -23,13 +24,15 @@ import com.twelvet.common.core.web.domain.TreeEntity;
 #elseif($table.tree)
 #set($Entity="TreeEntity")
 #end
-public class ${ClassName} extends ${Entity}
-{
+public class ${ClassName} extends ${Entity} {
+
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField))
-    /** $column.columnComment */
+    /**
+     * $column.columnComment
+     */
 #if($column.list)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
