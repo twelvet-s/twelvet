@@ -96,7 +96,7 @@ const Role: React.FC<{}> = () => {
             width: 80,
             dataIndex: 'status',
             render: (_: string, row: { [key: string]: string }) => [
-                <RoleStatusSwitch row={row} />
+                <RoleStatusSwitch row={row} key={row.roleId} />
             ]
         },
         {

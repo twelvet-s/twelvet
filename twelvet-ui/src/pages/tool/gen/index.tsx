@@ -7,7 +7,8 @@ import { batchGenCode, pageQuery, remove, synchDb } from './service'
 import { system } from '@/utils/twelvet'
 import { RequestData } from '@ant-design/pro-table'
 import row from 'antd/lib/row'
-import DrawerInfo from './components/drawerInfo/Index'
+import DrawerInfo from './components/DrawerInfo/Index'
+import PreviewCode from './components/PreviewCode/Index'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/typing'
 
 /**
@@ -19,7 +20,15 @@ const Gen: React.FC<{}> = () => {
 
     const formRef = useRef<FormInstance>()
 
-    const [drawerInfoVisible, setdrawerInfoVisible] = useState<boolean>(false)
+    const [drawerInfoVisible, setDrawerInfoVisible] = useState<boolean>(false)
+
+    const [previewCodeVisible, setPreviewCodeVisible] = useState<{
+        tableId: number
+        visible: boolean
+    }>({
+        tableId: 0,
+        visible: false
+    })
 
     // Form参数
     const columns: ProColumns = [
@@ -42,7 +51,10 @@ const Gen: React.FC<{}> = () => {
             title: '操作', fixed: 'right', width: 400, valueType: "option", search: false, dataIndex: 'operation', render: (_: string, row) => {
                 return (
                     <>
-                        <a onClick={() => refPut(row)}>
+                        <a onClick={() => setPreviewCodeVisible({
+                            tableId: row.tableId,
+                            visible: true
+                        })}>
                             <Space>
                                 <EyeOutlined />
                                 预览
@@ -165,7 +177,7 @@ const Gen: React.FC<{}> = () => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            setdrawerInfoVisible(true)
+                            setDrawerInfoVisible(true)
                         }}
                     >
                         <CloudSyncOutlined />
@@ -203,14 +215,24 @@ const Gen: React.FC<{}> = () => {
 
             />
 
+            {/* 数据导入 */}
             <DrawerInfo
                 onClose={() => {
-                    setdrawerInfoVisible(false)
+                    setDrawerInfoVisible(false)
                 }}
                 visible={drawerInfoVisible}
             />
 
-                
+            {/* 代码预览 */}
+            <PreviewCode
+                onClose={() => {
+                    setPreviewCodeVisible({
+                        tableId: 0,
+                        visible: false
+                    })
+                }}
+                info={previewCodeVisible}
+            />
 
         </>
     )
