@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { message, Form, Input, Modal, Tabs, Descriptions } from 'antd'
-import { FormInstance } from 'antd/lib/form'
-import { remove, getBydictCode, insert, update, getInfo } from './service'
+import React, { useState, useEffect } from 'react'
+import { message, Modal, Tabs } from 'antd'
+import { getInfo } from './service'
 import { system } from '@/utils/twelvet'
-import { isArray } from 'lodash'
 import ProDescriptions from '@ant-design/pro-descriptions'
+import styles from './styles.less'
 
 /**
  * 字典模块数据管理
@@ -53,6 +51,7 @@ const PreviewCode: React.FC<{
     return (
         <Modal
             title={`代码预览`}
+            width={'80%'}
             visible={info.visible}
             onCancel={() => {
                 onClose()
@@ -61,107 +60,106 @@ const PreviewCode: React.FC<{
         >
             <Tabs
                 defaultActiveKey="1"
+                tabPosition='top'
             >
                 <Tabs.TabPane tab="Controller.java" key="1">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`控制层`} valueType="code">
-
+                    <pre className={styles.preCode}>
+                        <code>
                             {codeData['vm/java/controller.java.vm']}
-
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Service.java" key="2">
 
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`业务层`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/java/service.java.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="ServiceImpl.java" key="3">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`业务实现层`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/java/serviceImpl.java.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Mapper.java" key="4">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`Mapper`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/java/mapper.java.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Mapper.xml" key="5">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`Mapper XML`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/xml/mapper.xml.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Domain.java" key="6">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`实体`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/java/domain.java.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Index.tsx" key="7">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`页面`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/react/index.tsx.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="Api.ts" key="8">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`Api`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/js/api.ts.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
                 <Tabs.TabPane tab="SQL" key="9">
-                    <ProDescriptions column={1}>
-                        <ProDescriptions.Item label={`SQL`} valueType="code">
+                    <pre className={styles.preCode}>
+                        <code>
 
                             {codeData['vm/sql/sql.vm']}
 
-                        </ProDescriptions.Item>
-                    </ProDescriptions>
+                        </code>
+                    </pre>
 
                 </Tabs.TabPane>
 
             </Tabs>
-        </Modal>
+        </Modal >
     )
 
 }

@@ -9,6 +9,7 @@ import { RequestData } from '@ant-design/pro-table'
 import row from 'antd/lib/row'
 import DrawerInfo from './components/DrawerInfo/Index'
 import PreviewCode from './components/PreviewCode/Index'
+import EditCode from './components/EditCode/Index'
 import { UseFetchDataAction } from '@ant-design/pro-table/lib/typing'
 
 /**
@@ -23,6 +24,14 @@ const Gen: React.FC<{}> = () => {
     const [drawerInfoVisible, setDrawerInfoVisible] = useState<boolean>(false)
 
     const [previewCodeVisible, setPreviewCodeVisible] = useState<{
+        tableId: number
+        visible: boolean
+    }>({
+        tableId: 0,
+        visible: false
+    })
+
+    const [editCodeVisible, setEditCodeVisible] = useState<{
         tableId: number
         visible: boolean
     }>({
@@ -61,7 +70,10 @@ const Gen: React.FC<{}> = () => {
                             </Space>
                         </a >
                         <Divider type="vertical" />
-                        <a href='#'>
+                        <a href='#' onClick={() => setEditCodeVisible({
+                            tableId: row.tableId,
+                            visible: true
+                        })}>
                             <Space>
                                 <EditOutlined />
                                 编辑
@@ -156,7 +168,7 @@ const Gen: React.FC<{}> = () => {
             <TWTProTable
                 actionRef={acForm}
                 formRef={formRef}
-                rowKey="tableName"
+                rowKey="tableId"
                 columns={columns}
                 request={pageQuery}
                 rowSelection={{}}
@@ -233,6 +245,18 @@ const Gen: React.FC<{}> = () => {
                 }}
                 info={previewCodeVisible}
             />
+
+            {/* 代码生成结构编辑 */}
+            <EditCode
+                onClose={() => {
+                    setEditCodeVisible({
+                        tableId: 0,
+                        visible: false
+                    })
+                }}
+                info={editCodeVisible}
+            />
+
 
         </>
     )

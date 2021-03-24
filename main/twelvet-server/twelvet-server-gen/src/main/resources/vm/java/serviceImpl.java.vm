@@ -1,21 +1,20 @@
 package ${packageName}.service.impl;
 
 import java.util.List;
-    #foreach ($column in $columns)
-        #if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
-        import com.twelvet.framework.core.utils.DateUtils;
-            #break
-        #end
-    #end
+#foreach ($column in $columns)
+#if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
+import com.twelvet.framework.core.utils.DateUtils;
+#break
+#end
+#end
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-    #if($table.sub)
-    import java.util.ArrayList;
-
-    import com.twelvet.framework.core.utils.StringUtils;
-    import org.springframework.transaction.annotation.Transactional;
-    import ${packageName}.domain.${subClassName};
-    #end
+#if($table.sub)
+import java.util.ArrayList;
+import com.twelvet.framework.core.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import ${packageName}.domain.${subClassName};
+#end
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.I${ClassName}Service;

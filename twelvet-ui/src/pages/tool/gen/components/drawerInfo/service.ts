@@ -17,8 +17,8 @@ export async function pageQuery(params: { [key: string]: any }) {
 }
 
 /**
- * 获取分页 Data
- * @param params 搜索参数
+ * 导入数据 Data
+ * @param params 数据ID
  */
  export async function importTable(selectedRowKeys: number[] | undefined) {
     return request(`${controller}/importTable?tables=${selectedRowKeys}`, {

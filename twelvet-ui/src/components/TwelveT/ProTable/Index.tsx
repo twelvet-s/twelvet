@@ -85,6 +85,10 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
          */
         request = async () => { },
         /**
+         * 数据源
+         */
+        dataSource,
+        /**
          * 对数据进行一些处理
          */
         postData,
@@ -240,6 +244,7 @@ const TWTProTable: React.FC<ProTableProps<string, ParamsType>> = props => {
                     return Promise.resolve()
                 }
             }}
+            dataSource={dataSource}
             expandable={{
                 // 展开列名称
                 childrenColumnName,
