@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { Button, Divider, Drawer, Input, message, Tabs, Tag } from 'antd'
+import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Spin, Tabs, Tag, TreeSelect } from 'antd'
 import Form, { FormInstance } from 'antd/lib/form'
-import { getInfo } from './service'
-import { system } from '@/utils/twelvet'
+import { getInfo, getMenus, getOptionselect } from './service'
+import { makeTree, system } from '@/utils/twelvet'
 import { Key } from 'antd/lib/table/interface'
 import { FormattedMessage } from '@/.umi/plugin-locale/localeExports'
 import { EditableProTable } from '@ant-design/pro-table'
+import ProSkeleton from '@ant-design/pro-skeleton';
 import TagList from './TagList'
+import PageLoading from '@/components/PageLoading'
 
 /**
  * 生成代码编辑
@@ -25,13 +27,12 @@ const EditCode: React.FC<{
 
     const formRef = useRef<FormInstance>()
 
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
-
     const [loading, setLoading] = useState<boolean>(false)
 
-    const { info, onClose } = props
+    // 生成模板切换
+    const [tplCategory, setTplCategory] = useState<string>()
 
-    const [dataSource, setDataSource] = useState<[]>([])
+    const { info, onClose } = props
 
     const [tableLoading, setTableLoading] = useState<boolean>(true)
 
@@ -39,6 +40,39 @@ const EditCode: React.FC<{
 
     const valueEnumRadio = {
         '1': { text: ' ', status: 'Default' },
+    }
+
+    const [form] = Form.useForm<FormInstance>()
+
+    // 菜单数据源
+    const [menuTree, setMenuTree] = useState<Array<{ [key: string]: any }>>([])
+
+    /**
+     * 表单其他信息/关联表信息
+     */
+    const [formInfo, setFormInfo] = useState<{
+        info: []
+        tabls: []
+    }>({
+        info: [],
+        tabls: []
+    })
+
+
+    /**
+     * 字段信息
+     */
+    const [dataSource, setDataSource] = useState<[]>([])
+
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 6 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 16 },
+            sm: { span: 16 },
+        },
     }
 
     // Form参数
@@ -133,17 +167,61 @@ const EditCode: React.FC<{
 
         try {
 
-            const { code, msg, data } = await getInfo(info.tableId)
-            if (code != 200) {
-                return message.error(msg)
-            }
+            await getInfo(info.tableId).then(async ({ code, msg, data }) => {
+                if (code != 200) {
+                    return message.error(msg)
+                }
 
-            const values = data.tables[0].columns
-            setDataSource(values)
-            setEditableRowKeys(values.map((item) => {
-                return item.columnId
+                setDataSource(data.rows)
 
-            }))
+                // 设置生成模板初始数据
+                setTplCategory(data.info.tplCategory)
+
+                setFormInfo({
+                    info: data.info.columns,
+                    tabls: data.tables
+                })
+
+                console.log(data.tables)
+
+                // 设置数据表信息
+                form.setFieldsValue({ ...data.info })
+
+                setEditableRowKeys(data.rows.map((item) => {
+                    return item.columnId
+
+                }))
+                // 获取菜单信息
+                await getMenus().then(async ({ code, msg, data }) => {
+
+                    if (code != 200) {
+                        return message.error(msg)
+                    }
+
+                    setMenuTree(makeTree({
+                        dataSource: data,
+                        id: `menuId`,
+                        enhance: {
+                            key: `menuId`,
+                            title: `menuName`,
+                            value: `menuId`
+                        }
+                    }))
+
+                }).then(async () => {
+                    // await getOptionselect().then(async ({ code, msg, data }) => {
+
+                    //     if (code != 200) {
+                    //         return message.error(msg)
+                    //     }
+
+                    //     form.setFieldsValue({ ...data.info })
+
+                    // })
+                })
+            })
+
+
         } catch (e) {
             system.error(e)
         } finally {
@@ -191,189 +269,384 @@ const EditCode: React.FC<{
                 </div>
             }
         >
-            <EditableProTable
-                // 支持横向超出自适应
-                scroll={{ x: 'x-content' }}
-                headerTitle='字段信息'
-                search={false}
-                actionRef={acForm}
-                formRef={formRef}
-                rowKey="columnId"
-                loading={tableLoading}
-                // 关闭默认的新建按钮
-                recordCreatorProps={false}
-                columns={columns}
-                value={dataSource}
-                editable={{
-                    type: 'multiple',
-                    editableKeys,
-                    actionRender: (row, config, defaultDoms) => {
-                        return [defaultDoms.delete];
-                    },
-                    onValuesChange: (record, recordList) => {
-                        setDataSource(recordList);
-                    },
-                    onChange: setEditableRowKeys,
-                }}
-                toolBarRender={() => []}
-                tableExtraRender={(_, data) => (
-                    <Tabs
-                        defaultActiveKey={`1`}
-                        tabPosition='left'
-                    >
-                        <Tabs.TabPane tab={`基本信息`} key={`1`}>
-                            <Form>
-                                <Form.Item
-                                    name="nickName"
-                                    label={'表名称'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'表描述'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+            {tableLoading && <ProSkeleton type="list" />}
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'实体类名称'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+            {!tableLoading && (
+                <EditableProTable
+                    // 支持横向超出自适应
+                    scroll={{ x: 'x-content' }}
+                    headerTitle='字段信息'
+                    search={false}
+                    actionRef={acForm}
+                    formRef={formRef}
+                    rowKey="columnId"
+                    // 关闭默认的新建按钮
+                    recordCreatorProps={false}
+                    columns={columns}
+                    value={dataSource}
+                    editable={{
+                        type: 'multiple',
+                        editableKeys,
+                        actionRender: (row, config, defaultDoms) => {
+                            return [defaultDoms.delete];
+                        },
+                        onValuesChange: (record, recordList) => {
+                            setDataSource(recordList);
+                        },
+                        onChange: setEditableRowKeys,
+                    }}
+                    toolBarRender={() => []}
+                    tableExtraRender={(_) => (
+                        <Form
+                            form={form}
+                        >
+                            <Tabs
+                                defaultActiveKey={`1`}
+                                tabPosition='left'
+                            >
+                                <Tabs.TabPane tab={`基本信息`} key={`1`}>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'作者'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                    <Row>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="tableName"
+                                                label={'表名称'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'备注'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input.TextArea />
-                                </Form.Item>
-                            </Form>
-                        </Tabs.TabPane>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="tableComment"
+                                                label={'表描述'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
 
-                        <Tabs.TabPane tab={`生成信息`} key={`2`}>
-                            <Form>
-                                <Form.Item
-                                    name="nickName"
-                                    label={'生成末班'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                    <Row>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="className"
+                                                label={'实体名'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'生成包路径'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="functionAuthor"
+                                                label={'作者名'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'生成模块名'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                    <Form.Item
+                                        {...{
+                                            labelCol: {
+                                                xs: { span: 2 },
+                                                sm: { span: 3 },
+                                            },
+                                            wrapperCol: {
+                                                xs: { span: 20 },
+                                                sm: { span: 20 },
+                                            },
+                                        }}
+                                        name="remark"
+                                        label={'备注'}
+                                    >
+                                        <Input.TextArea />
+                                    </Form.Item>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'生成业务名'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                </Tabs.TabPane>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'生成功能名'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
+                                <Tabs.TabPane tab={`生成信息`} key={`2`}>
+                                    <Row>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="tplCategory"
+                                                label={'生成模板'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Select onChange={(value: string) => {
+                                                    // 切换数据显示
+                                                    setTplCategory(value)
+                                                }}>
 
-                                <Form.Item
-                                    name="nickName"
-                                    label={'上级菜单'}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: <FormattedMessage id='accountandsettings.basic.nickname-message' />,
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                            </Form>
-                        </Tabs.TabPane>
-                    </Tabs>
-                )}
-            />
+                                                    <Select.Option value="crud">单表（增删改查）</Select.Option>
+                                                    <Select.Option value="tree">树表（增删改查）</Select.Option>
+                                                    <Select.Option value="sub">主子表（增删改查）</Select.Option>
+
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="packageName"
+                                                label={'生成包路径'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="moduleName"
+                                                label={'生成模块名'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="businessName"
+                                                label={'生成业务名'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="functionName"
+                                                label={'生成功能名'}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: '1231212313',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
+
+                                        <Col md={12} sm={24} xs={24}>
+                                            <Form.Item
+                                                {...formItemLayout}
+                                                name="parentMenuId"
+                                                label={'上级菜单'}
+                                            >
+                                                <TreeSelect
+                                                    allowClear
+                                                    // 支出搜索
+                                                    showSearch
+                                                    // 根据title进行搜索
+                                                    treeNodeFilterProp="title"
+                                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                    placeholder="上级菜单"
+                                                    treeData={menuTree}
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
+                                    {
+                                        tplCategory === `sub` && (
+                                            <>
+                                                <Divider plain>关联信息</Divider>
+
+                                                <Row>
+                                                    <Col md={12} sm={24} xs={24}>
+                                                        <Form.Item
+                                                            {...formItemLayout}
+                                                            name="subTableName"
+                                                            label={'关联子表名'}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: '1231212313',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Cascader
+                                                                options={formInfo.tabls}
+                                                                expandTrigger="hover"
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+
+                                                    <Col md={12} sm={24} xs={24}>
+                                                        <Form.Item
+                                                            {...formItemLayout}
+                                                            name="subTableFkName"
+                                                            label={'子表管理外键名'}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: '1231212313',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            </>
+                                        )
+                                    }
+
+                                    {
+                                        tplCategory === `tree` && (
+                                            <>
+                                                <Divider plain>其他信息</Divider>
+
+                                                <Row>
+                                                    <Col md={12} sm={24} xs={24}>
+                                                        <Form.Item
+                                                            {...formItemLayout}
+                                                            name="treeCode"
+                                                            label={'树编码字段'}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: '1231212313',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Select>
+
+                                                                {formInfo.info.map((item: {
+                                                                    columnName: string
+                                                                    columnComment: string
+                                                                }) => {
+                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                })}
+
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+
+                                                    <Col md={12} sm={24} xs={24}>
+                                                        <Form.Item
+                                                            {...formItemLayout}
+                                                            name="treeParentCode"
+                                                            label={'树父编码字段'}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: '1231212313',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Select>
+
+                                                                {formInfo.info.map((item: {
+                                                                    columnName: string
+                                                                    columnComment: string
+                                                                }) => {
+                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                })}
+
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+
+                                                <Row>
+                                                    <Col md={12} sm={24} xs={24}>
+                                                        <Form.Item
+                                                            {...formItemLayout}
+                                                            name="treeName"
+                                                            label={'树名称字段'}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: '1231212313',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Select>
+
+                                                                {formInfo.info.map((item: {
+                                                                    columnName: string
+                                                                    columnComment: string
+                                                                }) => {
+                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                })}
+
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            </>
+                                        )
+                                    }
+
+                                </Tabs.TabPane>
+                            </Tabs>
+                        </Form>
+                    )}
+                />
+            )}
+
         </Drawer>
     )
 

@@ -12,3 +12,23 @@ export async function getInfo(tableId: number) {
         method: 'GET',
     });
 }
+
+/**
+ * 获取所有菜单
+ * @returns 
+ */
+export async function getMenus() {
+    return request(`/system/menu/list`, {
+        method: 'GET',
+    });
+}
+
+/**
+ * 获取操作表
+ * @returns 
+ */
+export async function getOptionselect() {
+    return request(`/system/dict/type/optionselect`, {
+        method: 'GET',
+    });
+}
