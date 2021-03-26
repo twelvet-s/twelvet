@@ -28,7 +28,7 @@ export async function getMenus() {
  * @returns 
  */
 export async function getOptionselect() {
-    return request(`/system/dict/type/optionselect`, {
+    return request(`/system/dictionaries/type/optionSelect`, {
         method: 'GET',
     });
 }

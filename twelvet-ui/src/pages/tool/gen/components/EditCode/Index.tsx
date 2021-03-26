@@ -5,7 +5,6 @@ import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Sp
 import Form, { FormInstance } from 'antd/lib/form'
 import { getInfo, getMenus, getOptionselect } from './service'
 import { makeTree, system } from '@/utils/twelvet'
-import { Key } from 'antd/lib/table/interface'
 import { FormattedMessage } from '@/.umi/plugin-locale/localeExports'
 import { EditableProTable } from '@ant-design/pro-table'
 import ProSkeleton from '@ant-design/pro-skeleton';
@@ -44,20 +43,27 @@ const EditCode: React.FC<{
 
     const [form] = Form.useForm<FormInstance>()
 
+
+    const [tablesInfo, setTablesInfo] = useState<{}>({})
+
     // 菜单数据源
     const [menuTree, setMenuTree] = useState<Array<{ [key: string]: any }>>([])
 
     /**
-     * 表单其他信息/关联表信息
+     * 表单其他信息
      */
-    const [formInfo, setFormInfo] = useState<{
-        info: []
-        tabls: []
-    }>({
-        info: [],
-        tabls: []
-    })
+    const [formInfo, setFormInfo] = useState<[]>([])
 
+    // 关联表信息
+    const [formTables, setFormTables] = useState<Array<{
+        value: string
+        label: string
+        children: []
+    }>>([{
+        value: '',
+        label: '',
+        children: []
+    }])
 
     /**
      * 字段信息
@@ -139,19 +145,9 @@ const EditCode: React.FC<{
                 editor: { text: '富文本控件', status: 'Default' },
             }
         },
-        // {
-        //     title: '字典类型', search: false, width: 120, valueType: "text", dataIndex: 'dictType', valueEnum: {
-        //         input: { text: '文本框', status: 'Default' },
-        //         textarea: { text: '文本域', status: 'Default' },
-        //         select: { text: '下拉框', status: 'Default' },
-        //         radio: { text: '单选框', status: 'Default' },
-        //         checkbox: { text: '复选框', status: 'Default' },
-        //         datetime: { text: '日期控件', status: 'Default' },
-        //         imageUpload: { text: '图片上传', status: 'Default' },
-        //         fileUpload: { text: '文件上传', status: 'Default' },
-        //         editor: { text: '富文本控件', status: 'Default' },
-        //     }
-        // },
+        {
+            title: '字典类型', search: false, width: 220, valueType: "text", dataIndex: 'dictType', valueEnum: tablesInfo
+        },
     ]
 
     useEffect(() => {
@@ -177,23 +173,23 @@ const EditCode: React.FC<{
                 // 设置生成模板初始数据
                 setTplCategory(data.info.tplCategory)
 
-                setFormInfo({
-                    info: data.info.columns,
-                    tabls: data.tables
-                })
 
-                console.log(data.tables)
+                // 制作联动表数据
+
+                setFormInfo(data.info.columns)
 
                 // 设置数据表信息
                 form.setFieldsValue({ ...data.info })
 
-                setEditableRowKeys(data.rows.map((item) => {
+                setEditableRowKeys(data.rows.map((item: { columnId: number }) => {
                     return item.columnId
 
                 }))
+
+                setFormTables(cascaderTree(data.tables))
+
                 // 获取菜单信息
                 await getMenus().then(async ({ code, msg, data }) => {
-
                     if (code != 200) {
                         return message.error(msg)
                     }
@@ -208,16 +204,23 @@ const EditCode: React.FC<{
                         }
                     }))
 
-                }).then(async () => {
-                    // await getOptionselect().then(async ({ code, msg, data }) => {
+                    await getOptionselect().then(async ({ code, msg, data }) => {
 
-                    //     if (code != 200) {
-                    //         return message.error(msg)
-                    //     }
+                        if (code != 200) {
+                            return message.error(msg)
+                        }
 
-                    //     form.setFieldsValue({ ...data.info })
+                        let infos = {}
+                        data.map((item: {
+                            dictName: string
+                        }) => {
+                            const dictType = item['dictType']
+                            infos[dictType] = { text: `${item.dictName}：${dictType}`, status: 'Default' }
+                        })
+                        setTablesInfo(infos)
 
-                    // })
+                    })
+
                 })
             })
 
@@ -231,6 +234,50 @@ const EditCode: React.FC<{
     }
 
     /**
+     * 制作链表数据
+     * @param tables 
+     * @returns 
+     */
+    const cascaderTree = (tables: [{
+        tableName: string
+        tableComment: string
+        columns: [{
+            columnComment: string
+            columnName: string
+        }]
+    }]) => {
+        return tables.map(((item: {
+            tableName: string
+            tableComment: string
+            columns: [{
+                columnComment: string
+                columnName: string
+            }]
+        }) => {
+            // 表字段
+            const columns = item.columns
+
+            return {
+                value: item.tableName,
+                label: `${item.tableName}：${item.tableComment}`,
+                children: columns.map((children: {
+                    columnComment: string
+                    columnName: string
+                }) => {
+                    return {
+                        value: children.columnName,
+                        label: `${children.columnName}：${children.columnComment}`,
+                    }
+
+                })
+
+            }
+
+
+        }))
+    }
+
+    /**
      * 关闭抽屉
      */
     const close = () => {
@@ -240,6 +287,21 @@ const EditCode: React.FC<{
             setDataSource([])
             onClose()
         }
+    }
+
+    /**
+     * 保存数据
+     */
+    const onSave = () => {
+        form
+            .validateFields()
+            .then(async (params) => {
+
+                params.columns = dataSource
+
+                console.log(params)
+
+            })
     }
 
     return (
@@ -263,7 +325,7 @@ const EditCode: React.FC<{
                         取消
                   </Button>
                     <Divider type="vertical" />
-                    <Button loading={loading} type="primary" onClick={() => importTableRef()}>
+                    <Button loading={loading} type="primary" onClick={() => onSave()}>
                         保存
                   </Button>
                 </div>
@@ -527,7 +589,7 @@ const EditCode: React.FC<{
                                                             ]}
                                                         >
                                                             <Cascader
-                                                                options={formInfo.tabls}
+                                                                options={formTables}
                                                                 expandTrigger="hover"
                                                             />
                                                         </Form.Item>
@@ -573,11 +635,11 @@ const EditCode: React.FC<{
                                                         >
                                                             <Select>
 
-                                                                {formInfo.info.map((item: {
+                                                                {formInfo.map((item: {
                                                                     columnName: string
                                                                     columnComment: string
                                                                 }) => {
-                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                    return <Select.Option key={item.columnName} value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
                                                                 })}
 
                                                             </Select>
@@ -598,11 +660,11 @@ const EditCode: React.FC<{
                                                         >
                                                             <Select>
 
-                                                                {formInfo.info.map((item: {
+                                                                {formInfo.map((item: {
                                                                     columnName: string
                                                                     columnComment: string
                                                                 }) => {
-                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                    return <Select.Option key={item.columnName} value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
                                                                 })}
 
                                                             </Select>
@@ -625,11 +687,11 @@ const EditCode: React.FC<{
                                                         >
                                                             <Select>
 
-                                                                {formInfo.info.map((item: {
+                                                                {formInfo.map((item: {
                                                                     columnName: string
                                                                     columnComment: string
                                                                 }) => {
-                                                                    return <Select.Option value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
+                                                                    return <Select.Option key={item.columnName} value={item.columnName}>{`${item.columnName}：${item.columnComment}`}</Select.Option>
                                                                 })}
 
                                                             </Select>

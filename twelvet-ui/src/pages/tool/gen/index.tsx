@@ -1,16 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { CloseOutlined, CloudSyncOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FileZipOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, DatePicker, Space, Divider, FormInstance } from 'antd'
+import { CloseOutlined, CloudSyncOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FileZipOutlined, SyncOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Space, Divider, FormInstance } from 'antd'
 import { batchGenCode, pageQuery, remove, synchDb } from './service'
 import { system } from '@/utils/twelvet'
-import { RequestData } from '@ant-design/pro-table'
-import row from 'antd/lib/row'
 import DrawerInfo from './components/DrawerInfo/Index'
 import PreviewCode from './components/PreviewCode/Index'
 import EditCode from './components/EditCode/Index'
-import { UseFetchDataAction } from '@ant-design/pro-table/lib/typing'
 
 /**
  * 代码生成器
