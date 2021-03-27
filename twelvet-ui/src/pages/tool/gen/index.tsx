@@ -182,7 +182,7 @@ const Gen: React.FC<{}> = () => {
                     }
                     return params
                 }}
-                toolBarRender={(action, { selectedRowKeys }) => [
+                toolBarRender={(action, { selectedRowKeys, selectedRows }) => [
                     <Button
                         type="primary"
                         onClick={() => {
@@ -195,7 +195,10 @@ const Gen: React.FC<{}> = () => {
                     <Popconfirm
                         disabled={selectedRowKeys && selectedRowKeys.length > 0 ? false : true}
                         onConfirm={() => {
-                            batchGenCode(selectedRowKeys)
+                            const tableNames = selectedRows?.map(item => {
+                                return item.tableName
+                            })
+                            batchGenCode(tableNames)
                         }}
                         title="是否批量生成"
                     >
@@ -223,15 +226,6 @@ const Gen: React.FC<{}> = () => {
                 ]}
 
             />
-
-            {/* 数据导入 */}
-            <DrawerInfo
-                onClose={() => {
-                    setDrawerInfoVisible(false)
-                }}
-                visible={drawerInfoVisible}
-            />
-
             {/* 代码预览 */}
             <PreviewCode
                 onClose={() => {
@@ -243,8 +237,18 @@ const Gen: React.FC<{}> = () => {
                 info={previewCodeVisible}
             />
 
+            {/* 数据导入 */}
+            <DrawerInfo
+                reloadForm={acForm}
+                onClose={() => {
+                    setDrawerInfoVisible(false)
+                }}
+                visible={drawerInfoVisible}
+            />
+
             {/* 代码生成结构编辑 */}
             <EditCode
+                reloadForm={acForm}
                 onClose={() => {
                     setEditCodeVisible({
                         tableId: 0,

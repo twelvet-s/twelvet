@@ -13,6 +13,7 @@ import { Key } from 'antd/lib/table/interface'
 const DrawerInfo: React.FC<{
     visible: boolean
     onClose: () => void
+    reloadForm: ActionType
 }> = (props) => {
 
     const acForm = useRef<ActionType>()
@@ -23,7 +24,7 @@ const DrawerInfo: React.FC<{
 
     const [loading, setLoading] = useState<boolean>(false)
 
-    const { visible, onClose } = props
+    const { visible, reloadForm, onClose } = props
 
 
     // Form参数
@@ -56,10 +57,10 @@ const DrawerInfo: React.FC<{
             if (code != 200) {
                 return message.error(msg)
             }
-
-            close()
-
             message.success(msg)
+            close()
+            return reloadForm.current && reloadForm.current.reload()
+
         } catch (e) {
             system.error(e)
         } finally {

@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
-import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Spin, Tabs, Tag, TreeSelect } from 'antd'
+import { ActionType } from '@/components/TwelveT/ProTable/Index'
+import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Tabs, TreeSelect } from 'antd'
 import Form, { FormInstance } from 'antd/lib/form'
-import { getInfo, getMenus, getOptionselect } from './service'
+import { getInfo, getMenus, getOptionselect, putGen } from './service'
 import { makeTree, system } from '@/utils/twelvet'
-import { FormattedMessage } from '@/.umi/plugin-locale/localeExports'
 import { EditableProTable } from '@ant-design/pro-table'
 import ProSkeleton from '@ant-design/pro-skeleton';
 import TagList from './TagList'
-import PageLoading from '@/components/PageLoading'
 
 /**
  * 生成代码编辑
@@ -20,18 +18,19 @@ const EditCode: React.FC<{
         visible: boolean
     }
     onClose: () => void
+    reloadForm: ActionType
 }> = (props) => {
 
     const acForm = useRef<ActionType>()
 
     const formRef = useRef<FormInstance>()
 
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     // 生成模板切换
     const [tplCategory, setTplCategory] = useState<string>()
 
-    const { info, onClose } = props
+    const { info, reloadForm, onClose } = props
 
     const [tableLoading, setTableLoading] = useState<boolean>(true)
 
@@ -42,6 +41,8 @@ const EditCode: React.FC<{
     }
 
     const [form] = Form.useForm<FormInstance>()
+
+    const [tableForm] = Form.useForm<FormInstance>()
 
 
     const [tablesInfo, setTablesInfo] = useState<{}>({})
@@ -100,10 +101,24 @@ const EditCode: React.FC<{
                 Double: { text: 'Double', status: 'Default' },
                 BigDecimal: { text: 'BigDecimal', status: 'Default' },
                 Date: { text: 'Date', status: 'Default' },
-            }
+            }, formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项为必填项',
+                    },
+                ],
+            },
         },
         {
-            title: 'Java属性', search: false, width: 120, valueType: "text", dataIndex: 'javaField'
+            title: 'Java属性', search: false, width: 120, valueType: "text", dataIndex: 'javaField', formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项为必填项',
+                    },
+                ],
+            },
         },
         {
             title: '插入', search: false, width: 50, valueType: "checkbox", dataIndex: 'isInsert', valueEnum: valueEnumRadio
@@ -127,7 +142,15 @@ const EditCode: React.FC<{
                 LTE: { text: '<=', status: 'Default' },
                 LIKE: { text: 'like', status: 'Default' },
                 BETWEEN: { text: 'between', status: 'Default' },
-            }
+            },
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项为必填项',
+                    },
+                ],
+            },
         },
         {
             title: '必填', search: false, width: 50, valueType: "checkbox", dataIndex: 'isRequired', valueEnum: valueEnumRadio
@@ -138,12 +161,20 @@ const EditCode: React.FC<{
                 textarea: { text: '文本域', status: 'Default' },
                 select: { text: '下拉框', status: 'Default' },
                 radio: { text: '单选框', status: 'Default' },
-                checkbox: { text: '复选框', status: 'Default' },
+                radio: { text: '复选框', status: 'Default' },
                 datetime: { text: '日期控件', status: 'Default' },
                 imageUpload: { text: '图片上传', status: 'Default' },
                 fileUpload: { text: '文件上传', status: 'Default' },
                 editor: { text: '富文本控件', status: 'Default' },
-            }
+            },
+            formItemProps: {
+                rules: [
+                    {
+                        required: true,
+                        message: '此项为必填项',
+                    },
+                ],
+            },
         },
         {
             title: '字典类型', search: false, width: 220, valueType: "text", dataIndex: 'dictType', valueEnum: tablesInfo
@@ -177,6 +208,14 @@ const EditCode: React.FC<{
                 // 制作联动表数据
 
                 setFormInfo(data.info.columns)
+
+                // 配置链表参数
+                if (data.info.tplCategory == 'sub') {
+                    data.info.subTable = [
+                        data.info.subTableName,
+                        data.info.subTableFkName
+                    ]
+                }
 
                 // 设置数据表信息
                 form.setFieldsValue({ ...data.info })
@@ -228,6 +267,7 @@ const EditCode: React.FC<{
         } catch (e) {
             system.error(e)
         } finally {
+            setLoading(false)
             setTableLoading(false)
         }
 
@@ -284,6 +324,7 @@ const EditCode: React.FC<{
         if (!loading && !tableLoading) {
             // 清空数据关闭
             setTableLoading(true)
+            setLoading(true)
             setDataSource([])
             onClose()
         }
@@ -293,15 +334,81 @@ const EditCode: React.FC<{
      * 保存数据
      */
     const onSave = () => {
-        form
-            .validateFields()
-            .then(async (params) => {
+        try {
+            setLoading(true)
+            tableForm
+                .validateFields()
+                .then(() => {
+                    form
+                        .validateFields()
+                        .then(async (params) => {
 
-                params.columns = dataSource
+                            dataSource.map((item: {
+                                isEdit: [] | {}
+                                isInsert: [] | {}
+                                isList: [] | {}
+                                isQuery: [] | {}
+                                isRequired: [] | {}
+                            }) => {
+                                item['isEdit'] = item.isEdit ? item.isEdit[0] : null
+                                item['isInsert'] = item.isInsert ? item.isInsert[0] : null
+                                item['isList'] = item.isList ? item.isList[0] : null
+                                item['isQuery'] = item.isQuery ? item.isQuery[0] : null
+                                item['isRequired'] = item.isRequired ? item.isRequired[0] : null
+                            })
 
-                console.log(params)
+                            // 配置参数
+                            params['columns'] = dataSource
+                            params['tableId'] = info.tableId
+                            params['params'] = {}
 
-            })
+
+                            if (params['parentMenuId']) {
+                                params['params']['parentMenuId'] = params['parentMenuId']
+                            }
+
+
+                            // 树表查询
+                            if (params['tplCategory'] == 'tree') {
+
+                                params['params'] = {
+                                    treeCode: params['treeCode'],
+                                    treeName: params['treeName'],
+                                    treeParentCode: params['treeParentCode']
+                                }
+
+                            }
+
+                            if (params['tplCategory'] == 'sub') {
+                                const subTable = params['subTable']
+                                params['subTableName'] = subTable[0]
+                                params['subTableFkName'] = subTable[1]
+
+                                params['subTable'] = undefined
+                            }
+
+                            const { code, msg } = await putGen(params)
+
+                            if (code != 200) {
+                                return message.error(msg)
+                            }
+
+                            message.success(msg)
+
+                            close()
+                            return reloadForm.current && reloadForm.current.reload()
+                        }).catch((e) => {
+                            return message.error('请确保不留空')
+                        })
+                })
+
+        } catch (e) {
+
+            system.error(e)
+
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -348,17 +455,17 @@ const EditCode: React.FC<{
                     columns={columns}
                     value={dataSource}
                     editable={{
+                        form: tableForm,
                         type: 'multiple',
                         editableKeys,
                         actionRender: (row, config, defaultDoms) => {
                             return [defaultDoms.delete];
                         },
-                        onValuesChange: (record, recordList) => {
+                        onValuesChange: (record, recordList: any) => {
                             setDataSource(recordList);
                         },
                         onChange: setEditableRowKeys,
                     }}
-                    toolBarRender={() => []}
                     tableExtraRender={(_) => (
                         <Form
                             form={form}
@@ -378,7 +485,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -394,7 +501,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -412,7 +519,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -428,7 +535,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -466,7 +573,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -491,7 +598,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -509,7 +616,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -524,7 +631,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -542,7 +649,7 @@ const EditCode: React.FC<{
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: '1231212313',
+                                                        message: '此处不能为空',
                                                     },
                                                 ]}
                                             >
@@ -579,12 +686,12 @@ const EditCode: React.FC<{
                                                     <Col md={12} sm={24} xs={24}>
                                                         <Form.Item
                                                             {...formItemLayout}
-                                                            name="subTableName"
-                                                            label={'关联子表名'}
+                                                            name="subTable"
+                                                            label={'关联子表名/外键'}
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: '1231212313',
+                                                                    message: '此处不能为空',
                                                                 },
                                                             ]}
                                                         >
@@ -592,22 +699,6 @@ const EditCode: React.FC<{
                                                                 options={formTables}
                                                                 expandTrigger="hover"
                                                             />
-                                                        </Form.Item>
-                                                    </Col>
-
-                                                    <Col md={12} sm={24} xs={24}>
-                                                        <Form.Item
-                                                            {...formItemLayout}
-                                                            name="subTableFkName"
-                                                            label={'子表管理外键名'}
-                                                            rules={[
-                                                                {
-                                                                    required: true,
-                                                                    message: '1231212313',
-                                                                },
-                                                            ]}
-                                                        >
-                                                            <Input />
                                                         </Form.Item>
                                                     </Col>
                                                 </Row>
@@ -629,7 +720,7 @@ const EditCode: React.FC<{
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: '1231212313',
+                                                                    message: '此处不能为空',
                                                                 },
                                                             ]}
                                                         >
@@ -654,7 +745,7 @@ const EditCode: React.FC<{
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: '1231212313',
+                                                                    message: '此处不能为空',
                                                                 },
                                                             ]}
                                                         >
@@ -681,7 +772,7 @@ const EditCode: React.FC<{
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: '1231212313',
+                                                                    message: '此处不能为空',
                                                                 },
                                                             ]}
                                                         >

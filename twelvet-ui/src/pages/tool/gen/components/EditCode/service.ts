@@ -24,11 +24,22 @@ export async function getMenus() {
 }
 
 /**
- * 获取操作表
+ * 获取字典数据
  * @returns 
  */
 export async function getOptionselect() {
     return request(`/system/dictionaries/type/optionSelect`, {
         method: 'GET',
+    });
+}
+
+/**
+ * 保存数据
+ * @returns 
+ */
+export async function putGen(params: {}) {
+    return request(`${controller}`, {
+        method: 'PUT',
+        data: params
     });
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { message, Modal, Tabs } from 'antd'
+import ProSkeleton from '@ant-design/pro-skeleton'
 import { getInfo } from './service'
 import { system } from '@/utils/twelvet'
-import ProDescriptions from '@ant-design/pro-descriptions'
 import styles from './styles.less'
 
 /**
@@ -20,6 +20,8 @@ const PreviewCode: React.FC<{
 
     const [codeData, setCodeData] = useState<{}>({})
 
+    const [loading, setLoading] = useState<boolean>()
+
     /**
      * 初始化数据信息
      */
@@ -35,7 +37,7 @@ const PreviewCode: React.FC<{
      */
     const refGetInfo = async () => {
         try {
-
+            setLoading(true)
             const { code, msg, data } = await getInfo(info.tableId)
 
             if (code != 200) {
@@ -45,6 +47,8 @@ const PreviewCode: React.FC<{
             setCodeData(data)
         } catch (e) {
             system.error(e)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -58,107 +62,115 @@ const PreviewCode: React.FC<{
             }}
             footer={null}
         >
-            <Tabs
-                defaultActiveKey="1"
-                tabPosition='top'
-            >
-                <Tabs.TabPane tab="Controller.java" key="1">
-                    <pre className={styles.preCode}>
-                        <code>
-                            {codeData['vm/java/controller.java.vm']}
-                        </code>
-                    </pre>
-                </Tabs.TabPane>
 
-                <Tabs.TabPane tab="Service.java" key="2">
+            {loading && <ProSkeleton type="list" />}
 
-                    <pre className={styles.preCode}>
-                        <code>
+            {
+                !loading && (
+                    <Tabs
+                        defaultActiveKey="1"
+                        tabPosition='top'
+                    >
+                        <Tabs.TabPane tab="Controller.java" key="1">
+                            <pre className={styles.preCode}>
+                                <code>
+                                    {codeData['vm/java/controller.java.vm']}
+                                </code>
+                            </pre>
+                        </Tabs.TabPane>
 
-                            {codeData['vm/java/service.java.vm']}
+                        <Tabs.TabPane tab="Service.java" key="2">
 
-                        </code>
-                    </pre>
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/java/service.java.vm']}
 
-                <Tabs.TabPane tab="ServiceImpl.java" key="3">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/java/serviceImpl.java.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
-                </Tabs.TabPane>
+                        <Tabs.TabPane tab="ServiceImpl.java" key="3">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                <Tabs.TabPane tab="Mapper.java" key="4">
-                    <pre className={styles.preCode}>
-                        <code>
+                                    {codeData['vm/java/serviceImpl.java.vm']}
 
-                            {codeData['vm/java/mapper.java.vm']}
+                                </code>
+                            </pre>
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="Mapper.java" key="4">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/java/mapper.java.vm']}
 
-                <Tabs.TabPane tab="Mapper.xml" key="5">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/xml/mapper.xml.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="Mapper.xml" key="5">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/xml/mapper.xml.vm']}
 
-                <Tabs.TabPane tab="Domain.java" key="6">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/java/domain.java.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="Domain.java" key="6">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/java/domain.java.vm']}
 
-                <Tabs.TabPane tab="Index.tsx" key="7">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/react/index.tsx.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="Index.tsx" key="7">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/react/index.tsx.vm']}
 
-                <Tabs.TabPane tab="Api.ts" key="8">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/js/api.ts.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="Api.ts" key="8">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/js/api.ts.vm']}
 
-                <Tabs.TabPane tab="SQL" key="9">
-                    <pre className={styles.preCode}>
-                        <code>
+                                </code>
+                            </pre>
 
-                            {codeData['vm/sql/sql.vm']}
+                        </Tabs.TabPane>
 
-                        </code>
-                    </pre>
+                        <Tabs.TabPane tab="SQL" key="9">
+                            <pre className={styles.preCode}>
+                                <code>
 
-                </Tabs.TabPane>
+                                    {codeData['vm/sql/sql.vm']}
 
-            </Tabs>
+                                </code>
+                            </pre>
+
+                        </Tabs.TabPane>
+
+                    </Tabs>
+                )
+            }
+
         </Modal >
     )
 
