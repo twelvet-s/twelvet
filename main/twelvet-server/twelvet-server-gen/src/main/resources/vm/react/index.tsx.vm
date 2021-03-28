@@ -1,0 +1,407 @@
+import React, { useState, useRef } from 'react'
+import { ProColumns } from '@/components/TwelveT/ProTable/Table'
+import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
+import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Modal, Form, Input, Radio, Space, Divider } from 'antd'
+import { FormInstance } from 'antd/lib/form'
+import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
+import { system } from '@/utils/twelvet'
+import { isArray } from 'lodash'
+
+/**
+ * ${functionName}模块
+ */
+const ${BusinessName}: React.FC<{}> = () => {
+
+    // 显示Modal
+    const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
+
+    const [drawerInfo, setDrawerInfo] = useState<{
+        drawerInfoKey: string
+        visible: boolean
+    }>({
+        drawerInfoKey: '',
+        visible: false
+    })
+
+    // 是否执行Modal数据操作中
+    const [loadingModal, setLoadingModal] = useState<boolean>(false)
+
+    const acForm = useRef<ActionType>()
+
+    const formRef = useRef<FormInstance>()
+
+    const [form] = Form.useForm<FormInstance>()
+
+    const { TextArea } = Input
+
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 4 },
+            sm: { span: 4 },
+        },
+        wrapperCol: {
+            xs: { span: 18 },
+            sm: { span: 18 },
+        },
+    }
+
+    // Form参数
+    const columns: ProColumns = [
+    #foreach($column in $columns)
+        #set($javaField=$column.javaField)
+        #set($parentheseIndex=$column.columnComment.indexOf("（"))
+        #if($parentheseIndex != -1)
+            #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+        #else
+            #set($comment=$column.columnComment)
+        #end
+        #if($column.pk)
+        #elseif($column.list && $column.htmlType == "datetime")
+            {
+                title: '${comment}', ellipsis: true, width: 200, valueType: "datetime", dataIndex: '${javaField}',
+            },
+        #elseif($column.list && "" != $javaField)
+            {
+                title: '${comment}', ellipsis: true, width: 200, valueType: "text", dataIndex: '${javaField}',
+            },
+        #end
+    #end
+        {
+            title: '操作', fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
+                return (
+                    <>
+                        <a onClick={() => refPut(row)}>
+                            <Space>
+                                <EditOutlined />
+                                修改
+                            </Space>
+                        </a>
+
+                        <Divider type="vertical" />
+
+                        <Popconfirm
+                            onConfirm={() => refRemove(row.dictId)}
+                            title="确定删除吗"
+                        >
+                            <a href='#'>
+                                <Space>
+                                    <CloseOutlined />
+                                    删除
+                                </Space>
+                            </a>
+                        </Popconfirm>
+                    </>
+                )
+            }
+        },
+    ]
+
+    /**
+     * 新增${functionName}数据
+     * @param row row
+     */
+    const refPost = async () => {
+        setModal({ title: "新增", visible: true })
+    }
+
+    /**
+     * 获取修改${functionName}信息
+     * @param row row
+     */
+    const refPut = async (row: { [key: string]: any }) => {
+        try {
+            const { code, msg, data } = await get${BusinessName}(row.dictId)
+            if (code != 200) {
+                return message.error(msg)
+            }
+            // 赋值表单数据
+            form.setFieldsValue(data)
+
+            // 设置Modal状态
+            setModal({ title: "修改", visible: true })
+
+        } catch (e) {
+            system.error(e)
+        }
+    }
+
+    /**
+     * 移除${functionName}数据
+     * @param row dictIds
+     */
+    const refRemove = async (dictIds: (string | number)[] | string | undefined) => {
+        try {
+            if (!dictIds) {
+                return true
+            }
+
+            let params
+            if (isArray(dictIds)) {
+                params = dictIds.join(",")
+            } else {
+                params = dictIds
+            }
+
+            const { code, msg } = await del${BusinessName}(params)
+
+            if (code !== 200) {
+                return message.error(msg)
+            }
+
+            message.success(msg)
+
+            acForm.current && acForm.current.reload()
+
+        } catch (e) {
+            system.error(e)
+        }
+
+    }
+
+    /**
+     * 取消Modal的显示
+     */
+    const handleCancel = () => {
+        setModal({ title: "", visible: false })
+
+        form.resetFields()
+
+    }
+
+    /**
+     * 保存${functionName}数据
+     */
+    const onSave = () => {
+        form
+            .validateFields()
+            .then(
+                async (fields) => {
+                    try {
+                        // 开启加载中
+                        setLoadingModal(true)
+
+                        // ID为0则insert，否则将update
+                        const { code, msg } = fields.dictId == 0 ? await add${BusinessName}(fields) : await update${BusinessName}(fields)
+                        if (code != 200) {
+                            return message.error(msg)
+                        }
+
+                        message.success(msg)
+
+                        if (acForm.current) {
+                            acForm.current.reload()
+                        }
+
+                        // 关闭模态框
+                        handleCancel()
+                    } catch (e) {
+                        system.error(e)
+                    } finally {
+                        setLoadingModal(false)
+                    }
+                }).catch(e => {
+            system.error(e)
+        })
+    }
+
+    return (
+        <>
+            <TWTProTable
+                actionRef={acForm}
+                formRef={formRef}
+                rowKey="dictId"
+                columns={columns}
+                request={list${BusinessName}}
+                rowSelection={{}}
+                beforeSearchSubmit={(params) => {
+                    // 分隔搜索参数
+                    if (params.between) {
+                        const { between } = params
+                        // 移除参数
+                        delete params.between
+
+                        // 适配参数
+                        params.beginTime = between[0]
+                        params.endTime = between[1]
+                    }
+                    return params
+                }}
+                toolBarRender={(action, { selectedRowKeys }) => [
+                    <Button type="default" onClick={refPost}>
+                        <PlusOutlined />
+                        新增
+                    </Button>,
+                    <Popconfirm
+                        disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
+                        onConfirm={() => refRemove(selectedRowKeys)}
+                        title="是否删除选中数据"
+                    >
+                        <Button
+                            disabled={!(selectedRowKeys && selectedRowKeys.length > 0)}
+                            type="primary" danger
+                        >
+                            <DeleteOutlined />
+                            批量删除
+                        </Button>
+                    </Popconfirm>,
+                    <Popconfirm
+                        title="是否导出数据"
+                        onConfirm={() => {
+                            export${BusinessName}({
+                                ...formRef.current?.getFieldsValue()
+                            })
+                        }}
+                    >
+                        <Button type="default">
+                            <FundProjectionScreenOutlined />
+                            导出数据
+                        </Button>
+                    </Popconfirm>
+                ]}
+
+            />
+
+            <Modal
+                title={`${modal.title}${functionName}`}
+                visible={modal.visible}
+                okText={`${modal.title}`}
+                confirmLoading={loadingModal}
+                onOk={onSave}
+                onCancel={handleCancel}
+            >
+
+                <Form
+                    name="Menu"
+                    form={form}
+                >
+                    <Form.Item
+                        hidden
+                        {...formItemLayout}
+                        label="ID"
+                        name="dictId"
+                        initialValue={0}
+                    >
+                        <Input />
+                    </Form.Item>
+#foreach($column in $columns)
+#set($field=$column.javaField)
+#if($column.insert && !$column.pk)
+#if(($column.usableColumn) || (!$column.superColumn))
+    #set($parentheseIndex=$column.columnComment.indexOf("（"))
+    #if($parentheseIndex != -1)
+        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+    #else
+        #set($comment=$column.columnComment)
+    #end
+    #set($dictType=$column.dictType)
+    #if("" != $treeParentCode && $column.javaField == $treeParentCode)
+        <el-form-item label="${comment}" prop="${treeParentCode}">
+            <treeselect v-model="form.${treeParentCode}" :options="${businessName}Options" :normalizer="normalizer" placeholder="请选择${comment}" />
+    </el-form-item>
+    #elseif($column.htmlType == "input")
+        <Form.Item
+            hidden
+            {...formItemLayout}
+            label="ID"
+            name="${field}"
+        >
+            <Input />
+        </Form.Item>
+    #elseif($column.htmlType == "imageUpload")
+        <el-form-item label="${comment}">
+            <imageUpload v-model="form.${field}"/>
+        </el-form-item>
+    #elseif($column.htmlType == "fileUpload")
+        <el-form-item label="${comment}">
+            <fileUpload v-model="form.${field}"/>
+        </el-form-item>
+    #elseif($column.htmlType == "editor")
+        <el-form-item label="${comment}">
+            <editor v-model="form.${field}" :min-height="192"/>
+    </el-form-item>
+    #elseif($column.htmlType == "select" && "" != $dictType)
+        <el-form-item label="${comment}" prop="${field}">
+            <el-select v-model="form.${field}" placeholder="请选择${comment}">
+                <el-option
+                    v-for="dict in ${field}Options"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                    #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.dictValue)"#else:value="dict.dictValue"#end
+
+            ></el-option>
+        </el-select>
+    </el-form-item>
+    #elseif($column.htmlType == "select" && $dictType)
+    <el-form-item label="${comment}" prop="${field}">
+        <el-select v-model="form.${field}" placeholder="请选择${comment}">
+            <el-option label="请选择字典生成" value="" />
+        </el-select>
+    </el-form-item>
+    #elseif($column.htmlType == "checkbox" && "" != $dictType)
+    <el-form-item label="${comment}">
+        <el-checkbox-group v-model="form.${field}">
+            <el-checkbox
+                v-for="dict in ${field}Options"
+            :key="dict.dictValue"
+            :label="dict.dictValue">
+            {{dict.dictLabel}}
+        </el-checkbox>
+    </el-checkbox-group>
+    </el-form-item>
+    #elseif($column.htmlType == "checkbox" && $dictType)
+        <el-form-item label="${comment}">
+            <el-checkbox-group v-model="form.${field}">
+                <el-checkbox>请选择字典生成</el-checkbox>
+            </el-checkbox-group>
+        </el-form-item>
+    #elseif($column.htmlType == "radio" && "" != $dictType)
+        <el-form-item label="${comment}">
+            <el-radio-group v-model="form.${field}">
+                <el-radio
+                    v-for="dict in ${field}Options"
+                :key="dict.dictValue"
+                    #if($column.javaType == "Integer" || $column.javaType == "Long"):label="parseInt(dict.dictValue)"#else:label="dict.dictValue"#end
+
+            >{{dict.dictLabel}}</el-radio>
+        </el-radio-group>
+    </el-form-item>
+    #elseif($column.htmlType == "radio" && $dictType)
+        <el-form-item label="${comment}">
+            <el-radio-group v-model="form.${field}">
+                <el-radio label="1">请选择字典生成</el-radio>
+            </el-radio-group>
+        </el-form-item>
+    #elseif($column.htmlType == "datetime")
+        <el-form-item label="${comment}" prop="${field}">
+            <el-date-picker clearable size="small"
+                            v-model="form.${field}"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择${comment}">
+            </el-date-picker>
+        </el-form-item>
+    #elseif($column.htmlType == "textarea")
+        <Form.Item
+            hidden
+            {...formItemLayout}
+            label="ID"
+            name="${field}"
+            initialValue={0}
+        >
+            <Input.TextArea />
+        </Form.Item>
+    #end
+#end
+#end
+#end
+
+                </Form>
+
+            </Modal>
+        </>
+    )
+
+}
+
+export default ${BusinessName}
