@@ -2,12 +2,13 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, Radio, Space, Divider } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, Radio, Upload, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
+import UploadImg from '@/components/TwelveT/Upload'
 
 /**
  * ${functionName}模块
@@ -308,19 +309,36 @@ const ${BusinessName}: React.FC<{}> = () => {
             <Input />
         </Form.Item>
     #elseif($column.htmlType == "imageUpload")
-        <el-form-item label="${comment}">
-            <imageUpload v-model="form.${field}"/>
-        </el-form-item>
+        <Form.Item
+            {...formItemLayout}
+            label="${comment}"
+            name="${field}"
+        >
+            <UploadImg
+                name='file'
+                // 开启图片剪裁
+                imgCrop={true}
+            >
+            </UploadImg>
+        </Form.Item>
     #elseif($column.htmlType == "fileUpload")
-        <el-form-item label="${comment}">
-            <fileUpload v-model="form.${field}"/>
-        </el-form-item>
+        <Form.Item
+            {...formItemLayout}
+            label="${comment}"
+            name="${field}"
+        >
+            <Upload
+                name='file'
+                maxCount={1}
+            >
+                <Button>上传文件</Button>
+            </Upload>
+        </Form.Item>
     #elseif($column.htmlType == "editor")
         <el-form-item label="${comment}">
             <editor v-model="form.${field}" :min-height="192"/>
     </el-form-item>
     #elseif($column.htmlType == "select" && "" != $dictType)
-
     <Form.Item
         {...formItemLayout}
         label="${comment}"
@@ -328,7 +346,6 @@ const ${BusinessName}: React.FC<{}> = () => {
     >
         <DictionariesSelect type='sys_oauth_client_details' mode={false} />
     </Form.Item>
-
     #elseif($column.htmlType == "select" && $dictType)
     <el-form-item label="${comment}" prop="${field}">
         <el-select v-model="form.${field}" placeholder="请选择${comment}">
