@@ -8,13 +8,14 @@ import { system } from '@/utils/twelvet'
  */
 const DictionariesSelect: React.FC<{
     type: string
+    mode?: 'multiple' | 'tags' | false
 }> = (props) => {
 
     const { Option } = Select
 
     const [treeData, setTreeData] = useState<Array<React.ReactNode>>([])
 
-    const { type } = props
+    const { type, mode = 'multiple' } = props
 
     useEffect(() => {
         makeTree()
@@ -49,7 +50,7 @@ const DictionariesSelect: React.FC<{
     return (
         <Select
             {...props}
-            mode="multiple"
+            mode={mode}
             placeholder='请选择'
             showSearch
             allowClear

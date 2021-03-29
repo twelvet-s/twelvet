@@ -262,7 +262,7 @@ const Dept: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
+                    name="Dept"
                     form={form}
                 >
                     <Form.Item

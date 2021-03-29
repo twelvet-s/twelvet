@@ -407,7 +407,7 @@ const Staff: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
+                    name="Staff"
                     form={form}
                 >
                     <Form.Item

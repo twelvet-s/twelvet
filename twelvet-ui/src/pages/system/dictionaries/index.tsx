@@ -314,7 +314,7 @@ const Dictionaries: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
+                    name="Dictionaries"
                     form={form}
                 >
                     <Form.Item

@@ -161,7 +161,7 @@ const EditCode: React.FC<{
                 textarea: { text: '文本域', status: 'Default' },
                 select: { text: '下拉框', status: 'Default' },
                 radio: { text: '单选框', status: 'Default' },
-                radio: { text: '复选框', status: 'Default' },
+                checkbox: { text: '复选框', status: 'Default' },
                 datetime: { text: '日期控件', status: 'Default' },
                 imageUpload: { text: '图片上传', status: 'Default' },
                 fileUpload: { text: '文件上传', status: 'Default' },

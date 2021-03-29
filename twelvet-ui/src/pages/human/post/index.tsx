@@ -261,7 +261,7 @@ const Post: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
+                    name="Post"
                     form={form}
                 >
                     <Form.Item

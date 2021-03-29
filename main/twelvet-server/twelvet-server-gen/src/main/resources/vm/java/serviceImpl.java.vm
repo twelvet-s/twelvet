@@ -3,7 +3,7 @@ package ${packageName}.service.impl;
 import java.util.List;
 #foreach ($column in $columns)
 #if($column.javaField == 'createTime' || $column.javaField == 'updateTime')
-import com.twelvet.framework.core.utils.DateUtils;
+import com.twelvet.framework.utils.DateUtils;
 #break
 #end
 #end

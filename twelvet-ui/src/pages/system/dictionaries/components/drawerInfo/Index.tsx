@@ -290,7 +290,7 @@ const DrawerInfo: React.FC<{
             >
 
                 <Form
-                    name="Menu"
+                    name="Dictionaries"
                     form={form}
                 >
 

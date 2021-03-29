@@ -4,6 +4,7 @@ import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
 import { Popconfirm, Button, message, Modal, Form, Input, Radio, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
+import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
@@ -81,7 +82,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         <Divider type="vertical" />
 
                         <Popconfirm
-                            onConfirm={() => refRemove(row.dictId)}
+                            onConfirm={() => refRemove(row.${pkColumn.javaField})}
                             title="确定删除吗"
                         >
                             <a href='#'>
@@ -111,7 +112,7 @@ const ${BusinessName}: React.FC<{}> = () => {
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await get${BusinessName}(row.dictId)
+            const { code, msg, data } = await get${BusinessName}(row.${pkColumn.javaField})
             if (code != 200) {
                 return message.error(msg)
             }
@@ -128,19 +129,19 @@ const ${BusinessName}: React.FC<{}> = () => {
 
     /**
      * 移除${functionName}数据
-     * @param row dictIds
+     * @param row ${pkColumn.javaField}
      */
-    const refRemove = async (dictIds: (string | number)[] | string | undefined) => {
+    const refRemove = async (${pkColumn.javaField}: (string | number)[] | string | undefined) => {
         try {
-            if (!dictIds) {
+            if (!${pkColumn.javaField}) {
                 return true
             }
 
             let params
-            if (isArray(dictIds)) {
-                params = dictIds.join(",")
+            if (isArray(${pkColumn.javaField})) {
+                params = ${pkColumn.javaField}.join(",")
             } else {
-                params = dictIds
+                params = ${pkColumn.javaField}
             }
 
             const { code, msg } = await del${BusinessName}(params)
@@ -182,7 +183,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         setLoadingModal(true)
 
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.dictId == 0 ? await add${BusinessName}(fields) : await update${BusinessName}(fields)
+                        const { code, msg } = fields.${pkColumn.javaField} == 0 ? await add${BusinessName}(fields) : await update${BusinessName}(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -210,7 +211,7 @@ const ${BusinessName}: React.FC<{}> = () => {
             <TWTProTable
                 actionRef={acForm}
                 formRef={formRef}
-                rowKey="dictId"
+                rowKey="${pkColumn.javaField}"
                 columns={columns}
                 request={list${BusinessName}}
                 rowSelection={{}}
@@ -272,14 +273,13 @@ const ${BusinessName}: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
                     form={form}
                 >
                     <Form.Item
                         hidden
                         {...formItemLayout}
-                        label="ID"
-                        name="dictId"
+                        label="主键"
+                        name="${pkColumn.javaField}"
                         initialValue={0}
                     >
                         <Input />
@@ -301,9 +301,8 @@ const ${BusinessName}: React.FC<{}> = () => {
     </el-form-item>
     #elseif($column.htmlType == "input")
         <Form.Item
-            hidden
             {...formItemLayout}
-            label="ID"
+            label="${comment}"
             name="${field}"
         >
             <Input />
@@ -321,17 +320,15 @@ const ${BusinessName}: React.FC<{}> = () => {
             <editor v-model="form.${field}" :min-height="192"/>
     </el-form-item>
     #elseif($column.htmlType == "select" && "" != $dictType)
-        <el-form-item label="${comment}" prop="${field}">
-            <el-select v-model="form.${field}" placeholder="请选择${comment}">
-                <el-option
-                    v-for="dict in ${field}Options"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                    #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.dictValue)"#else:value="dict.dictValue"#end
 
-            ></el-option>
-        </el-select>
-    </el-form-item>
+    <Form.Item
+        {...formItemLayout}
+        label="${comment}"
+        name="${field}"
+    >
+        <DictionariesSelect type='sys_oauth_client_details' mode={false} />
+    </Form.Item>
+
     #elseif($column.htmlType == "select" && $dictType)
     <el-form-item label="${comment}" prop="${field}">
         <el-select v-model="form.${field}" placeholder="请选择${comment}">
@@ -383,11 +380,9 @@ const ${BusinessName}: React.FC<{}> = () => {
         </el-form-item>
     #elseif($column.htmlType == "textarea")
         <Form.Item
-            hidden
             {...formItemLayout}
-            label="ID"
+            label="${comment}"
             name="${field}"
-            initialValue={0}
         >
             <Input.TextArea />
         </Form.Item>

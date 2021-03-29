@@ -328,7 +328,7 @@ const Job: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
+                    name="Job"
                     form={form}
                 >
 
