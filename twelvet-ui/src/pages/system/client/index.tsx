@@ -7,7 +7,7 @@ import { FormInstance } from 'antd/lib/form'
 import { pageQuery, remove, getByClientId, insert, update } from './service'
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
-import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
+import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
 
 /**
  * 终端模块

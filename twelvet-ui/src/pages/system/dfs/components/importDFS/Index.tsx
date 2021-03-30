@@ -6,7 +6,7 @@ import styles from './index.less'
 import { RcFile } from 'antd/lib/upload'
 import { uploadFile } from './service'
 
-const DeptSearch: React.FC<{
+const importDFS: React.FC<{
     visible: boolean
     onCancel: () => void
     ok: () => void
@@ -127,4 +127,4 @@ const DeptSearch: React.FC<{
     )
 }
 
-export default DeptSearch
+export default importDFS

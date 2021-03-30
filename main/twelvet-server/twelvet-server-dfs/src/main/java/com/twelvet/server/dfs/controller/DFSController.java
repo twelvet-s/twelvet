@@ -56,7 +56,6 @@ public class DFSController extends TWTController {
      * @param file MultipartFile
      * @return R<SysFile>
      */
-    @AuthIgnore
     @Log(service = "单文件上传", businessType = BusinessType.IMPORT)
     @PostMapping("/upload")
     public R<SysFile> upload(MultipartFile file) {

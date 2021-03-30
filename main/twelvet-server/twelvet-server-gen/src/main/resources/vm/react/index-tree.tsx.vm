@@ -2,14 +2,23 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, Radio, Space, Divider } from 'antd'
+import { Popconfirm, Button, DatePicker, message, Modal, Form, Input, Radio, Upload, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
-import { pageQuery, remove, exportExcel, getBydictId, insert, update, clearCache } from './service'
+import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
+import DictionariesRadio from '@/components/TwelveT/Dictionaries/DictionariesRadio/Index'
+import DictionariesCheckbox from '@/components/TwelveT/Dictionaries/DictionariesCheckbox/Index'
+import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
+import UploadImg from '@/components/TwelveT/Upload'
+import TWT from '@/setting'
+
+const token = JSON.parse(localStorage.getItem(TWT.accessToken))
+
+const { RangePicker } = DatePicker;
 
 /**
- * 字典模块类型管理
+ * ${functionName}模块
  */
 const ${BusinessName}: React.FC<{}> = () => {
 
@@ -48,28 +57,25 @@ const ${BusinessName}: React.FC<{}> = () => {
 
     // Form参数
     const columns: ProColumns = [
-        {
-            title: '字典名称', ellipsis: true, width: 200, valueType: "text", dataIndex: 'dictName',
-        },
-        {
-            title: '字典类型', width: 200, valueType: "text", dataIndex: 'dictType'
-        },
-        {
-            title: '状态',
-            ellipsis: false,
-            width: 80,
-            dataIndex: 'status',
-            valueEnum: {
-                1: { text: '正常', status: 'success' },
-                0: { text: '停用', status: 'error' },
-            },
-        },
-        {
-            title: '备注', search: false, width: 200, valueType: "text", dataIndex: 'remark'
-        },
-        {
-            title: '创建时间', search: false, width: 200, valueType: "dateTime", dataIndex: 'createTime'
-        },
+        #foreach($column in $columns)
+            #set($javaField=$column.javaField)
+            #set($parentheseIndex=$column.columnComment.indexOf("（"))
+            #if($parentheseIndex != -1)
+                #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+            #else
+                #set($comment=$column.columnComment)
+            #end
+            #if($column.pk)
+            #elseif($column.list && $column.htmlType == "datetime")
+                {
+                    title: '${comment}', ellipsis: true, width: 200, valueType: "datetime", dataIndex: '${javaField}',
+                },
+            #elseif($column.list && "" != $javaField)
+                {
+                    title: '${comment}', ellipsis: true, width: 200, valueType: "text", dataIndex: '${javaField}',
+                },
+            #end
+        #end
         {
             title: '操作', fixed: 'right', width: 320, valueType: "option", dataIndex: 'operation', render: (_: string, row: { [key: string]: string }) => {
                 return (
@@ -84,7 +90,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         <Divider type="vertical" />
 
                         <Popconfirm
-                            onConfirm={() => refRemove(row.dictId)}
+                            onConfirm={() => refRemove(row.${pkColumn.javaField})}
                             title="确定删除吗"
                         >
                             <a href='#'>
@@ -101,7 +107,7 @@ const ${BusinessName}: React.FC<{}> = () => {
     ]
 
     /**
-     * 新增字典
+     * 新增${functionName}数据
      * @param row row
      */
     const refPost = async () => {
@@ -109,12 +115,12 @@ const ${BusinessName}: React.FC<{}> = () => {
     }
 
     /**
-     * 获取修改字典信息
+     * 获取修改${functionName}信息
      * @param row row
      */
     const refPut = async (row: { [key: string]: any }) => {
         try {
-            const { code, msg, data } = await getBydictId(row.dictId)
+            const { code, msg, data } = await get${BusinessName}(row.${pkColumn.javaField})
             if (code != 200) {
                 return message.error(msg)
             }
@@ -130,23 +136,23 @@ const ${BusinessName}: React.FC<{}> = () => {
     }
 
     /**
-     * 移除字典
-     * @param row dictIds
+     * 移除${functionName}数据
+     * @param row ${pkColumn.javaField}
      */
-    const refRemove = async (dictIds: (string | number)[] | string | undefined) => {
+    const refRemove = async (${pkColumn.javaField}: (string | number)[] | string | undefined) => {
         try {
-            if (!dictIds) {
+            if (!${pkColumn.javaField}) {
                 return true
             }
 
             let params
-            if (isArray(dictIds)) {
-                params = dictIds.join(",")
+            if (isArray(${pkColumn.javaField})) {
+                params = ${pkColumn.javaField}.join(",")
             } else {
-                params = dictIds
+                params = ${pkColumn.javaField}
             }
 
-            const { code, msg } = await remove(params)
+            const { code, msg } = await del${BusinessName}(params)
 
             if (code !== 200) {
                 return message.error(msg)
@@ -173,7 +179,7 @@ const ${BusinessName}: React.FC<{}> = () => {
     }
 
     /**
-     * 保存数据
+     * 保存${functionName}数据
      */
     const onSave = () => {
         form
@@ -185,7 +191,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         setLoadingModal(true)
 
                         // ID为0则insert，否则将update
-                        const { code, msg } = fields.dictId == 0 ? await insert(fields) : await update(fields)
+                        const { code, msg } = fields.${pkColumn.javaField} == 0 ? await add${BusinessName}(fields) : await update${BusinessName}(fields)
                         if (code != 200) {
                             return message.error(msg)
                         }
@@ -208,29 +214,14 @@ const ${BusinessName}: React.FC<{}> = () => {
         })
     }
 
-    /**
-     * 清空字典緩存
-     */
-    const clear = async () => {
-        try {
-            const { code, msg } = await clearCache()
-            if (code != 200) {
-                return message.error(msg)
-            }
-            message.success(msg)
-        } catch (e) {
-            system.error(e)
-        }
-    }
-
     return (
         <>
             <TWTProTable
                 actionRef={acForm}
                 formRef={formRef}
-                rowKey="dictId"
+                rowKey="${pkColumn.javaField}"
                 columns={columns}
-                request={pageQuery}
+                request={list${BusinessName}}
                 rowSelection={{}}
                 beforeSearchSubmit={(params) => {
                     // 分隔搜索参数
@@ -266,7 +257,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                     <Popconfirm
                         title="是否导出数据"
                         onConfirm={() => {
-                            exportExcel({
+                            export${BusinessName}({
                                 ...formRef.current?.getFieldsValue()
                             })
                         }}
@@ -281,7 +272,7 @@ const ${BusinessName}: React.FC<{}> = () => {
             />
 
             <Modal
-                title={`${modal.title}字典`}
+                title={`${modal.title}${functionName}`}
                 visible={modal.visible}
                 okText={`${modal.title}`}
                 confirmLoading={loadingModal}
@@ -290,18 +281,199 @@ const ${BusinessName}: React.FC<{}> = () => {
             >
 
                 <Form
-                    name="Menu"
                     form={form}
                 >
                     <Form.Item
                         hidden
                         {...formItemLayout}
-                        label="字典ID"
-                        name="dictId"
+                        label="主键"
+                        name="${pkColumn.javaField}"
                         initialValue={0}
                     >
                         <Input />
                     </Form.Item>
+                    #foreach($column in $columns)
+                        #set($field=$column.javaField)
+                        #if($column.insert && !$column.pk)
+                            #if(($column.usableColumn) || (!$column.superColumn))
+                                #set($parentheseIndex=$column.columnComment.indexOf("（"))
+                                #if($parentheseIndex != -1)
+                                    #set($comment=$column.columnComment.substring(0, $parentheseIndex))
+                                #else
+                                    #set($comment=$column.columnComment)
+                                #end
+                                #set($dictType=$column.dictType)
+                                #if("" != $treeParentCode && $column.javaField == $treeParentCode)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                #elseif($column.htmlType == "input")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                #elseif($column.htmlType == "imageUpload")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <UploadImg
+                                            name='file'
+                                            maxCount={1}
+                                            // 开启图片剪裁
+                                            imgCrop={true}
+                                        >
+                                        </UploadImg>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "fileUpload")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        maxCount={1}
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "editor")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "select" && "" != $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <DictionariesSelect type='${column.javaField}' mode={false} />
+                                    </Form.Item>
+                                #elseif($column.htmlType == "select" && $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "checkbox" && "" != $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "checkbox" && $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "radio" && "" != $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "radio" && $dictType)
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Upload
+                                            name='file'
+                                            headers={{
+                                                Authorization: `Bearer ${token.access_token}`
+                                            }}
+                                            maxCount={1}
+                                        >
+                                            <Button>上传文件</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                #elseif($column.htmlType == "datetime")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <RangePicker />
+                                    </Form.Item>
+                                #elseif($column.htmlType == "textarea")
+                                    <Form.Item
+                                        {...formItemLayout}
+                                        label="${comment}"
+                                        name="${field}"
+                                    >
+                                        <Input.TextArea />
+                                    </Form.Item>
+                                #end
+                            #end
+                        #end
+                    #end
 
                 </Form>
 
@@ -311,4 +483,4 @@ const ${BusinessName}: React.FC<{}> = () => {
 
 }
 
-export default Dictionaries
+export default ${BusinessName}

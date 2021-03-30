@@ -9,7 +9,7 @@ import JobStatus from './components/jobStatusSwitch/Index'
 import Details from './components/details/Index'
 import { FormInstance } from 'antd/lib/form'
 import { isArray } from 'lodash'
-import DictionariesSelect from '@/components/TwelveT/DictionariesSelect/Index'
+import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
 
 /**
  * 定时任务
