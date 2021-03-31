@@ -51,12 +51,11 @@ public class DFSController extends TWTController {
     }
 
     /**
-     * 单文件上传API
+     * 系统单文件上传API
      *
      * @param file MultipartFile
      * @return R<SysFile>
      */
-    @Log(service = "单文件上传", businessType = BusinessType.IMPORT)
     @PostMapping("/upload")
     public R<SysFile> upload(MultipartFile file) {
         // 上传并返回访问地址
@@ -71,6 +70,21 @@ public class DFSController extends TWTController {
         sysFile.setUrl(url);
 
         return R.ok(sysFile);
+    }
+
+    /**
+     * 单文件上传
+     *
+     * @param file MultipartFile
+     * @return R<SysFile>
+     */
+    @PostMapping("/commonUpload")
+    @Log(service = "单文件上传", businessType = BusinessType.IMPORT)
+    public AjaxResult commonUpload(MultipartFile file) {
+        // 上传并返回访问地址
+        SysDfs sysDfs = sysFileService.uploadFile(file);
+        String url = domain + File.separator + sysDfs.getPath();
+        return AjaxResult.success("上传成功", url);
     }
 
     /**

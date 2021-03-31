@@ -179,11 +179,11 @@ public class VelocityUtils {
         } else if (template.contains("sql.vm")) {
             fileName = businessName + "Menu.sql";
         } else if (template.contains("api.ts.vm")) {
-            fileName = StringUtils.format("{}/api/{}/{}.ts", reactPath, moduleName, businessName);
+            fileName = StringUtils.format("{}/pages/{}/{}/service.ts", reactPath, moduleName, businessName);
         } else if (template.contains("index.tsx.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.tsx", reactPath, moduleName, businessName);
+            fileName = StringUtils.format("{}/pages/{}/{}/index.tsx", reactPath, moduleName, businessName);
         } else if (template.contains("index-tree.tsx.vm")) {
-            fileName = StringUtils.format("{}/views/{}/{}/index.tsx", reactPath, moduleName, businessName);
+            fileName = StringUtils.format("{}/pages/{}/{}/index.tsx", reactPath, moduleName, businessName);
         }
         return fileName;
     }

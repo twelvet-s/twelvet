@@ -12,6 +12,7 @@ import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 import UploadImg from '@/components/TwelveT/Upload'
 import TWT from '@/setting'
+import { getDvaApp } from 'umi'
 
 const token = JSON.parse(localStorage.getItem(TWT.accessToken))
 
@@ -276,6 +277,8 @@ const ${BusinessName}: React.FC<{}> = () => {
                 confirmLoading={loadingModal}
                 onOk={onSave}
                 onCancel={handleCancel}
+                // 销毁组件，要求重新装载
+                destroyOnClose
             >
 
                 <Form
@@ -329,7 +332,7 @@ const ${BusinessName}: React.FC<{}> = () => {
         <Form.Item
             {...formItemLayout}
             label="${comment}"
-            rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
+            rules={[{ required: ${isRequired}, message: '请上传${comment}' }]}
             name="${field}"
         >
             <UploadImg
@@ -337,15 +340,34 @@ const ${BusinessName}: React.FC<{}> = () => {
                 maxCount={1}
                 // 开启图片剪裁
                 imgCrop={true}
-                action={''}
+                action={TWT.uploadUrl}
             >
             </UploadImg>
         </Form.Item>
     #elseif($column.htmlType == "fileUpload")
         <Form.Item
+            getValueFromEvent={async (value) => {
+                // 对上传信息进行格式化，获取正确的信息
+                if (value && value.fileList) {
+                    const [firstFile] = value.fileList
+                    // 存在参数进行格式化
+                    if (firstFile && firstFile.response) {
+                        const { code, msg, data } = firstFile.response
+
+                        if (code != 200) {
+                            message.error(msg)
+                            return null
+                        }
+                        message.success(msg)
+                        return data
+                    }
+
+                }
+                return null;
+            }}
             {...formItemLayout}
             label="${comment}"
-            rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
+            rules={[{ required: ${isRequired}, message: '请上传${comment}' }]}
             name="${field}"
         >
             <Upload
@@ -354,6 +376,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                     Authorization: `Bearer ${token.access_token}`
                 }}
                 maxCount={1}
+                action={TWT.uploadUrl}
             >
                 <Button>上传文件</Button>
             </Upload>
@@ -382,15 +405,7 @@ const ${BusinessName}: React.FC<{}> = () => {
             rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
             name="${field}"
         >
-            <Upload
-                name='file'
-                headers={{
-                    Authorization: `Bearer ${token.access_token}`
-                }}
-                maxCount={1}
-            >
-                <Button>上传文件</Button>
-            </Upload>
+            <DictionariesSelect type='${dictType}' mode={false} />
         </Form.Item>
     #elseif($column.htmlType == "checkbox" && $dictType)
         <Form.Item

@@ -92,7 +92,9 @@ class Upload extends Component<UploadType> {
         if (file.length > 0 && file[0].response) {
 
             const uploadFile: UploadFile = file[0]
-            const { code, msg, imgUrl } = uploadFile.response
+            const { code, msg, imgUrl, data } = uploadFile.response
+
+            const imgPath = imgUrl ? imgUrl : data
 
             // 续签失败将要求重新登录
             if (code == 401) {
@@ -108,7 +110,7 @@ class Upload extends Component<UploadType> {
                         return f
                     }
                     // 设置图片url
-                    f.url = imgUrl
+                    f.url = imgPath
                     return f
                 })
 
@@ -116,7 +118,7 @@ class Upload extends Component<UploadType> {
                 if (this.props.onChange) {
                     if (this.props.maxCount === 1) {
                         // 单文件将直接设置为当前响应地址
-                        this.props.onChange(imgUrl)
+                        this.props.onChange(imgPath)
                     } else {
                         const values = fileList.map(v => {
                             return v.url
@@ -127,7 +129,7 @@ class Upload extends Component<UploadType> {
                 }
 
                 // 上传成功后需要执行的方法
-                if(this.props.success){
+                if (this.props.success) {
                     this.props.success()
                 }
 
@@ -182,7 +184,7 @@ class Upload extends Component<UploadType> {
                 // 最大上传数量
                 maxCount={maxCount}
                 listType={listType ? listType : 'picture-card'}
-                action={`${TWT.action}${action}`}
+                action={`${action}`}
                 // 查看触发
                 onPreview={this.handlePreview}
                 // 处理文件上传完成后

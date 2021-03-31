@@ -11,7 +11,8 @@ const TWT: any = {
     isDev,
     // api请求前缀
     urlPrefix,
-    action: `${urlPrefix}/`
+    action: `${urlPrefix}/`,
+    uploadUrl: `${urlPrefix}/dfs/commonUpload`
 }
 
 export default TWT

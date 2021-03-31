@@ -51,7 +51,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@ant-design/pro-table": "^2.9.16",
     "@umijs/route-utils": "^1.0.33",
-    "antd": "4.12.3",
+    "antd": "4.14",
     "antd-img-crop": "^3.13.2",
     "classnames": "^2.2.6",
     "echarts": "^4.8.0",

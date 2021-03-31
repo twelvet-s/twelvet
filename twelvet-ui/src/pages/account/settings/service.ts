@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import TWT from '@/setting'
 
 // 请求的控制器名称
 const controller = "/system/user/profile";
@@ -15,7 +16,7 @@ export async function queryCurrent() {
 }
 
 // 更新用户头像API
-export const updateAvatar = `${controller}/avatar`;
+export const updateAvatar = `${TWT.action}system/user/profile/avatar`;
 
 /**
  * 修改用户信息
