@@ -8,7 +8,7 @@ import styles from './BaseView.less'
 // 图片剪辑样式
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-import Upload from '@/components/TwelveT/Upload'
+import UploadTWT from '@/components/TwelveT/Upload'
 import { update, updateAvatar } from '../service'
 import { system } from '@/utils/twelvet'
 
@@ -108,7 +108,7 @@ class BaseView extends Component<BaseViewProps> {
                             name="avatar"
                             label={<FormattedMessage id='accountandsettings.basic.avatar' />}
                         >
-                            <Upload
+                            <UploadTWT
                                 name='avatarFile'
                                 // 开启图片剪裁
                                 imgCrop={true}
@@ -119,7 +119,7 @@ class BaseView extends Component<BaseViewProps> {
                                     this.putUser()
                                 }}
                             >
-                            </Upload>
+                            </UploadTWT>
                         </Form.Item>
                     </Form>
                 </div>

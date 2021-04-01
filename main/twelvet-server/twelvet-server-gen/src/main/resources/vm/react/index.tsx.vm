@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, DatePicker, message, Modal, Form, Input, Radio, Upload, Space, Divider } from 'antd'
+import { Popconfirm, Button, DatePicker, message, Modal, Form, Input, Upload, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
 import DictionariesRadio from '@/components/TwelveT/Dictionaries/DictionariesRadio/Index'
@@ -10,7 +10,7 @@ import DictionariesCheckbox from '@/components/TwelveT/Dictionaries/Dictionaries
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
 import { system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
-import UploadImg from '@/components/TwelveT/Upload'
+import UploadTWT from '@/components/TwelveT/Upload'
 import TWT from '@/setting'
 import { getDvaApp } from 'umi'
 
@@ -24,14 +24,6 @@ const ${BusinessName}: React.FC<{}> = () => {
     // 显示Modal
     const [modal, setModal] = useState<{ title: string, visible: boolean }>({ title: ``, visible: false })
 
-    const [drawerInfo, setDrawerInfo] = useState<{
-        drawerInfoKey: string
-        visible: boolean
-    }>({
-        drawerInfoKey: '',
-        visible: false
-    })
-
     // 是否执行Modal数据操作中
     const [loadingModal, setLoadingModal] = useState<boolean>(false)
 
@@ -40,8 +32,6 @@ const ${BusinessName}: React.FC<{}> = () => {
     const formRef = useRef<FormInstance>()
 
     const [form] = Form.useForm<FormInstance>()
-
-    const { TextArea } = Input
 
     const formItemLayout = {
         labelCol: {
@@ -335,51 +325,30 @@ const ${BusinessName}: React.FC<{}> = () => {
             rules={[{ required: ${isRequired}, message: '请上传${comment}' }]}
             name="${field}"
         >
-            <UploadImg
+            <UploadTWT
                 name='file'
                 maxCount={1}
                 // 开启图片剪裁
                 imgCrop={true}
                 action={TWT.uploadUrl}
             >
-            </UploadImg>
+            </UploadTWT>
         </Form.Item>
     #elseif($column.htmlType == "fileUpload")
         <Form.Item
-            getValueFromEvent={async (value) => {
-                // 对上传信息进行格式化，获取正确的信息
-                if (value && value.fileList) {
-                    const [firstFile] = value.fileList
-                    // 存在参数进行格式化
-                    if (firstFile && firstFile.response) {
-                        const { code, msg, data } = firstFile.response
-
-                        if (code != 200) {
-                            message.error(msg)
-                            return null
-                        }
-                        message.success(msg)
-                        return data
-                    }
-
-                }
-                return null;
-            }}
             {...formItemLayout}
             label="${comment}"
             rules={[{ required: ${isRequired}, message: '请上传${comment}' }]}
             name="${field}"
         >
-            <Upload
+            <UploadTWT
                 name='file'
-                headers={{
-                    Authorization: `Bearer ${token.access_token}`
-                }}
                 maxCount={1}
+                listType={'picture'}
                 action={TWT.uploadUrl}
+                title={<Button> 上传文件</Button>}
             >
-                <Button>上传文件</Button>
-            </Upload>
+            </UploadTWT>
         </Form.Item>
     #elseif($column.htmlType == "editor")
         <Form.Item

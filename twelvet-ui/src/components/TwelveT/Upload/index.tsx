@@ -12,9 +12,9 @@ import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 
 /**
- * 图片上传组件
+ * 上传组件
  */
-class Upload extends Component<UploadType> {
+class UploadTWT extends Component<UploadType> {
 
     state = {
         previewImage: '',
@@ -53,7 +53,7 @@ class Upload extends Component<UploadType> {
     }
 
     /**
-     * 获取图片流
+     * 获取文件流
      * @param file 
      */
     getBase64 = (file: Blob) => {
@@ -66,10 +66,15 @@ class Upload extends Component<UploadType> {
     }
 
     /**
-     * 查看图片详情
+     * 查看文件详情
      * @param file 
      */
     handlePreview = async (file: any) => {
+
+        if (this.props.listType && this.props.listType != 'picture-card') {
+            return false
+        }
+
         if (!file.url && !file.preview) {
             file.preview = await this.getBase64(file.originFileObj);
         }
@@ -86,7 +91,7 @@ class Upload extends Component<UploadType> {
      * @param param
      */
     handleChange = async ({ fileList }: UploadChangeParam) => {
-        // 获取最后一张图片
+        // 获取最后一张文件
         const file: Array<UploadFile> = fileList.slice(-1)
 
         if (file.length > 0 && file[0].response) {
@@ -109,7 +114,7 @@ class Upload extends Component<UploadType> {
                     if (f.uid != uploadFile.uid) {
                         return f
                     }
-                    // 设置图片url
+                    // 设置文件url
                     f.url = imgPath
                     return f
                 })
@@ -231,4 +236,4 @@ class Upload extends Component<UploadType> {
 
 }
 
-export default Upload
+export default UploadTWT

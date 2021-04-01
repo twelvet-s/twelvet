@@ -2,7 +2,7 @@ export interface UploadType {
     onChange?: any
     value?: any
     name?: string
-    title?: string
+    title?: any
     maxCount: number
     action: string
     listType?: 'picture-card' | 'picture'
