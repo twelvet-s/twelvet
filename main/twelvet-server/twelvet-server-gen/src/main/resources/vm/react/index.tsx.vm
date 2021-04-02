@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
 import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined, SettingOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, DatePicker, message, Modal, Form, Input, Upload, Space, Divider } from 'antd'
+import { Popconfirm, Button, message, Modal, Form, Input, Upload, Space, Divider } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
 import DictionariesRadio from '@/components/TwelveT/Dictionaries/DictionariesRadio/Index'
@@ -13,8 +13,8 @@ import { isArray } from 'lodash'
 import UploadTWT from '@/components/TwelveT/Upload'
 import TWT from '@/setting'
 import { getDvaApp } from 'umi'
-
-const token = JSON.parse(localStorage.getItem(TWT.accessToken))
+import DatePickerTWT from '@/components/TwelveT/DatePicker/Index'
+import moment from 'moment'
 
 /**
  * ${functionName}模块
@@ -395,12 +395,16 @@ const ${BusinessName}: React.FC<{}> = () => {
     </Form.Item>
     #elseif($column.htmlType == "datetime")
         <Form.Item
+            // 格式化时间
+            getValueFromEvent={(date) => {
+                return moment(date).valueOf()
+            }}
             {...formItemLayout}
             label="${comment}"
             rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
             name="${field}"
         >
-            <DatePicker />
+            <DatePickerTWT showTime />
         </Form.Item>
     #elseif($column.htmlType == "textarea")
         <Form.Item
