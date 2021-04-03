@@ -32,6 +32,10 @@ const importDFS: React.FC<{
     const handleUpload = async () => {
         try {
 
+            if(files.length <= 0){
+                return message.warning('请先选择需上传的图片')
+            }
+
             setUploadLoading(true)
 
             // 表单数据
