@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { download } from '@/utils/request'
 
 /**
  * 查询${functionName}列表
@@ -51,4 +51,12 @@ export function del${BusinessName}(${pkColumn.javaField}: string | number) {
     return request(`/${moduleName}/${businessName}/${${pkColumn.javaField}}`, {
         method: `delete`
     })
+}
+
+/**
+ * 导出数据
+ * @param params
+ */
+export async function exportDfs(params?: { [key: string]: any }) {
+    return download(`/${moduleName}/${businessName}/export`, params);
 }
