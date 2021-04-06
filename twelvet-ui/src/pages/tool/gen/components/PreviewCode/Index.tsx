@@ -134,11 +134,11 @@ const PreviewCode: React.FC<{
 
                         </Tabs.TabPane>
 
-                        <Tabs.TabPane tab="Index.tsx" key="7">
+                        <Tabs.TabPane tab={codeData['vm/react/index.tsx.vm'] ? 'index.tsx' : 'index-tree.tsx'} key="7">
                             <pre className={styles.preCode}>
                                 <code>
 
-                                    {codeData['vm/react/index.tsx.vm']}
+                                    {codeData['vm/react/index.tsx.vm'] ? codeData['vm/react/index.tsx.vm'] : codeData['vm/react/index-tree.tsx.vm']}
 
                                 </code>
                             </pre>

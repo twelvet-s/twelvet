@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Tabs, Tooltip, TreeSelect } from 'antd'
+import { Button, Cascader, Col, Divider, Drawer, Input, message, Row, Select, Tabs, TreeSelect } from 'antd'
 import Form, { FormInstance } from 'antd/lib/form'
 import { getInfo, getMenus, getOptionselect, putGen } from './service'
 import { makeTree, system } from '@/utils/twelvet'
 import { EditableProTable } from '@ant-design/pro-table'
 import ProSkeleton from '@ant-design/pro-skeleton';
 import TagList from './TagList'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 
 /**
  * 生成代码编辑
@@ -336,10 +335,10 @@ const EditCode: React.FC<{
      */
     const onSave = () => {
         try {
-            setLoading(true)
             tableForm
                 .validateFields()
                 .then(() => {
+                    setLoading(true)
                     form
                         .validateFields()
                         .then(async (params) => {
@@ -595,13 +594,7 @@ const EditCode: React.FC<{
                                             <Form.Item
                                                 {...formItemLayout}
                                                 name="packageName"
-                                                label={
-                                                    <Tooltip title="
-                                                        java的包路径，例如 com.twelvet.server.system
-                                                    ">
-                                                        生成包路径 <QuestionCircleOutlined />
-                                                    </Tooltip>
-                                                }
+                                                label={'生成包路径'}
                                                 rules={[
                                                     {
                                                         required: true,
@@ -619,13 +612,7 @@ const EditCode: React.FC<{
                                             <Form.Item
                                                 {...formItemLayout}
                                                 name="moduleName"
-                                                label={
-                                                    <Tooltip title="
-                                                        可理解为子系统名，例如 system
-                                                    ">
-                                                        生成模块名 <QuestionCircleOutlined />
-                                                    </Tooltip>
-                                                }
+                                                label={'生成模块名'}
                                                 rules={[
                                                     {
                                                         required: true,
@@ -640,13 +627,7 @@ const EditCode: React.FC<{
                                             <Form.Item
                                                 {...formItemLayout}
                                                 name="businessName"
-                                                label={
-                                                    <Tooltip title="
-                                                        可理解为功能英文名，例如 user
-                                                    ">
-                                                        生成业务名 <QuestionCircleOutlined />
-                                                    </Tooltip>
-                                                }
+                                                label={'生成业务名'}
                                                 rules={[
                                                     {
                                                         required: true,
@@ -664,13 +645,7 @@ const EditCode: React.FC<{
                                             <Form.Item
                                                 {...formItemLayout}
                                                 name="functionName"
-                                                label={
-                                                    <Tooltip title="
-                                                        用作类描述，例如 用户
-                                                    ">
-                                                        生成功能名 <QuestionCircleOutlined />
-                                                    </Tooltip>
-                                                }
+                                                label={'生成功能名'}
                                                 rules={[
                                                     {
                                                         required: true,
@@ -686,13 +661,7 @@ const EditCode: React.FC<{
                                             <Form.Item
                                                 {...formItemLayout}
                                                 name="parentMenuId"
-                                                label={
-                                                    <Tooltip title="
-                                                        分配到指定菜单下，例如 系统管理
-                                                    ">
-                                                        上级菜单 <QuestionCircleOutlined />
-                                                    </Tooltip>
-                                                }
+                                                label={'上级菜单'}
                                             >
                                                 <TreeSelect
                                                     allowClear
@@ -718,13 +687,7 @@ const EditCode: React.FC<{
                                                         <Form.Item
                                                             {...formItemLayout}
                                                             name="subTable"
-                                                            label={
-                                                                <Tooltip title="
-                                                                    关联子表的表名/外键， 如：sys_user
-                                                                ">
-                                                                    上级菜单 <QuestionCircleOutlined />
-                                                                </Tooltip>
-                                                            }
+                                                            label={'关联子表名/外键'}
                                                             rules={[
                                                                 {
                                                                     required: true,
@@ -753,13 +716,7 @@ const EditCode: React.FC<{
                                                         <Form.Item
                                                             {...formItemLayout}
                                                             name="treeCode"
-                                                            label={
-                                                                <Tooltip title="
-                                                                    树显示的编码字段名， 如：dept_id
-                                                                ">
-                                                                    树编码字段 <QuestionCircleOutlined />
-                                                                </Tooltip>
-                                                            }
+                                                            label={'树编码字段'}
                                                             rules={[
                                                                 {
                                                                     required: true,
@@ -784,13 +741,7 @@ const EditCode: React.FC<{
                                                         <Form.Item
                                                             {...formItemLayout}
                                                             name="treeParentCode"
-                                                            label={
-                                                                <Tooltip title="
-                                                                    树显示的父编码字段名， 如：parent_Id
-                                                                ">
-                                                                    树父编码字段  <QuestionCircleOutlined />
-                                                                </Tooltip>
-                                                            }
+                                                            label={'树父编码字段'}
                                                             rules={[
                                                                 {
                                                                     required: true,
@@ -817,13 +768,7 @@ const EditCode: React.FC<{
                                                         <Form.Item
                                                             {...formItemLayout}
                                                             name="treeName"
-                                                            label={
-                                                                <Tooltip title="
-                                                                    树节点的显示名称字段名， 如：dept_name
-                                                                ">
-                                                                    树名称字段  <QuestionCircleOutlined />
-                                                                </Tooltip>
-                                                            }
+                                                            label={'树名称字段'}
                                                             rules={[
                                                                 {
                                                                     required: true,
