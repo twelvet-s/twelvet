@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react'
 import { ProColumns } from '@/components/TwelveT/ProTable/Table'
 import TWTProTable, { ActionType } from '@/components/TwelveT/ProTable/Index'
-import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, TreeSelect, CloseOutlined } from '@ant-design/icons'
-import { Popconfirm, Button, message, Modal, Form, Input, Space, Divider } from 'antd'
+import { DeleteOutlined, FundProjectionScreenOutlined, PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
+import { Popconfirm, Button, message, Modal, Form, Input, Space, Divider, TreeSelect } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import DictionariesSelect from '@/components/TwelveT/Dictionaries/DictionariesSelect/Index'
 import DictionariesRadio from '@/components/TwelveT/Dictionaries/DictionariesRadio/Index'
 import DictionariesCheckbox from '@/components/TwelveT/Dictionaries/DictionariesCheckbox/Index'
 import { list${BusinessName}, get${BusinessName}, del${BusinessName}, add${BusinessName}, update${BusinessName}, export${BusinessName} } from "./service";
-import { system } from '@/utils/twelvet'
+import { makeTree, system } from '@/utils/twelvet'
 import { isArray } from 'lodash'
 import UploadTWT from '@/components/TwelveT/Upload'
 import TWT from '@/setting'
@@ -45,6 +45,8 @@ const ${BusinessName}: React.FC<{}> = () => {
             sm: { span: 18 },
         },
     }
+
+    const [${businessName}Options, set${BusinessName}Options] = useState<[]>()
 
     // Form参数
     const columns: ProColumns = [
@@ -131,6 +133,7 @@ const ${BusinessName}: React.FC<{}> = () => {
      */
     const refPost = async () => {
         setModal({ title: "新增", visible: true })
+        getTreeselect()
     }
 
     /**
@@ -152,10 +155,42 @@ const ${BusinessName}: React.FC<{}> = () => {
             // 赋值表单数据
             form.setFieldsValue(data)
 
+            getTreeselect()
+
             // 设置Modal状态
             setModal({ title: "修改", visible: true })
 
         } catch (e) {
+            system.error(e)
+        }
+    }
+
+    /** 查询下拉树结构 */
+    const getTreeselect = async () => {
+
+        try{
+            const { code, msg, data } = await list${BusinessName}({})
+            if (code != 200) {
+                return message.error(msg)
+            }
+
+            const tree = [{
+                key: 0,
+                title: '顶级节点',
+                value: 0,
+                children: makeTree({
+                    dataSource: data.records,
+                    id: `${treeCode}`,
+                    parentId: '${treeParentCode}',
+                    enhance: {
+                        key: `${treeCode}`,
+                        title: `${treeCode}`,
+                        value: `${treeCode}`
+                    }
+                })
+            }]
+            set${BusinessName}Options(tree)
+        }catch (e){
             system.error(e)
         }
     }
@@ -356,7 +391,13 @@ const ${BusinessName}: React.FC<{}> = () => {
                         rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
                         name="${field}"
                     >
-                        <TreeSelect />
+                        <TreeSelect
+                            placeholder={"请选择${comment}"}
+                            showSearch
+                            treeLine
+                            treeNodeFilterProp="title"
+                            treeData={${businessName}Options}
+                        />
                     </Form.Item>
 #elseif($column.htmlType == "input")
                     <Form.Item
@@ -365,7 +406,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
                         name="${field}"
                     >
-                        <Input />
+                        <Input placeholder={"请输入${comment}"} />
                     </Form.Item>
 #elseif($column.htmlType == "imageUpload")
                     <Form.Item

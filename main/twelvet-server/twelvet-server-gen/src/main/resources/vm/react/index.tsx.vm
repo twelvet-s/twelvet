@@ -346,7 +346,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                         rules={[{ required: ${isRequired}, message: '${comment}不能为空' }]}
                         name="${field}"
                     >
-                        <Input />
+                        <Input placeholder={"请输入${comment}"} />
                     </Form.Item>
 #if($column.htmlType == "input")
                     <Form.Item

@@ -50,10 +50,11 @@ export const makeTree = (params: {
     const parentId = params.parentId || 'parentId'
     const children = params.children || 'children'
     const enhance = params.enhance || {}
-    const rootId = params.rootId || 0
 
     // 对源数据深克隆
     const cloneData = JSON.parse(JSON.stringify(params.dataSource))
+
+    
     // 循环所有项
     const treeData = cloneData.filter((father: { [key: string]: any; children: any }) => {
         // 增强参数
@@ -67,15 +68,23 @@ export const makeTree = (params: {
             return father[id] === child[parentId]
         })
 
+
         // 放进子分类
         if (branchArr.length > 0) {
             father[children] = branchArr
         }
+
         // 返回第一层
-        return father[parentId] === rootId
+        return true
     })
 
-    return treeData.length > 0 ? treeData : params.dataSource
+    if (treeData.length > 0) {
+        return treeData
+    }
+
+    system.error('树列表制作可能出错了,请检查是否正确数据')
+
+    return cloneData
 }
 
 /**
