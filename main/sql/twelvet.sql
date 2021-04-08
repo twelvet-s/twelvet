@@ -237,19 +237,19 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1072 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1079 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '/system', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-03 11:05:10', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, '/system', NULL, 0, 'M', 1, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-19 14:46:45', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '人力管理', 0, 2, '/human', NULL, 0, 'M', 1, 1, '', 'icon-human-resources', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 11:38:41', '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '工具箱', 0, 4, '/tool', NULL, 0, 'M', 1, 1, '', 'icon-tool-box', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 16:25:19', '系统工具目录');
 INSERT INTO `sys_menu` VALUES (4, '日志管理', 0, 3, '/log', '', 0, 'M', 1, 1, '', 'icon-log', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 20:48:12', '日志管理菜单');
-INSERT INTO `sys_menu` VALUES (5, 'TwelveT', 0, 5, 'https://www.twelvet.cn', NULL, 1, 'M', 0, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-30 21:33:04', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (5, 'TwelveT', 0, 5, 'https://www.twelvet.cn', NULL, 1, 'M', 0, 1, '', 'icon-system', 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-13 17:39:36', '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '职员管理', 2, 1, '/human/staff', './human/staff', 1, 'C', 1, 1, 'system:user:list', 'icon-team', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 11:47:39', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 2, 2, '/human/role', './human/role', 0, 'C', 1, 1, 'system:role:list', 'icon-role', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 11:39:15', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 2, 'menu', 'system/menu', 0, 'C', 1, 1, 'system:menu:list', 'icon-menu', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-30 22:55:55', '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 2, 'menu', 'system/menu', 0, 'C', 1, 1, 'system:menu:list', 'icon-menu', 'admin', '2018-03-16 11:33:00', 'admin', '2021-03-26 12:30:06', '菜单管理菜单');
 INSERT INTO `sys_menu` VALUES (103, '部门管理', 2, 4, '/human/dept', './human/dept', 0, 'C', 1, 1, 'system:dept:list', 'icon-dept', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 11:39:40', '部门管理菜单');
 INSERT INTO `sys_menu` VALUES (104, '岗位管理', 2, 5, '/human/post', './human/post', 0, 'C', 1, 1, 'system:post:list', 'icon-post', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 11:40:02', '岗位管理菜单');
 INSERT INTO `sys_menu` VALUES (105, '字典管理', 1, 3, '/system/dictionaries', './system/dictionaries', 1, 'C', 0, 1, 'system:dictionaries:list', 'icon-dictionaries', 'admin', '2018-03-16 11:33:00', 'admin', '2020-11-14 21:46:40', '字典管理菜单');
@@ -310,6 +310,13 @@ INSERT INTO `sys_menu` VALUES (1063, '日志导出', 1061, 4, '#', '', 1, 'F', 1
 INSERT INTO `sys_menu` VALUES (1064, '操作查询', 1061, 1, '#', '', 1, 'F', 1, 1, 'system:operlog:query', NULL, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1066, '图形化编辑器', 3, 1, '/tool/graphicalEditor', NULL, 1, 'M', 1, 1, NULL, 'icon-graphical-edit', 'admin', '2020-11-14 16:25:44', 'admin', NULL, '');
 INSERT INTO `sys_menu` VALUES (1071, '文件管理', 1, 6, '/system/dfs', '/system/dfs', 1, 'C', 1, 1, 'asd', 'icon-DFS', 'admin', '2020-12-31 17:16:37', 'admin', '2021-01-02 20:03:42', '');
+INSERT INTO `sys_menu` VALUES (1072, '代码生成器', 3, 2, '/tool/gen', '/tool/gen', 1, 'C', 1, 1, 'tool:gen:list', 'icon-gen-code', 'admin', '2021-03-20 22:15:51', 'admin', '2021-03-22 00:32:20', '');
+INSERT INTO `sys_menu` VALUES (1073, '生成查询', 1072, 1, '', NULL, 1, 'F', 1, 1, 'tool:gen:query', '#', 'admin', '2021-03-20 23:01:21', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1074, '生成修改', 1072, 2, '', NULL, 1, 'F', 1, 1, 'tool:gen:edit', '#', 'admin', '2021-03-20 23:01:39', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1075, '导入代码 ', 1072, 3, '', NULL, 1, 'F', 1, 1, 'tool:gen:import', '#', 'admin', '2021-03-20 23:02:37', 'admin', '2021-03-20 23:02:46', '');
+INSERT INTO `sys_menu` VALUES (1076, '生成删除', 1072, 4, '', NULL, 1, 'F', 1, 1, '	 tool:gen:remove', '#', 'admin', '2021-03-20 23:03:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1077, '预览代码', 1072, 5, '', NULL, 1, 'F', 1, 1, 'tool:gen:preview', '#', 'admin', '2021-03-20 23:03:22', 'admin', '2021-03-20 23:03:30', '');
+INSERT INTO `sys_menu` VALUES (1078, '生成代码', 1072, 6, '', NULL, 1, 'F', 1, 1, 'tool:gen:code', '#', 'admin', '2021-03-20 23:03:46', 'admin', '2021-03-22 11:34:47', '');
 
 -- ----------------------------
 -- Table structure for sys_oauth_client_details
