@@ -26,16 +26,10 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
 
-        <!-- SpringBoot Web -->
+        <!-- undertow容器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!--Mybatis-->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
         <!-- pool 对象池 -->

@@ -24,6 +24,13 @@ export async function login(params: { [key: string]: string | number }) {
             scope: 'server',
             client_id: 'twelvet',
             client_secret: '123456'
+        },
+        data: {
+            ...params,
+            grant_type: 'password',
+            scope: 'server',
+            client_id: 'twelvet',
+            client_secret: '123456'
         }
     })
 }

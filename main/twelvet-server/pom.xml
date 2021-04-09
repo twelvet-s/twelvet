@@ -19,6 +19,7 @@
         <module>twelvet-server-job</module>
         <module>twelvet-server-dfs</module>
         <module>twelvet-server-gen</module>
+        <module>twelvet-server-demo</module>
     </modules>
 
     <dependencies>
@@ -47,22 +48,16 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <!-- Mysql Connector -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
         <!--公共安全配置模块-->
         <dependency>
             <groupId>com.twelvet</groupId>
             <artifactId>twelvet-framework-security</artifactId>
         </dependency>
 
-        <!--默认采用多数据-->
+        <!--Swagger接口文档-->
         <dependency>
             <groupId>com.twelvet</groupId>
-            <artifactId>twelvet-framework-datasource</artifactId>
+            <artifactId>twelvet-framework-swagger</artifactId>
         </dependency>
 
     </dependencies>

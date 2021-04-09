@@ -32,6 +32,12 @@
             <artifactId>twelvet-api-job</artifactId>
         </dependency>
 
+        <!--默认采用多数据-->
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-framework-datasource</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

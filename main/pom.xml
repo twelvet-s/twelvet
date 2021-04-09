@@ -56,6 +56,7 @@
         <fast-dfs.version>1.26.5</fast-dfs.version>
         <commons.io.version>2.5</commons.io.version>
         <velocity.version>1.7</velocity.version>
+        <knife4j.version>3.0.2</knife4j.version>
 
         <docker.image.prefix>springboot</docker.image.prefix>
         <docker.plugin.version>0.32.0</docker.plugin.version>
@@ -155,6 +156,13 @@
                 <version>${commons.io.version}</version>
             </dependency>
 
+            <!-- Swagger -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
             <!-- excel工具 -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
@@ -201,6 +209,13 @@
             <dependency>
                 <groupId>com.twelvet</groupId>
                 <artifactId>twelvet-framework-log</artifactId>
+                <version>${twelvet.version}</version>
+            </dependency>
+
+            <!-- 接口文档模块 -->
+            <dependency>
+                <groupId>com.twelvet</groupId>
+                <artifactId>twelvet-framework-swagger</artifactId>
                 <version>${twelvet.version}</version>
             </dependency>
 

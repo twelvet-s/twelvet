@@ -36,7 +36,6 @@ import java.util.List;
  * -@PreFilter 允许方法调用,但必须在进入方法之前过滤输入值
  */
 @Configuration
-@EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 

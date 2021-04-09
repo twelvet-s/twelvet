@@ -1,14 +1,21 @@
 package com.twelvet.framework.core.handler;
 
 import com.twelvet.framework.core.application.domain.AjaxResult;
+import com.twelvet.framework.core.domain.R;
 import com.twelvet.framework.core.exception.TWTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.List;
 
 
 /**
@@ -45,6 +52,45 @@ public class TWTExceptionHandler {
     }
 
     /**
+     * 处理业务校验过程中碰到的非法参数异常 该异常基本由{@link org.springframework.util.Assert}抛出
+     *
+     * @param exception 参数校验异常
+     * @return API返回结果对象包装后的错误输出结果
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public AjaxResult handleIllegalArgumentException(IllegalArgumentException exception) {
+        log.error("非法参数,ex = {}", exception.getMessage(), exception);
+        return AjaxResult.error(exception.getMessage());
+    }
+
+    /**
+     * validation Exception
+     * 参数绑定异常
+     *
+     * @return AjaxResult
+     */
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public AjaxResult handleBodyValidException(MethodArgumentNotValidException exception) {
+        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+        log.warn("参数绑定异常,ex = {}", fieldErrors.get(0).getDefaultMessage());
+        return AjaxResult.error(fieldErrors.get(0).getDefaultMessage());
+    }
+
+    /**
+     * validation Exception (以form-data形式传参)
+     * 参数绑定异常
+     * @return AjaxResult
+     */
+    @ExceptionHandler({ BindException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public AjaxResult bindExceptionHandler(BindException exception) {
+        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+        log.warn("参数绑定异常,ex = {}", fieldErrors.get(0).getDefaultMessage());
+        return AjaxResult.error(fieldErrors.get(0).getDefaultMessage());
+    }
+
+    /**
      * 无权限
      *
      * @param e AccessDeniedException
@@ -63,7 +109,7 @@ public class TWTExceptionHandler {
     @ExceptionHandler(Exception.class)
     public AjaxResult handleException(Exception e) {
         log.error(e.getMessage(), e);
-        return AjaxResult.error("无法完成此请求，请检查您的操作！！！");
+        return AjaxResult.error(e.getLocalizedMessage());
     }
 
 }
