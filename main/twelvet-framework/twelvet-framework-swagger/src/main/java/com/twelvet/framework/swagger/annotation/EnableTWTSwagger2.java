@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @EnableSwagger2
-@Import({ SwaggerAutoConfiguration.class })
+@Import({ SwaggerAutoConfiguration.class})
 public @interface EnableTWTSwagger2 {
 
 }

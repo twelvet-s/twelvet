@@ -39,13 +39,13 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
           },
         ]}
       />
-      <Tooltip title="使用帮助">
+      <Tooltip title="Swagger聚合文档">
         <a
           style={{
             color: 'inherit',
           }}
           target="_blank"
-          href="https://www.twelvet.cn"
+          href="/api/doc.html"
           rel="noopener noreferrer"
           className={styles.action}
         >

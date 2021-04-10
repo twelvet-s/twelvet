@@ -76,7 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/**",
                         "/oauth/*",
                         "/oauth/user/token",
-                        "/token/**"
+                        "/token/**",
+                        "/v2/api-docs"
                 )
                 .permitAll()
                 // 除以上所有进行拦截

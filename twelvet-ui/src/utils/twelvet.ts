@@ -43,13 +43,14 @@ export const makeTree = (params: {
     parentId?: string | 'parentId',
     children?: string | 'children',
     enhance?: { [key: string]: string } | {},
-    rootId?: number | 0
+    rootId?: number | false | 0
 }) => {
     // 获取默认数据
     const id = params.id || 'id'
     const parentId = params.parentId || 'parentId'
     const children = params.children || 'children'
     const enhance = params.enhance || {}
+    const rootId = params.rootId || 0
 
     // 对源数据深克隆
     const cloneData = JSON.parse(JSON.stringify(params.dataSource))
@@ -74,8 +75,13 @@ export const makeTree = (params: {
             father[children] = branchArr
         }
 
+        // 无需判断直接返回
+        if(!rootId && rootId != 0){
+            return true
+        }
+
         // 返回第一层
-        return true
+        return father[parentId] === rootId
     })
 
     if (treeData.length > 0) {

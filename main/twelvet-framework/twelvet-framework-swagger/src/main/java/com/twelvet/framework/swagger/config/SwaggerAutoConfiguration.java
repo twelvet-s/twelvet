@@ -5,10 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
@@ -68,7 +65,7 @@ public class SwaggerAutoConfiguration {
 
         pars.add(versionPar.build());
 
-        ApiSelectorBuilder builder = new Docket(DocumentationType.SWAGGER_2).host(swaggerProperties.getHost())
+        ApiSelectorBuilder builder = new Docket(DocumentationType.OAS_30).host(swaggerProperties.getHost())
                 .apiInfo(apiInfo(swaggerProperties)).globalRequestParameters(pars).select()
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()));
 
@@ -81,6 +78,7 @@ public class SwaggerAutoConfiguration {
 
     /**
      * 配置默认的全局鉴权策略的开关，通过正则表达式进行匹配；默认匹配所有URL
+     *
      * @return SecurityContext
      */
     private SecurityContext securityContext() {
@@ -89,6 +87,7 @@ public class SwaggerAutoConfiguration {
 
     /**
      * 默认的全局鉴权策略
+     *
      * @return List<SecurityReference>
      */
     private List<SecurityReference> defaultAuth() {
@@ -103,22 +102,28 @@ public class SwaggerAutoConfiguration {
     }
 
     private OAuth securitySchema() {
-        ArrayList<AuthorizationScope> authorizationScopeList = new ArrayList<>();
-        swaggerProperties().getAuthorization().getAuthorizationScopeList()
-                .forEach(authorizationScope -> authorizationScopeList.add(
-                        new AuthorizationScope(authorizationScope.getScope(), authorizationScope.getDescription())));
         ArrayList<GrantType> grantTypes = new ArrayList<>();
         swaggerProperties().getAuthorization().getTokenUrlList()
-                .forEach(tokenUrl -> grantTypes.add(new ResourceOwnerPasswordCredentialsGrant(tokenUrl)));
-        return new OAuth(swaggerProperties().getAuthorization().getName(), authorizationScopeList, grantTypes);
+                .forEach(tokenUrl -> grantTypes.add(
+                        new ResourceOwnerPasswordCredentialsGrant(tokenUrl)
+                        )
+                );
+        return new OAuthBuilder().name("oauth2").grantTypes(grantTypes).build();
     }
 
     private ApiInfo apiInfo(SwaggerProperties swaggerProperties) {
-        return new ApiInfoBuilder().title(swaggerProperties.getTitle()).description(swaggerProperties.getDescription())
-                .license(swaggerProperties.getLicense()).licenseUrl(swaggerProperties.getLicenseUrl())
+        return new ApiInfoBuilder()
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
+                .license(swaggerProperties.getLicense())
+                .licenseUrl(swaggerProperties.getLicenseUrl())
                 .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
-                .contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(),
-                        swaggerProperties.getContact().getEmail()))
+                .contact(
+                        new Contact(
+                                swaggerProperties.getContact().getName(),
+                                swaggerProperties.getContact().getUrl(),
+                                swaggerProperties.getContact().getEmail())
+                )
                 .version(swaggerProperties.getVersion()).build();
     }
 }

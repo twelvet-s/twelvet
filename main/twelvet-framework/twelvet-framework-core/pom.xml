@@ -62,6 +62,12 @@
             <artifactId>validation-api</artifactId>
         </dependency>
 
+        <!--Swagger接口文档-->
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-framework-swagger</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

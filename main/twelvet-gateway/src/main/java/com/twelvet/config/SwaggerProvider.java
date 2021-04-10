@@ -1,4 +1,4 @@
-package com.twelvet.framework.swagger.config;
+package com.twelvet.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.config.GatewayProperties;
@@ -12,6 +12,11 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author twelvet
+ * @WebSite www.twelvet.cn
+ * @Description: 聚合接口文档注册
+ */
 @Primary
 @Component
 public class SwaggerProvider implements SwaggerResourcesProvider {
@@ -28,13 +33,14 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
         List<SwaggerResource> resources = new ArrayList<>();
         List<String> routes = new ArrayList<>();
         routeLocator.getRoutes().subscribe(route -> routes.add(route.getId()));
-        gatewayProperties.getRoutes().stream().filter(routeDefinition -> routes.contains(routeDefinition.getId())).forEach(route -> {
-            route.getPredicates().stream()
-                    .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
-                    .forEach(predicateDefinition -> resources.add(swaggerResource(route.getId(),
-                            predicateDefinition.getArgs().get(NameUtils.GENERATED_NAME_PREFIX + "0")
-                                    .replace("**", "v2/api-docs"))));
-        });
+        gatewayProperties
+                .getRoutes()
+                .stream()
+                .filter(routeDefinition -> routes.contains(routeDefinition.getId())).forEach(route -> route.getPredicates().stream()
+                .filter(predicateDefinition -> ("Path").equalsIgnoreCase(predicateDefinition.getName()))
+                .forEach(predicateDefinition -> resources.add(swaggerResource(route.getId(),
+                        predicateDefinition.getArgs().get(NameUtils.GENERATED_NAME_PREFIX + "0")
+                                .replace("**", "v2/api-docs")))));
 
         return resources;
     }

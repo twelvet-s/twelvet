@@ -12,6 +12,7 @@ import com.twelvet.framework.utils.file.FileUtils;
 import com.twelvet.server.dfs.service.IDFSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,6 +105,7 @@ public class DFSController extends TWTController {
      * @param fileIds 文件地址
      * @return AjaxResult
      */
+    @PreAuthorize("@role.hasPermi('dfs:dfs:remove')")
     @Log(service = "删除文件", businessType = BusinessType.DELETE)
     @DeleteMapping("/{fileIds}")
     public AjaxResult deleteFile(@PathVariable Long[] fileIds) {
@@ -117,6 +119,7 @@ public class DFSController extends TWTController {
      * @param sysDfs SysDfs
      * @return AjaxResult
      */
+    @PreAuthorize("@role.hasPermi('dfs:dfs:list')")
     @GetMapping("/pageQuery")
     public AjaxResult pageQuery(SysDfs sysDfs) {
         startPage();

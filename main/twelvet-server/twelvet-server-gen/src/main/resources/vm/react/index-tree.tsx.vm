@@ -182,6 +182,7 @@ const ${BusinessName}: React.FC<{}> = () => {
                     dataSource: data.records,
                     id: `${treeCode}`,
                     parentId: '${treeParentCode}',
+                    rootId: false,
                     enhance: {
                         key: `${treeCode}`,
                         title: `${treeCode}`,

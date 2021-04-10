@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("swagger")
 public class SwaggerProperties {
+
     /**
      * 是否开启swagger
      */
