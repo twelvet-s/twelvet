@@ -1,6 +1,5 @@
 package com.twelvet.framework.swagger.config;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +24,6 @@ import java.util.function.Predicate;
  * @Description: Swagger配置
  */
 @Configuration
-@EnableAutoConfiguration
-@ConditionalOnProperty(name = "swagger.enabled", matchIfMissing = true)
 public class SwaggerAutoConfiguration {
 
     /**
