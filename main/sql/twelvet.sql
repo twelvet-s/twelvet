@@ -1,5 +1,4 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+-- 系统数据
 
 -- ----------------------------
 -- Table structure for gen_table

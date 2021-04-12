@@ -1,5 +1,4 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+-- 定时任务
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
