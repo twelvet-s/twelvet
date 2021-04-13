@@ -94,7 +94,7 @@ const Index: React.FC<{}> = () => {
                 </Col>
 
                 <Col xl={{ span: 8 }} xs={{ span: 24 }}>
-                    <Card title="捐赠支持">
+                    <Card title="捐赠支持（用于演示站/维护项目）">
                         <Image src='https://www.twelvet.cn/assets/images/pay.png' />
                     </Card>
                 </Col>
