@@ -3,7 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request'
-import { notification } from 'antd'
+import { message, notification } from 'antd'
 import { getDvaApp } from 'umi'
 import { system } from '@/utils/twelvet'
 import TWT from '@/setting'
@@ -110,6 +110,11 @@ request.use(
 
 // Filter【请求后的处理】
 request.interceptors.response.use(async (httpResponse, httpRequest) => {
+
+    if(httpResponse.status === 504){
+        message.error(codeMessage[504])
+        throw new Error(codeMessage[504])
+    }
 
     // blob类型直接返回
     if (httpRequest.responseType === 'blob' && httpResponse.status == 200) {
