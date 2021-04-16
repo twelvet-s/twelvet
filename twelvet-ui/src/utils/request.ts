@@ -112,7 +112,10 @@ request.use(
 request.interceptors.response.use(async (httpResponse, httpRequest) => {
 
     if(httpResponse.status === 504){
-        message.error(codeMessage[504])
+        notification.error({
+            description: '服务异常,无法连接',
+            message: codeMessage[504],
+        });
         throw new Error(codeMessage[504])
     }
 
