@@ -2,7 +2,7 @@
 
 [![AUR](https://img.shields.io/badge/license-MIT-blue)](https://github.com/twelvet-s/twelvet/blob/master/LICENSE)
 [![](https://img.shields.io/badge/Author-TwelveT-orange.svg)](https://www.twelvet.cn)
-[![](https://img.shields.io/badge/version-1.0.0-success)](https://github.com/twelvet-s/twelvet)
+[![](https://img.shields.io/badge/version-1.1.0-success)](https://github.com/twelvet-s/twelvet)
 [![GitHub stars](https://img.shields.io/github/stars/twelvet-s/twelvet.svg?style=social&label=Stars)](https://github.com/twelvet-s/twelvet/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/twelvet-s/twelvet.svg?style=social&label=Fork)](https://github.com/twelvet-s/twelvet/network/members)
 [![star](https://gitee.com/twelvet/twelvet/badge/star.svg?theme=white)](https://gitee.com/twelvet/twelvet/stargazers)
@@ -56,7 +56,7 @@ com.twelvet
 12. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
 13. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
 14. 分布式文件储存。
-15. Swagger网关聚合文档
+15. Swagger网关聚合文档。
 
 ## 演示图
 
@@ -79,7 +79,7 @@ com.twelvet
 
 - admin/123456
 
-演示地址：http://cloud.twelvet.cn
+演示地址：[http://cloud.twelvet.cn](http://cloud.twelvet.cn)
 
 ## TwelveT微服务交流群
 
