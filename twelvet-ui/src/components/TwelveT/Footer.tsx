@@ -26,7 +26,7 @@ const Footer = () => {
                     {
                         key: '开发文档',
                         title: '开发文档',
-                        href: 'https://www.twelvet.cn',
+                        href: 'https://www.twelvet.cn/docs',
                         blankTarget: true,
                     },
                 ]}
