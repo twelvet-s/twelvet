@@ -1,5 +1,6 @@
 package com.twelvet.server.system.service.impl;
 
+import com.twelvet.framework.datascope.annotation.SysDataScope;
 import com.twelvet.api.system.domain.*;
 import com.twelvet.framework.core.constants.UserConstants;
 import com.twelvet.framework.core.exception.TWTException;
@@ -49,7 +50,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return 用户信息集合信息
      */
     @Override
-    // TODO @DataScope(deptAlias = "d", userAlias = "u")
+    @SysDataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user) {
         return sysUserMapper.selectUserList(user);
     }

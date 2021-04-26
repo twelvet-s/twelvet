@@ -32,6 +32,12 @@
             <artifactId>twelvet-api-dfs</artifactId>
         </dependency>
 
+        <!-- 数据权限 -->
+        <dependency>
+            <groupId>com.twelvet</groupId>
+            <artifactId>twelvet-framework-datascope</artifactId>
+        </dependency>
+
         <!--默认采用多数据-->
         <dependency>
             <groupId>com.twelvet</groupId>
