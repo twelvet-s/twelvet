@@ -23,8 +23,7 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
 
     @Override
     @Cacheable(value = CacheConstants.CLIENT_DETAILS_KEY, key = "#clientId", unless = "#result == null")
-    public ClientDetails loadClientByClientId(String clientId)
-    {
+    public ClientDetails loadClientByClientId(String clientId) {
         return super.loadClientByClientId(clientId);
     }
 

@@ -28,6 +28,16 @@ public class SecurityConstants
     public static final String DETAILS_USERNAME = "username";
 
     /**
+     * 部门ID
+     */
+    public static final String DETAILS_DEPT_ID = "dept_id";
+
+    /**
+     * 权限组
+     */
+    public static final String DETAILS_ROLES = "roles";
+
+    /**
      * sys_oauth_client_details 表的字段，不包括client_id、client_secret
      */
     public static final String CLIENT_FIELDS = "client_id, client_secret, resource_ids, scope, "

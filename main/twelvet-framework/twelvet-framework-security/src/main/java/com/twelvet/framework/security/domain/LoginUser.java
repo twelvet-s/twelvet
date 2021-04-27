@@ -1,9 +1,12 @@
 package com.twelvet.framework.security.domain;
 
+import com.twelvet.api.system.domain.SysRole;
+import com.twelvet.framework.utils.annotation.excel.Excel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author twelvet
@@ -19,10 +22,22 @@ public class LoginUser extends User {
      */
     private Long userId;
 
-    public LoginUser(Long userId, String username, String password, boolean enabled, boolean accountNonExpired,
+    /**
+     * 角色对象
+     */
+    private List<SysRole> roles;
+
+    /**
+     * 部门ID
+     */
+    private Long deptId;
+
+    public LoginUser(Long userId, Long deptId, List<SysRole> roles, String username, String password, boolean enabled, boolean accountNonExpired,
                      boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.userId = userId;
+        this.deptId = deptId;
+        this.roles = roles;
     }
 
     public Long getUserId() {
@@ -33,4 +48,19 @@ public class LoginUser extends User {
         this.userId = userId;
     }
 
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
+    }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
 }

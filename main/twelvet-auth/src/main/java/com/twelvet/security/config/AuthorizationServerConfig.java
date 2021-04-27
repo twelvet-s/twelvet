@@ -123,6 +123,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 LoginUser user = (LoginUser) authentication.getUserAuthentication().getPrincipal();
                 Map<String, Object> additionalInformation = new LinkedHashMap<>();
                 additionalInformation.put("code", HttpStatus.OK.value());
+                additionalInformation.put(SecurityConstants.DETAILS_DEPT_ID, user.getDeptId());
+                additionalInformation.put(SecurityConstants.DETAILS_ROLES, user.getRoles());
                 additionalInformation.put(SecurityConstants.DETAILS_USER_ID, user.getUserId());
                 additionalInformation.put(SecurityConstants.DETAILS_USERNAME, user.getUsername());
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);

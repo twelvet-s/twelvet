@@ -112,6 +112,8 @@ public class TwTUserDetailsServiceImpl implements UserDetailsService {
 
         return new LoginUser(
                 user.getUserId(),
+                user.getDeptId(),
+                user.getRoles(),
                 user.getUsername(),
                 user.getPassword(),
                 true,

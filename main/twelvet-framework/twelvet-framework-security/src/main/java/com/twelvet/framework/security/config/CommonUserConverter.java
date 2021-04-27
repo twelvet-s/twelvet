@@ -1,5 +1,6 @@
 package com.twelvet.framework.security.config;
 
+import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.framework.security.constans.SecurityConstants;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.utils.Convert;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,7 +47,10 @@ public class CommonUserConverter implements UserAuthenticationConverter {
 
             Long userId = Convert.toLong(map.get(SecurityConstants.DETAILS_USER_ID));
             String username = (String) map.get(SecurityConstants.DETAILS_USERNAME);
-            LoginUser user = new LoginUser(userId, username, N_A, true, true, true, true, authorities);
+            // 加入权限信息
+            Long deptId = Convert.toLong(map.get(SecurityConstants.DETAILS_DEPT_ID));
+            List<SysRole> roles = (List<SysRole> ) map.get(SecurityConstants.DETAILS_ROLES);
+            LoginUser user = new LoginUser(userId, deptId, roles, username, N_A, true, true, true, true, authorities);
             return new UsernamePasswordAuthenticationToken(user, N_A, authorities);
         }
         return null;
