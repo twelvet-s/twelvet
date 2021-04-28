@@ -85,25 +85,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.formLogin().loginPage("/token/login").loginProcessingUrl("/token/form")
+        http
+                .formLogin()
+                .loginPage("/token/login")
+                .loginProcessingUrl("/token/form")
                 .failureHandler(authenticationFailureHandler()).and().logout()
                 .and().authorizeRequests().antMatchers("/token/**", "/actuator/**").permitAll()
-                .anyRequest().authenticated().and().csrf().disable();
-
-        /*http
-                // 关闭csrf
-                .csrf().disable()
-                // 设置安全
-                .authorizeRequests()
-                // 放行路径
-                .antMatchers(
-                        "/actuator/**",
-                        "/token/**",
-                        "/v2/api-docs"
-                )
-                .permitAll()
-                // 除以上所有进行拦截
-                .anyRequest().authenticated();*/
+                .anyRequest().authenticated()
+                .and().csrf().disable();
     }
 
 }

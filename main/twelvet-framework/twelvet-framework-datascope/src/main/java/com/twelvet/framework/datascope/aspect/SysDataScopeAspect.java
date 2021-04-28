@@ -1,9 +1,8 @@
 package com.twelvet.framework.datascope.aspect;
 
-import com.twelvet.framework.datascope.annotation.SysDataScope;
 import com.twelvet.api.system.domain.SysRole;
-import com.twelvet.api.system.domain.SysUser;
 import com.twelvet.framework.core.application.domain.BaseEntity;
+import com.twelvet.framework.datascope.annotation.SysDataScope;
 import com.twelvet.framework.security.domain.LoginUser;
 import com.twelvet.framework.security.utils.SecurityUtils;
 import com.twelvet.framework.utils.StringUtils;
@@ -14,8 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -80,15 +77,14 @@ public class SysDataScopeAspect {
         // 获取当前的用户
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if (StringUtils.isNotNull(loginUser)) {
-            Long currentUser = loginUser.getUserId();
             // 如果是超级管理员，则不过滤数据
             if (!SecurityUtils.isAdmin(loginUser.getUserId())) {
-                /*dataScopeFilter(
+                dataScopeFilter(
                         joinPoint,
                         loginUser,
                         controllerDataScope.deptAlias(),
                         controllerDataScope.userAlias()
-                );*/
+                );
             }
         }
     }
@@ -101,7 +97,7 @@ public class SysDataScopeAspect {
      * @param deptAlias 部门别名
      * @param userAlias 用户别名
      */
-    public static void dataScopeFilter(JoinPoint joinPoint, SysUser user, String deptAlias, String userAlias) {
+    public static void dataScopeFilter(JoinPoint joinPoint, LoginUser user, String deptAlias, String userAlias) {
         StringBuilder sqlString = new StringBuilder();
 
         for (SysRole role : user.getRoles()) {
