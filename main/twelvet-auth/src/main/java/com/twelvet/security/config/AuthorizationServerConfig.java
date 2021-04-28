@@ -25,9 +25,11 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
+import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
 import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
 import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
@@ -152,7 +154,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 配置系统支持的授权模式
                 .tokenGranter(new CompositeTokenGranter(tokenGranters))
                 // 请求方式
-                .allowedTokenEndpointRequestMethods(HttpMethod.POST)
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 // 指定token存储位置
                 .tokenStore(tokenStore())
                 // 自定义账号密码登录（Oauth2密码模式需要,刷新模式也需要）
@@ -193,8 +195,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 new PhonePasswordTokenGranter(tokenServices, clientDetailsService, requestFactory, twTUserDetailsService),
                 // 授权码模式
                 new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory),
+                // 客户端模式
+                new ClientCredentialsTokenGranter(tokenServices, clientDetailsService, requestFactory),
                 // 密码模式
                 new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory),
+                // 简单模式
+                new ImplicitTokenGranter(tokenServices, clientDetailsService, requestFactory),
                 // 支持刷新模式
                 new RefreshTokenGranter(tokenServices, clientDetailsService, requestFactory)
         ));
