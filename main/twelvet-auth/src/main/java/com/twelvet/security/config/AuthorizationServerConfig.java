@@ -165,6 +165,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .reuseRefreshTokens(false)
                 // 增强access_token信息
                 .tokenEnhancer(tokenEnhancer())
+                // 自定义确认授权页面
+                .pathMapping("/oauth/confirm_access", "/token/confirm_access")
                 // 自定义异常处理
                 .exceptionTranslator(customWebResponseExceptionTranslator);
     }
@@ -191,18 +193,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     private List<TokenGranter> getTokenGranters(AuthorizationCodeServices authorizationCodeServices, AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
         return new ArrayList<>(Arrays.asList(
-                // 手机号密码模式
-                new PhonePasswordTokenGranter(tokenServices, clientDetailsService, requestFactory, twTUserDetailsService),
                 // 授权码模式
                 new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory),
                 // 客户端模式
                 new ClientCredentialsTokenGranter(tokenServices, clientDetailsService, requestFactory),
                 // 密码模式
                 new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory),
-                // 简单模式
+                // 简化模式
                 new ImplicitTokenGranter(tokenServices, clientDetailsService, requestFactory),
                 // 支持刷新模式
-                new RefreshTokenGranter(tokenServices, clientDetailsService, requestFactory)
+                new RefreshTokenGranter(tokenServices, clientDetailsService, requestFactory),
+                // 自定义手机号密码模式例子(并未真正接入手机)
+                new PhonePasswordTokenGranter(tokenServices, clientDetailsService, requestFactory, twTUserDetailsService)
         ));
     }
 

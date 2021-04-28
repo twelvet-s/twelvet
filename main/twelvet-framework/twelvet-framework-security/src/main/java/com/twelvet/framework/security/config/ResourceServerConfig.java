@@ -78,14 +78,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable();
+        // 允许使用iframe 嵌套，避免swagger-ui 不被加载的问题
+        http.headers().frameOptions().disable();
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         // 不登录可以访问
         authIgnoreConfig().getIgnoreUrls().forEach(url -> registry.antMatchers(url).permitAll());
-        registry.anyRequest().authenticated();
+        registry.anyRequest().authenticated().and().csrf().disable();
 
     }
 
