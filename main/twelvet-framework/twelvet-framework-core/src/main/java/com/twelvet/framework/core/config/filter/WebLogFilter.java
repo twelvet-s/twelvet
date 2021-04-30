@@ -48,6 +48,14 @@ public class WebLogFilter implements Filter {
 
         String requestData;
 
+        HttpServletRequest request = ServletUtils.getRequest();
+
+        HttpServletRequest request2 = ServletUtils.getRequest();
+
+        HttpServletRequest request3 = ServletUtils.getRequest();
+
+        HttpServletRequest request4 = ServletUtils.getRequest();
+
         // 获取数据
         if (ServletUtils.METHOD_GET.equals(method)) {
             requestData = JSON.toJSONString(ServletUtils.getMapParam());

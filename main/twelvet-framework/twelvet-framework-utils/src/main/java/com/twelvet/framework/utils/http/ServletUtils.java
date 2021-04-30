@@ -152,14 +152,16 @@ public class ServletUtils {
         StringBuilder sb = new StringBuilder();
         try (
                 ServletInputStream inputStream = req.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))
         ) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
+            StringBuilder stringBuilder = new StringBuilder();
+            char[] charBuffer = new char[128];
+            int bytesRead;
+            while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                stringBuilder.append(charBuffer, 0, bytesRead);
             }
 
-            return sb.toString();
+            return stringBuilder.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
