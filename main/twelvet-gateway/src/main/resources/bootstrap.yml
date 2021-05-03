@@ -1,3 +1,6 @@
+server:
+  port: 88
+
 # Spring
 spring:
   application:

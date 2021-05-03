@@ -75,13 +75,13 @@ public class SysUserController extends TWTController {
     }
 
     /**
-     * 用户倒入出
+     * 用户用户导出
      *
      * @param response HttpServletResponse
      * @param user     SysUser
      */
     @ApiOperationSupport(author = "twelvet")
-    @ApiOperation(value = "用户倒入出")
+    @ApiOperation(value = "用户用户导出")
     @PostMapping("/export")
     @Log(service = "用户管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@role.hasPermi('system:user:export')")

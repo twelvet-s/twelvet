@@ -28,7 +28,7 @@ export async function remove(fileIds: string) {
 
 /**
  * 下载文件
- * @param fileId
+ * @param fileId 文件id
  */
 export async function downloadFile(fileId: string) {
     return download(`${controller}/download/${fileId}`);

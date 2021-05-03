@@ -1,3 +1,7 @@
+server:
+  port: 8084
+
+
 spring:
   application:
     # 应用名称
