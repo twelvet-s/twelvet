@@ -2,7 +2,9 @@ package com.twelvet.framework.utils.http;
 
 import com.twelvet.framework.utils.CharsetKit;
 import com.twelvet.framework.utils.Convert;
+import com.twelvet.framework.utils.TWTUtils;
 import com.twelvet.framework.utils.exception.TWTUtilsException;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -11,8 +13,12 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -59,9 +65,19 @@ public class ServletUtils {
     public static HttpServletRequest getRequest() {
         try {
             return getRequestAttributes().getRequest();
-        } catch (Exception e) {
-            return null;
+        } catch (NullPointerException e) {
+            throw new TWTUtilsException("获取Request失败");
         }
+    }
+
+    /**
+     * 获取当前地址完整URI(注意是服务器的IP,便于查找出错机器)
+     *
+     * @return 当前完整访问地址
+     */
+    public static String getHostRequestURI() {
+        HttpServletRequest request = getRequest();
+        return IpUtils.getHostIp() + ":" + request.getServerPort() + request.getRequestURI();
     }
 
     /**
@@ -79,7 +95,8 @@ public class ServletUtils {
      * @return ServletRequestAttributes
      */
     public static ServletRequestAttributes getRequestAttributes() {
-        return (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes;
     }
 
     /**
@@ -107,7 +124,7 @@ public class ServletUtils {
      * @return Map
      */
     public static Map<String, String> getMapParam(HttpServletRequest httpServletRequest) {
-        Map<String, String> map = new HashMap<>(5);
+        Map<String, String> map = new HashMap<>(6);
         // 获取所有参数名称
         Enumeration enu = httpServletRequest.getParameterNames();
         // 遍历hash
@@ -127,23 +144,24 @@ public class ServletUtils {
     }
 
     /**
-     * @param req HttpServletRequest
+     * 获取body数据
+     *
      * @return String
      */
-    public String getStrFromStream(HttpServletRequest req) {
-        ServletInputStream is;
-        try {
-            is = req.getInputStream();
-            int nRead = 1;
-            int nTotalRead = 0;
-            byte[] bytes = new byte[10240];
-            while (nRead > 0) {
-                nRead = is.read(bytes, nTotalRead, bytes.length - nTotalRead);
-                if (nRead > 0) {
-                    nTotalRead = nTotalRead + nRead;
-                }
+    public static String getStrFromStream(HttpServletRequest req) {
+        StringBuilder sb = new StringBuilder();
+        try (
+                ServletInputStream inputStream = req.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))
+        ) {
+            StringBuilder stringBuilder = new StringBuilder();
+            char[] charBuffer = new char[128];
+            int bytesRead;
+            while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                stringBuilder.append(charBuffer, 0, bytesRead);
             }
-            return new String(bytes, 0, nTotalRead, StandardCharsets.UTF_8);
+
+            return stringBuilder.toString();
         } catch (IOException e) {
             e.printStackTrace();
             return "";

@@ -1,6 +1,9 @@
 package com.twelvet.framework.core.constants;
 
 public class Constants {
+
+    public static final String AUTHORIZATION = "Authorization";
+
     /**
      * UTF-8 字符集
      */
