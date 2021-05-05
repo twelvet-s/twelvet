@@ -3,7 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request'
-import { message, notification } from 'antd'
+import { notification } from 'antd'
 import { getDvaApp } from 'umi'
 import { system } from '@/utils/twelvet'
 import TWT from '@/setting'
