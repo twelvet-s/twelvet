@@ -1,6 +1,8 @@
 package com.twelvet.framework.core.config.filter;
 
-import com.alibaba.fastjson.JSON;
+
+import cn.hutool.json.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twelvet.framework.core.constants.Constants;
 import com.twelvet.framework.utils.DateUtils;
 import com.twelvet.framework.utils.http.ServletUtils;
@@ -48,17 +50,11 @@ public class WebLogFilter implements Filter {
 
         String requestData;
 
-        HttpServletRequest request = ServletUtils.getRequest();
-
-        HttpServletRequest request2 = ServletUtils.getRequest();
-
-        HttpServletRequest request3 = ServletUtils.getRequest();
-
-        HttpServletRequest request4 = ServletUtils.getRequest();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         // 获取数据
         if (ServletUtils.METHOD_GET.equals(method)) {
-            requestData = JSON.toJSONString(ServletUtils.getMapParam());
+            requestData = objectMapper.writeValueAsString(ServletUtils.getMapParam());
         } else {
             requestData = ServletUtils.getStrFromStream((HttpServletRequest) servletRequest);
         }

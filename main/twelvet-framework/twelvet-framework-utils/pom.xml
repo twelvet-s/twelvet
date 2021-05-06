@@ -62,11 +62,18 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
-        <!--Fast Json-->
+        <!--json模块-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
+
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
 
     </dependencies>
 

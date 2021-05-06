@@ -1,7 +1,8 @@
 package com.twelvet.framework.log.aspect;
 
-import com.alibaba.fastjson.JSON;
+
 import com.twelvet.api.system.domain.SysOperationLog;
+import com.twelvet.framework.core.exception.TWTException;
 import com.twelvet.framework.log.annotation.Log;
 import com.twelvet.framework.log.enums.BusinessStatus;
 import com.twelvet.framework.log.service.AsyncLogService;
@@ -17,6 +18,7 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -89,8 +92,11 @@ public class LogAspect {
             // 请求的地址
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operationLog.setOperIp(ip);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
             // 返回参数
-            operationLog.setJsonResult(JSON.toJSONString(jsonResult));
+            operationLog.setJsonResult(objectMapper.writeValueAsString(jsonResult));
 
             operationLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (loginUser != null) {
@@ -147,7 +153,12 @@ public class LogAspect {
     private void setRequestValue(JoinPoint joinPoint, SysOperationLog operationLog) {
         String requestMethod = operationLog.getRequestMethod();
         if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod)) {
-            String params = argsArrayToString(joinPoint.getArgs());
+            String params;
+            try {
+                params = argsArrayToString(joinPoint.getArgs());
+            } catch (IOException e) {
+                throw new TWTException("参数拼装失败");
+            }
             operationLog.setOperParam(StringUtils.substring(params, 0, 2000));
         } else {
             Map<?, ?> paramsMap = (Map<?, ?>) ServletUtils.getRequest().getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
@@ -175,13 +186,13 @@ public class LogAspect {
     /**
      * 参数拼装
      */
-    private String argsArrayToString(Object[] paramsArray) {
+    private String argsArrayToString(Object[] paramsArray) throws IOException {
         StringBuilder params = new StringBuilder();
         if (paramsArray != null && paramsArray.length > 0) {
             for (Object o : paramsArray) {
                 if (!isFilterObject(o)) {
-                    Object jsonObj = JSON.toJSON(o);
-                    params.append(jsonObj.toString()).append(" ");
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    params.append(objectMapper.writeValueAsString(o)).append(" ");
                 }
             }
         }

@@ -1,8 +1,9 @@
 package com.twelvet.framework.security.handler;
 
-import com.alibaba.fastjson.JSON;
+
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.utils.http.ServletUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author twelvet
@@ -25,13 +27,16 @@ public class CustomAccessDeniedHandler extends OAuth2AccessDeniedHandler {
     private final Logger logger = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException authException) {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException authException) throws IOException {
         logger.info("权限不足，请联系管理员 {}", request.getRequestURI());
 
         int code = HttpStatus.FORBIDDEN.value();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
         ServletUtils.render(
                 code,
-                JSON.toJSONString(AjaxResult.error(code, authException.getMessage()))
+                objectMapper.writeValueAsString(AjaxResult.error(code, authException.getMessage()))
         );
     }
 }

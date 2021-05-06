@@ -50,13 +50,13 @@
 
         <druid.version>1.1.22</druid.version>
         <dynamic-datasource.version>3.2.1</dynamic-datasource.version>
-        <fastjson.version>1.2.75</fastjson.version>
         <pagehelper.boot.version>1.2.12</pagehelper.boot.version>
         <poi.version>3.17</poi.version>
         <fast-dfs.version>1.26.5</fast-dfs.version>
         <commons.io.version>2.5</commons.io.version>
         <velocity.version>1.7</velocity.version>
         <knife4j.version>3.0.2</knife4j.version>
+        <hutool.version>5.6.4</hutool.version>
 
         <docker.image.prefix>springboot</docker.image.prefix>
         <docker.plugin.version>0.32.0</docker.plugin.version>
@@ -114,13 +114,6 @@
                 <version>${dynamic-datasource.version}</version>
             </dependency>
 
-            <!-- 阿里JSON解析器 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-
             <!-- FastDFS 分布式文件系统 -->
             <dependency>
                 <groupId>com.github.tobato</groupId>
@@ -134,6 +127,14 @@
                 <artifactId>velocity</artifactId>
                 <version>${velocity.version}</version>
             </dependency>
+
+            <!--hutool-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
 
             <!-- Mybatis 依赖配置 -->
             <dependency>

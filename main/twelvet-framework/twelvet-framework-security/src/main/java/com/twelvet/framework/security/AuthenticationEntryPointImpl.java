@@ -1,8 +1,10 @@
 package com.twelvet.framework.security;
 
-import com.alibaba.fastjson.JSON;
+
+import cn.hutool.json.JSON;
 import com.twelvet.framework.core.application.domain.AjaxResult;
 import com.twelvet.framework.utils.http.ServletUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -24,7 +27,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
     public void commence(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
-            AuthenticationException authenticationException) {
+            AuthenticationException authenticationException) throws IOException {
 
         // 获取异常主体
         Throwable cause = authenticationException.getCause();
@@ -41,10 +44,12 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
             msg = "Sorry, You don't have access";
         }
 
+        ObjectMapper objectMapper = new ObjectMapper();
+
         // 发送json数据
         ServletUtils.render(
                 code,
-                JSON.toJSONString(AjaxResult.error(code, msg))
+                objectMapper.writeValueAsString(AjaxResult.error(code, msg))
         );
 
     }
