@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twelvet.framework.core.constants.Constants;
 import com.twelvet.framework.utils.DateUtils;
 import com.twelvet.framework.utils.http.ServletUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,8 +24,8 @@ import java.io.IOException;
  * @Description: 日志拦截收集
  */
 @Component
-@WebFilter(filterName = "LogFilter", urlPatterns = "/*")
-public class WebLogFilter implements Filter {
+@Aspect
+public class WebLogFilter {
 
     private final static Logger log = LoggerFactory.getLogger(WebLogFilter.class);
 
@@ -34,7 +38,7 @@ public class WebLogFilter implements Filter {
      * @throws IOException      IOException
      * @throws ServletException ServletException
      */
-    @Override
+    /*@Override
     public void doFilter(
             ServletRequest servletRequest,
             ServletResponse servletResponse,
@@ -69,11 +73,11 @@ public class WebLogFilter implements Filter {
                                 "\ntoken：%s" +
                                 "\n参数：%s" +
                                 "\n方式：%s" +
-                                "\n<===================Response================" +
+                                "\n<=================Response==================" +
                                 "\n状态：%s" +
                                 "\n内容：%s" +
                                 "\n时长：%s毫秒" +
-                                "\n=======================END==================",
+                                "\n====================END=====================",
                         // 请求时间
                         DateUtils.getTime(),
                         // 当前访问完整地址包括端口号
@@ -92,6 +96,31 @@ public class WebLogFilter implements Filter {
                         resTime
                 )
         );
+
+    }*/
+    @Pointcut("execution(* com.twelvet..*.controller..*.*(..))")
+    public void logPointcut() {
+
+    }
+
+    @Around("logPointcut()")
+    public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        try {
+            Object result = joinPoint.proceed();
+            Object[] args = joinPoint.getArgs();
+
+
+
+            long end = System.currentTimeMillis();
+            log.error("+++++around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
+            return result;
+
+        } catch (Throwable e) {
+            long end = System.currentTimeMillis();
+            log.error("+++++around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
+            throw e;
+        }
 
     }
 
