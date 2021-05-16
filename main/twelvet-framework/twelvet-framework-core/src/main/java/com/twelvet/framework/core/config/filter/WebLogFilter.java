@@ -1,21 +1,13 @@
 package com.twelvet.framework.core.config.filter;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.twelvet.framework.core.constants.Constants;
 import com.twelvet.framework.utils.DateUtils;
-import com.twelvet.framework.utils.http.ServletUtils;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -23,9 +15,10 @@ import java.io.IOException;
  * @WebSite www.twelvet.cn
  * @Description: 日志拦截收集
  */
-@Component
-@Aspect
-public class WebLogFilter {
+@WebFilter(filterName = "BaseFilter", urlPatterns = "/*")
+//@Component
+// @Aspect
+public class WebLogFilter implements Filter {
 
     private final static Logger log = LoggerFactory.getLogger(WebLogFilter.class);
 
@@ -38,7 +31,7 @@ public class WebLogFilter {
      * @throws IOException      IOException
      * @throws ServletException ServletException
      */
-    /*@Override
+    @Override
     public void doFilter(
             ServletRequest servletRequest,
             ServletResponse servletResponse,
@@ -49,31 +42,20 @@ public class WebLogFilter {
         // 执行业务
         filterChain.doFilter(servletRequest, servletResponse);
 
-        String method = ServletUtils.getRequest().getMethod();
-
-        String requestData;
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // 获取数据
-        if (ServletUtils.METHOD_GET.equals(method)) {
-            requestData = objectMapper.writeValueAsString(ServletUtils.getMapParam());
-        } else {
-            requestData = ServletUtils.getStrFromStream((HttpServletRequest) servletRequest);
-        }
+        String requestData = "AS";
 
         long resTime = System.currentTimeMillis() - startTime;
 
         log.info(
                 String.format(
                         "" +
-                                "\n===================Request================>" +
+                                "\n===================Request================>"+
                                 "\n时间：%s" +
                                 "\n地址：%s" +
                                 "\ntoken：%s" +
                                 "\n参数：%s" +
                                 "\n方式：%s" +
-                                "\n<=================Response==================" +
+                                "\n<=================Response=================="+
                                 "\n状态：%s" +
                                 "\n内容：%s" +
                                 "\n时长：%s毫秒" +
@@ -81,47 +63,62 @@ public class WebLogFilter {
                         // 请求时间
                         DateUtils.getTime(),
                         // 当前访问完整地址包括端口号
-                        ServletUtils.getHostRequestURI(),
+                        "",
                         // 认证Token
-                        ServletUtils.getRequest().getHeader(Constants.AUTHORIZATION),
+                        "",
                         // 请求参数
                         requestData,
                         // 请求方式
-                        method,
+                        "",
                         // 请求状态
-                        ServletUtils.getResponse().getStatus(),
+                        "",
                         // 响应内容
-                        1,
+                        "",
                         // 执行时间（ms）
                         resTime
                 )
         );
 
-    }*/
-    @Pointcut("execution(* com.twelvet..*.controller..*.*(..))")
+    }
+
+    /*@Pointcut("execution(* com.twelvet..*.controller..*.*(..))")
     public void logPointcut() {
 
     }
 
     @Around("logPointcut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         try {
             Object result = joinPoint.proceed();
             Object[] args = joinPoint.getArgs();
 
+            ObjectMapper objectMapper = new ObjectMapper();
 
+            long endTime = System.currentTimeMillis();
+            log.info(
+                    String.format(
+                            "\n===================Request================>\n时间：%s\n地址：%s\ntoken：%s\n参数：%s\n方式：%s"
+                                    + "\n<===================Response================\n状态：%s\n内容：%s\n时长：%s毫秒"
+                                    + "\n============================================",
+                            DateUtils.getTime(),
+                            "url",
+                            "token",
+                            objectMapper.writeValueAsString(args),
+                            "方法",
+                            "状态",
+                            objectMapper.writeValueAsString(result),
+                            endTime - startTime)
 
-            long end = System.currentTimeMillis();
-            log.error("+++++around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
+            );
             return result;
 
         } catch (Throwable e) {
-            long end = System.currentTimeMillis();
-            log.error("+++++around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
+            long endTime = System.currentTimeMillis();
+            log.error("+++++around " + joinPoint + "\tUse time : " + (endTime - startTime) + " ms with exception : " + e.getMessage());
             throw e;
         }
 
-    }
+    }*/
 
 }

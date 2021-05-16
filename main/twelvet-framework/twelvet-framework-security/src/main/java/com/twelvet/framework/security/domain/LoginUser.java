@@ -2,6 +2,8 @@ package com.twelvet.framework.security.domain;
 
 import com.twelvet.api.system.domain.SysRole;
 import com.twelvet.framework.utils.annotation.excel.Excel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -63,4 +65,14 @@ public class LoginUser extends User {
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("deptId", getDeptId())
+                .append("roles", getRoles())
+                .append("userId", getUserId())
+                .toString();
+    }
+
 }
