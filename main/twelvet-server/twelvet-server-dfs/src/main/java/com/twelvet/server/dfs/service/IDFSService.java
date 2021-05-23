@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author twelvet
  * @WebSite www.twelvet.cn
- * @Description: 文件上传接口
+ * @Description: 文件上传接口（支持七牛、阿里云、腾讯云、又拍云，DFS）
  */
 public interface IDFSService {
 
@@ -21,7 +21,7 @@ public interface IDFSService {
     List<SysDfs> uploadFiles(MultipartFile[] files);
 
     /**
-     * 多文件上传接口
+     * 文件上传接口
      *
      * @param files 上传的文件
      * @return 访问地址

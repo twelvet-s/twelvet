@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import java.util.List;
  * @WebSite www.twelvet.cn
  * @Description: FastDFS文件存储
  */
+@Primary
 @Service
 public class DFSServiceImpl implements IDFSService {
 
@@ -44,7 +46,6 @@ public class DFSServiceImpl implements IDFSService {
      *
      * @param files 上传的文件
      * @return 访问地址
-     * @throws Exception
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
