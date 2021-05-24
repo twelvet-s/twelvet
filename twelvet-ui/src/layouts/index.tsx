@@ -7,7 +7,7 @@ import ProLayout, { PageHeaderWrapper, BasicLayoutProps as ProLayoutProps, Setti
 import { createFromIconfontCN } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { Link, useIntl, connect, Dispatch, history, Redirect } from 'umi'
-import { Result, Button, Input } from 'antd'
+import { Result, Button, Input, Tabs, Dropdown, Menu, message } from 'antd'
 import Authorized from '@/utils/Authorized'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import { ConnectState } from '@/models/connect'
@@ -17,6 +17,7 @@ import Footer from '@/components/TwelveT/Footer'
 import { CurrentUser } from '@/models/user'
 import TWT from '../setting'
 import { stringify } from 'querystring'
+import styles from './index.less';
 
 const IconFont = createFromIconfontCN();
 
@@ -67,6 +68,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
     )
 }
 
+
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     // 不存在token需要求登录
@@ -86,6 +88,58 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     // 登录组件
     if (props.location.pathname === '/login') {
         return props.children
+    }
+
+    let menus: MenuDataItem[] = [];
+    const defaultTabs: { title: string, key: string, path: string, closable: boolean }[] = [{
+        title: '欢迎页',
+        key: '/',
+        path: '/',
+        closable: false,
+    }]
+
+
+    const [tabs, setTabs] = useState<{ title: string, key: string, path: string, closable: boolean }[]>(defaultTabs);
+    const [activeTabKey, setActiveTabKey] = useState<string>('');
+
+    const removeTabs = (activeKey, action) => {
+        if (action === "remove") {
+            const newTabs = [...tabs];
+            let index = 0;
+            for (let i = 0; i < tabs.length; i += 1) {
+                if (tabs[i].key === activeKey) {
+                    index = i;
+                    break;
+                }
+            }
+            let openIndex = 0;
+            if (index === 0) {
+                // 说明我们删除的是的一个标签。打开标签应该是下一个
+                openIndex = index + 1;
+            } else {
+                openIndex = index - 1;
+            }
+            if (openIndex >= tabs.length) {
+                message.destroy();
+                message.warn("至少保留一个标签");
+            } else {
+                history.push(tabs[openIndex].key);
+                setActiveTabKey(tabs[openIndex].key);
+                setTabs(newTabs.filter(item => item.key !== activeTabKey));
+            }
+        }
+    }
+
+    const closeTabs = ({ key }: { key: string }) => {
+        if (key === "other") {
+            // 关闭其他标签
+            setTabs(tabs.filter(item => item.key === activeTabKey));
+        } else if (key === "all") {
+            // 关闭所有标签
+            history.push(defaultTabs[0].path);
+            setActiveTabKey(defaultTabs[0].key);
+            setTabs(defaultTabs);
+        }
     }
 
     const {
@@ -170,6 +224,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             contentWidth='Fluid'
             fixedHeader={false}
             fixSiderbar={true}
+            // 是否开启分割菜单
+            splitMenus={true}
             colorWeak={false}
             iconfontUrl='js/icon.js'
             // 渲染菜单数据
@@ -263,17 +319,69 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     <span>{route.breadcrumbName}</span>
                 )
             }}
+            handleOpenChange={(openKeys) => {
+                const { host, href } = window.location;
+                const currentUrl = href.substr(href.indexOf("localhost:8000") + host.length);
+                const currentFirstMenu = menus.filter(item => item.path === openKeys[0]);
+                const currentFirstMenu1 = menus.filter(item => item.path === currentUrl);
+                if (currentFirstMenu1.length === 0) {
+                    history.push(currentUrl);
+                    return;
+                }
+                if (currentFirstMenu && currentFirstMenu.length > 0 && currentFirstMenu[0].children) {
+                    const secondMenu = currentFirstMenu[0].children[0];
+                    if (secondMenu.children) {
+                        history.push(secondMenu.children[0].path);
+                    } else {
+                        history.push(secondMenu.path);
+                    }
+                }
+            }}
             footerRender={() => <Footer />}
             rightContentRender={() => <RightContent />}
             {...props}
 
         >
             <Authorized authority={authorized!.authority} noMatch={noMatch}>
+
+                <Tabs
+                    className={styles.menuTabs}
+                    type="editable-card"
+                    activeKey={activeTabKey}
+                    hideAdd
+                    onTabClick={(activeKey) => {
+                        setActiveTabKey(activeKey);
+                        history.push(activeKey);
+                    }}
+                    onEdit={(e, action) => {
+                        removeTabs(e, action);
+                    }}
+                    tabBarExtraContent={
+                        <Dropdown overlay={
+                            <Menu onClick={(e) => closeTabs(e)}>
+                                <Menu.Item key='other'>
+                                    关闭其他
+                  </Menu.Item>
+                                <Menu.Item key='all'>
+                                    关闭全部
+                  </Menu.Item>
+                            </Menu>
+                        } placement="bottomCenter">
+                            <Button style={{ marginRight: 24 }} type='primary'>标签管理</Button>
+                        </Dropdown>
+                    }
+                >
+                    {
+                        tabs.map(tab => <Tabs.TabPane key={tab.key} tab={tab.title} closable={!!tab.closable} />)
+                    }
+                </Tabs>
+
                 {/* 页面位置信息 */}
-                <PageHeaderWrapper>
-                    {/* 内容 */}
+
+                {/* 内容 */}
+                <div className={styles.content}>
                     {children}
-                </PageHeaderWrapper>
+                </div>
             </Authorized>
         </ProLayout >
     )
