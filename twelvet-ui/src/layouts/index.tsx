@@ -91,6 +91,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     }
 
     let menus: MenuDataItem[] = [];
+    let tabMenus: { title: string, key: string, path: string, closable: boolean }[] = [];
     const defaultTabs: { title: string, key: string, path: string, closable: boolean }[] = [{
         title: '欢迎页',
         key: '/',
@@ -319,15 +320,43 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     <span>{route.breadcrumbName}</span>
                 )
             }}
+            onPageChange={(location) => {
+                // TODO 多tab栏的切换
+                const currentTab = tabs.filter(tab => tab.path === location?.pathname);
+                if (currentTab.length === 0) {
+                    const newTabs = [...tabs];
+                    const currentTabMenu = tabMenus.filter(tabMenu => tabMenu.path === location?.pathname);
+                    if (currentTabMenu.length > 0) {
+                        newTabs.push({
+                            ...currentTabMenu[0],
+                        });
+                        setTabs(newTabs);
+                    }
+                }
+                setActiveTabKey(location?.pathname || '');
+            }}
+            onOpenChange={(openKeys) => {
+                if (openKeys.length === 1) {
+                    const currentFirstMenu = menus.filter(item => item.path === openKeys[0]);
+                    if (currentFirstMenu && currentFirstMenu.length > 0 && currentFirstMenu[0].children) {
+                        const secondMenu = currentFirstMenu[0].children[0];
+                        if (secondMenu.children) {
+                            history.push(secondMenu.children[0].path);
+                        } else {
+                            history.push(secondMenu.path);
+                        }
+                    }
+                }
+            }}
             handleOpenChange={(openKeys) => {
                 const { host, href } = window.location;
                 const currentUrl = href.substr(href.indexOf("localhost:8000") + host.length);
                 const currentFirstMenu = menus.filter(item => item.path === openKeys[0]);
-                const currentFirstMenu1 = menus.filter(item => item.path === currentUrl);
-                if (currentFirstMenu1.length === 0) {
-                    history.push(currentUrl);
-                    return;
-                }
+                // const currentFirstMenu1 = menus.filter(item => item.path === currentUrl);
+                // if (currentFirstMenu1.length === 0) {
+                //     history.push(currentUrl);
+                //     return;
+                // }
                 if (currentFirstMenu && currentFirstMenu.length > 0 && currentFirstMenu[0].children) {
                     const secondMenu = currentFirstMenu[0].children[0];
                     if (secondMenu.children) {
