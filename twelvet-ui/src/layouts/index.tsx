@@ -91,7 +91,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     }
 
     let menus: MenuDataItem[] = [];
-    let tabMenus: { title: string, key: string, path: string, closable: boolean }[] = [];
+    let tabMenus: {
+        title: string,
+        key: string,
+        path: string,
+        closable: boolean
+    }[] = [];
     const defaultTabs: { title: string, key: string, path: string, closable: boolean }[] = [{
         title: '欢迎页',
         key: '/',
@@ -102,6 +107,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
     const [tabs, setTabs] = useState<{ title: string, key: string, path: string, closable: boolean }[]>(defaultTabs);
     const [activeTabKey, setActiveTabKey] = useState<string>('');
+    const [title] = useState<string>('TwelveT')
+
+    const [keyWord, setKeyWord] = useState('')
 
     const removeTabs = (activeKey, action) => {
         if (action === "remove") {
@@ -157,6 +165,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         }
     } = props
 
+    // 获取当前用户信息
     useEffect(() => {
         // 获取用户信息
         if (dispatch) {
@@ -167,9 +176,51 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         }
     }, [])
 
-    const [title] = useState<string>('TwelveT')
+    // 渲染当前路由
+    useEffect(() => {
+        if (currentUser.menuData.data.length > 0) {
+            getAllMenuList(currentUser.menuData.data);
+        }
+        // currentUser.menuData.data.map(item => {
+        //     if (item.children) {
+        //         const current = menus.filter(menu => menu.path === item.path);
+        //         if (current.length === 0) {
+        //             menus.push(item)
+        //         }
+        //     }
+        //     const tabMenu = tabMenus.filter(tabMenu => tabMenu.path === item.path);
+        //     if (tabMenu.length === 0 && item.name) {
+        //         if (!item.children) {
+        //             tabMenus.push({
+        //                 closable: item.closable || true,
+        //                 title: item.name,
+        //                 key: item.path || '',
+        //                 path: item.path || '',
+        //             })
+        //         }
+        //     }
+        // })
+    }, [currentUser.menuData.data])
 
-    const [keyWord, setKeyWord] = useState('')
+    // 取出所有菜单为列表
+    const getAllMenuList = (menus: [{
+        name: string,
+        path: string,
+        hidden: boolean,
+        routes: []
+    }]) => {
+        menus.map(item => {
+            tabMenus.push({
+                title: item.name,
+                key: item.name,
+                path: item.path,
+                closable: item.hidden
+            })
+            if (item.routes && item.routes.length > 0) {
+                getAllMenuList(item.routes)
+            }
+        })
+    }
 
     /**
      * 关键字搜索菜单
@@ -320,21 +371,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                     <span>{route.breadcrumbName}</span>
                 )
             }}
+            // 改变页面时
             onPageChange={(location) => {
                 // TODO 多tab栏的切换
                 const currentTab = tabs.filter(tab => tab.path === location?.pathname);
-                if (currentTab.length === 0) {
-                    const newTabs = [...tabs];
-                    const currentTabMenu = tabMenus.filter(tabMenu => tabMenu.path === location?.pathname);
-                    if (currentTabMenu.length > 0) {
-                        newTabs.push({
-                            ...currentTabMenu[0],
-                        });
-                        setTabs(newTabs);
-                    }
+                const newTabs = [...tabs];
+                const currentTabMenu = tabMenus.filter(tabMenu => tabMenu.path === location?.pathname);
+                if (currentTabMenu.length > 0) {
+                    newTabs.push({
+                        ...currentTabMenu[0],
+                    });
+                    setTabs(newTabs);
                 }
                 setActiveTabKey(location?.pathname || '');
             }}
+            // 打开页面时
             onOpenChange={(openKeys) => {
                 if (openKeys.length === 1) {
                     const currentFirstMenu = menus.filter(item => item.path === openKeys[0]);
