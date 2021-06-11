@@ -38,7 +38,7 @@ const Panel = () => {
             <h1>
                 TwelveT 微服务
                 <Divider type="vertical" />
-                <a target='_blank' href="https://github.com/twelvet-s/twelvet/">
+                <a target='_blank' href="https://gitee.com/twelvet/twelvet/">
                     <Tag icon={<GithubOutlined />} color='success'>
                         免费开源 
                     </Tag>
@@ -82,7 +82,7 @@ const Panel = () => {
 
                     <Row>
                         <Col className={styles.topSpace} xxl={{ span: 12 }} xl={{ span: 24 }} xs={{ span: 24 }}>
-                            <a target='_blank' href="https://github.com/twelvet-s/twelvet/">
+                            <a target='_blank' href="https://gitee.com/twelvet/twelvet/">
                                 <Button type='primary'>
                                     <GithubOutlined />
                                     GitHub

@@ -20,7 +20,7 @@ const Footer = () => {
                     {
                         key: 'Github',
                         title: <GithubOutlined />,
-                        href: 'https://github.com/twelvet-s/twelvet',
+                        href: 'https://gitee.com/twelvet/twelvet',
                         blankTarget: true,
                     },
                     {

@@ -1,10 +1,10 @@
 # twelvet
 
-[![AUR](https://img.shields.io/badge/license-MIT-blue)](https://github.com/twelvet-s/twelvet/blob/master/LICENSE)
+[![AUR](https://img.shields.io/badge/license-MIT-blue)](https://gitee.com/twelvet/twelvet/blob/master/LICENSE)
 [![](https://img.shields.io/badge/Author-TwelveT-orange.svg)](https://www.twelvet.cn)
-[![](https://img.shields.io/badge/version-1.1.0-success)](https://github.com/twelvet-s/twelvet)
-[![GitHub stars](https://img.shields.io/github/stars/twelvet-s/twelvet.svg?style=social&label=Stars)](https://github.com/twelvet-s/twelvet/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/twelvet-s/twelvet.svg?style=social&label=Fork)](https://github.com/twelvet-s/twelvet/network/members)
+[![](https://img.shields.io/badge/version-1.1.0-success)](https://gitee.com/twelvet/twelvet)
+[![GitHub stars](https://img.shields.io/github/stars/twelvet-s/twelvet.svg?style=social&label=Stars)](https://gitee.com/twelvet/twelvet/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/twelvet-s/twelvet.svg?style=social&label=Fork)](https://gitee.com/twelvet/twelvet/network/members)
 [![star](https://gitee.com/twelvet/twelvet/badge/star.svg?theme=white)](https://gitee.com/twelvet/twelvet/stargazers)
 [![fork](https://gitee.com/twelvet/twelvet/badge/fork.svg?theme=white)](https://gitee.com/twelvet/twelvet/members)
 
